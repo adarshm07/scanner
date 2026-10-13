@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Env / secrets
+.env
+.env.local
+*.local
+
+# SQLite / caches
+*.sqlite
+*.sqlite3
+scanner-x-cache/
+!fixtures/exposed-files/.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store

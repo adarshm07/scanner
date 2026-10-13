@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+*/dist/
+build/
+*/build/
+
+# Environment files and secrets
+.env
+.env*.local
+*.local
+!backend/fixtures/exposed-files/.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Databases and runtime caches
+*.sqlite
+*.sqlite3
+scanner-x-cache/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# OS metadata
+.DS_Store
+Thumbs.db
