@@ -59,12 +59,13 @@ export async function runGitleaks(
   repoDir: string,
   opts: { fullHistory?: boolean; logOpts?: string } = {}
 ): Promise<Finding[]> {
-  const fullHistory = opts.fullHistory === true;
+  // A commit range (diff mode) always scans history, so secrets added then removed in the PR are caught.
+  const scanGit = opts.fullHistory === true || !!opts.logOpts;
   if (!(await toolAvailable("gitleaks"))) {
     return [];
   }
   const reportPath = path.join(repoDir, ".scanner-x-gitleaks.json");
-  const args = fullHistory
+  const args = scanGit
     ? [
         "git",
         ...(opts.logOpts ? [`--log-opts=${opts.logOpts}`] : []),
@@ -74,7 +75,7 @@ export async function runGitleaks(
   await runCommand(
     "gitleaks",
     args,
-    { cwd: repoDir, timeoutMs: fullHistory ? 600000 : 120000 }
+    { cwd: repoDir, timeoutMs: scanGit ? 600000 : 120000 }
   );
   try {
     const content = await fs.readFile(reportPath, "utf8");

@@ -128,15 +128,36 @@ async function cloneRepo(
     : opts.fullHistory
       ? []
       : ["--depth", "1"];
-  const branchArgs = opts.headRef ? ["--branch", opts.headRef] : [];
+  // Persist the same restrictions for lazy blob fetches made later by checkout and gitleaks.
+  const persistArgs = GIT_SAFE.map((arg) => (arg === "-c" ? "--config" : arg));
+  const checkoutArgs = opts.headRef ? ["--no-checkout"] : [];
   const clone = await runCommand(
     "git",
-    [...GIT_SAFE, "clone", "--no-tags", ...historyArgs, ...branchArgs, "--", repoUrl, dir],
+    [...GIT_SAFE, "clone", "--no-tags", ...persistArgs, ...historyArgs, ...checkoutArgs, "--", repoUrl, dir],
     { timeoutMs: opts.fullHistory || opts.baseRef ? 600000 : 120000 }
   );
   let ref = new Date().toISOString();
   if (clone.spawnError || clone.code !== 0) {
     return { dir, ref, error: gitError(clone, "git clone") };
+  }
+  // Fetch-then-checkout accepts branches, SHAs and refs/pull/N/head (fork PRs), unlike clone --branch.
+  if (opts.headRef) {
+    const fetchHead = await runCommand(
+      "git",
+      [...GIT_SAFE, "fetch", "--no-tags", "origin", "--", opts.headRef],
+      { cwd: dir, timeoutMs: 300000 }
+    );
+    if (fetchHead.spawnError || fetchHead.code !== 0) {
+      return { dir, ref, error: `could not fetch head ref ${opts.headRef}: ${gitError(fetchHead, "git fetch")}` };
+    }
+    const checkout = await runCommand(
+      "git",
+      [...GIT_SAFE, "checkout", "--detach", "FETCH_HEAD"],
+      { cwd: dir, timeoutMs: 300000 }
+    );
+    if (checkout.spawnError || checkout.code !== 0) {
+      return { dir, ref, error: `could not check out ${opts.headRef}: ${gitError(checkout, "git checkout")}` };
+    }
   }
   const rev = await runCommand("git", ["rev-parse", "HEAD"], { cwd: dir });
   if (rev.code === 0) ref = rev.stdout.trim();
@@ -164,11 +185,18 @@ async function cloneRepo(
   return { dir, ref: `${baseSha.slice(0, 12)}...${ref}`, baseSha, changed };
 }
 
+const DEPENDENCY_FILES = new Set([
+  "package.json", "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml",
+]);
+
 function inChangedFiles(finding: Finding, dirs: string[], changed: Set<string>): boolean {
+  // Gitleaks already scanned only the PR's commit range.
+  if (finding.skill.startsWith("gitleaks-")) return true;
   const file = finding.location.file;
   if (!file) return false;
-  if (finding.skill.startsWith("npm-audit") || file === "package.json") {
-    return changed.has("package.json") || changed.has("package-lock.json");
+  // npm audit reports against the root, but a nested workspace manifest can change the resolved tree.
+  if (finding.skill.startsWith("npm-audit")) {
+    return [...changed].some((f) => DEPENDENCY_FILES.has(path.posix.basename(f)));
   }
   return dirs.some((dir) => {
     const rel = path.relative(dir, path.resolve(dir, file)).split(path.sep).join("/");

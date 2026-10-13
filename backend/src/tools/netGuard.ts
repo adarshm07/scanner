@@ -34,9 +34,10 @@ for (const [addr, prefix] of [
 }
 
 // Read lazily: this module loads before dotenv runs in util.ts.
-function allowPrivate(): boolean {
+export function allowPrivateTargets(): boolean {
   return /^(1|true|yes|on)$/i.test((process.env.ALLOW_PRIVATE_TARGETS ?? "").trim());
 }
+const allowPrivate = allowPrivateTargets;
 
 export function isPrivateAddress(ip: string): boolean {
   const mapped = /^::ffff:(\d+\.\d+\.\d+\.\d+)$/i.exec(ip);
@@ -48,6 +49,14 @@ export function isPrivateAddress(ip: string): boolean {
 }
 
 export class PrivateTargetError extends Error {}
+
+/** Node skips `lookup` for IP literals, so they must be checked before connecting. */
+export function assertIpLiteralAllowed(hostname: string): void {
+  const ip = hostname.replace(/^\[|\]$/g, "");
+  if (net.isIP(ip) && !allowPrivate() && isPrivateAddress(ip)) {
+    throw new PrivateTargetError(`Blocked connection to private or internal address ${ip}`);
+  }
+}
 
 export async function assertPublicHost(host: string): Promise<void> {
   if (allowPrivate()) return;

@@ -1,6 +1,6 @@
 import { CheckResult, Finding, makeFindingId, Severity } from "../schema/finding";
 import { DomainResult } from "./domainResult";
-import { fetchWithTimeout } from "./util";
+import { fetchWithTimeout, targetOrigin } from "./util";
 
 /**
  * HTTP security header inspection (domain mode, passive). Fetches the root URL
@@ -58,7 +58,7 @@ export function headerAdapter(
   headers: Record<string, string>,
   serverHeader: string | null
 ): DomainResult {
-  const url = `https://${host}`;
+  const url = targetOrigin(host);
   const G = "HTTP headers";
   const findings: Finding[] = [];
   const checks: CheckResult[] = [];
@@ -139,7 +139,7 @@ export function headerAdapter(
 
 export async function runHeaderCheck(host: string): Promise<DomainResult> {
   try {
-    const res = await fetchWithTimeout(`https://${host}`, { timeoutMs: 12000 });
+    const res = await fetchWithTimeout(targetOrigin(host), { timeoutMs: 12000 });
     const headers: Record<string, string> = {};
     res.headers.forEach((value, key) => (headers[key.toLowerCase()] = value));
     return headerAdapter(host, headers, headers["server"] ?? null);
@@ -158,7 +158,7 @@ export async function runHeaderCheck(host: string): Promise<DomainResult> {
           severity: "low",
           confidence: "low",
           title: "Could not fetch HTTP headers",
-          location: { url: `https://${host}` },
+          location: { url: targetOrigin(host) },
           raw_snippet: null,
           tool_message: `Header inspection failed: ${(err as Error).message}`,
           metadata: {},

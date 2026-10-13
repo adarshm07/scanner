@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import path from "path";
 import dotenv from "dotenv";
 import { Agent, fetch, Response } from "undici";
-import { assertPublicHost, guardedLookup } from "./netGuard";
+import { allowPrivateTargets, assertIpLiteralAllowed, assertPublicHost, guardedLookup } from "./netGuard";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
@@ -112,6 +112,7 @@ export async function fetchWithTimeout(
   url: string,
   opts: { timeoutMs?: number; method?: string; headers?: Record<string, string> } = {}
 ): Promise<Response> {
+  assertIpLiteralAllowed(new URL(url).hostname);
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), opts.timeoutMs ?? 15000);
   try {
@@ -127,6 +128,18 @@ export async function fetchWithTimeout(
   }
 }
 
+const LOCAL_TARGET = /^(localhost|\d{1,3}(\.\d{1,3}){3})(:\d{1,5})?$/;
+
+/** localhost or IPv4, optionally with a port; only accepted with ALLOW_PRIVATE_TARGETS. */
+export function isLocalTarget(host: string): boolean {
+  return LOCAL_TARGET.test(host);
+}
+
+/** Local fixtures serve plain http; everything else is scanned over https. */
+export function targetOrigin(host: string): string {
+  return `${isLocalTarget(host) ? "http" : "https"}://${host}`;
+}
+
 /**
  * Validate + normalize a domain into a bare hostname. Rejects anything that
  * isn't a plausible hostname to avoid SSRF-style abuse of the domain tools.
@@ -134,7 +147,11 @@ export async function fetchWithTimeout(
 export function normalizeDomain(input: string): string {
   const trimmed = input.trim().toLowerCase();
   const withoutScheme = trimmed.replace(/^https?:\/\//, "");
-  const host = withoutScheme.split("/")[0].split(":")[0];
+  const hostWithPort = withoutScheme.split("/")[0];
+  if (allowPrivateTargets() && isLocalTarget(hostWithPort)) {
+    return hostWithPort;
+  }
+  const host = hostWithPort.split(":")[0];
   const valid = /^(?=.{1,253}$)([a-z0-9](-?[a-z0-9])*\.)+[a-z]{2,}$/.test(host);
   if (!valid) {
     throw new Error(`Invalid domain: ${input}`);

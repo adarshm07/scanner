@@ -94,7 +94,10 @@ re-check the resolved address at connect time, so DNS rebinding can't bypass thi
 Git clones are restricted to https with redirects disabled.
 
 To scan the local fixtures (`npm run serve:exposed-fixture`, `npm run serve:csp-fixtures`),
-start the backend with `ALLOW_PRIVATE_TARGETS=true`.
+start the backend with `ALLOW_PRIVATE_TARGETS=true` and scan `127.0.0.1:4174` or
+`127.0.0.1:4175`. With the flag on, domain mode accepts `localhost` or an IPv4
+address with an optional port, scanned over plain http, and the server logs a
+startup warning. IP literals are otherwise refused at connect time.
 
 ### Frontend
 
@@ -119,12 +122,13 @@ Both scan routes also have `/stream` variants that return server-sent progress e
 ### Diff (PR) scans
 
 Pass `baseRef` (the PR's base branch or commit) and optionally `headRef` (the PR
-branch; defaults to the repo's default branch). The repo is cloned, diffed with
-`git diff base...head`, and only findings in changed files are reported.
-Dependency findings are kept only when `package.json` or `package-lock.json`
-changed. With `fullHistory`, gitleaks scans only the commits in `base..head`.
-The tools still run over the whole checkout, so diff scans save report noise and
-LLM cost, not tool runtime.
+head: a branch, commit SHA, or `refs/pull/N/head` for fork PRs; defaults to the
+repo's default branch). The repo is cloned, diffed with `git diff base...head`,
+and only findings in changed files are reported. Dependency findings are kept
+when any `package.json` or lockfile changed, including nested workspace
+manifests. Gitleaks always scans the commits in `base..head`, so a secret added
+and then removed within the PR is still reported. The other tools still run over
+the whole checkout, so diff scans save report noise and LLM cost, not tool runtime.
 
 ## Agent skill
 

@@ -1,6 +1,6 @@
 import { CheckResult, Finding, makeFindingId } from "../schema/finding";
 import { DomainResult } from "./domainResult";
-import { fetchWithTimeout } from "./util";
+import { fetchWithTimeout, targetOrigin } from "./util";
 import type { Response } from "undici";
 
 const PATHS = [".git/config", ".git/HEAD", ".env", ".env.local", ".env.production"];
@@ -25,7 +25,7 @@ function isRecognizable(path: string, body: string): boolean {
 async function getSameOrigin(url: string, domain: string): Promise<Response | null> {
   let current = new URL(url);
   for (let attempt = 0; attempt <= MAX_REDIRECTS; attempt += 1) {
-    if (current.hostname !== domain) return null;
+    if (current.host !== domain) return null;
     const response = await fetchWithTimeout(current.toString(), {
       timeoutMs: REQUEST_TIMEOUT_MS,
     });
@@ -33,7 +33,7 @@ async function getSameOrigin(url: string, domain: string): Promise<Response | nu
     const location = response.headers.get("location");
     if (!location) return null;
     const next = new URL(location, current);
-    if (next.hostname !== domain) return null;
+    if (next.host !== domain) return null;
     current = next;
   }
   return null;
@@ -41,7 +41,7 @@ async function getSameOrigin(url: string, domain: string): Promise<Response | nu
 
 async function fetchCandidate(domain: string, path: string): Promise<ExposedFile | null> {
   try {
-    const response = await getSameOrigin(`https://${domain}/${path}`, domain);
+    const response = await getSameOrigin(`${targetOrigin(domain)}/${path}`, domain);
     if (!response || response.status !== 200) return null;
     const body = await response.text();
     return isRecognizable(path, body) ? { path, body } : null;
@@ -66,7 +66,7 @@ export function exposedFilesAdapter(
     severity: "critical",
     confidence: "high",
     title: `Exposed ${path} at web root`,
-    location: { url: `https://${domain}/${path}` },
+    location: { url: `${targetOrigin(domain)}/${path}` },
     raw_snippet: null,
     tool_message: "Sensitive file publicly accessible and returned recognizable content",
     metadata: { file: path },

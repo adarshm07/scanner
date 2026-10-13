@@ -3,6 +3,7 @@ import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import { router } from "./api/routes";
 import { config } from "./tools/util";
+import { allowPrivateTargets } from "./tools/netGuard";
 import { listProviders, hasUsableProvider } from "./llm";
 
 const app = express();
@@ -43,6 +44,11 @@ app.use("/api", router);
 
 app.listen(config.port, () => {
   console.log(`Scanner-X backend listening on :${config.port}`);
+  if (allowPrivateTargets()) {
+    console.warn(
+      "WARNING: ALLOW_PRIVATE_TARGETS is on. Scans may reach localhost and internal networks; never enable this on a public deployment."
+    );
+  }
   const usable = listProviders().filter((p) => p.available);
   if (hasUsableProvider()) {
     console.log(

@@ -1,6 +1,6 @@
 import { CheckResult, Finding, makeFindingId, Severity } from "../schema/finding";
 import { DomainResult } from "./domainResult";
-import { fetchWithTimeout } from "./util";
+import { fetchWithTimeout, targetOrigin } from "./util";
 
 interface CspSource {
   raw: string;
@@ -55,7 +55,7 @@ function cspIssues(raw: string): { id: string; severity: Severity; title: string
 }
 
 export function cspAdapter(domain: string, source: CspSource | null): DomainResult {
-  const url = `https://${domain}`;
+  const url = targetOrigin(domain);
   if (!source) {
     const finding: Finding = {
       skill: "csp-strength",
@@ -128,7 +128,7 @@ export function cspAdapter(domain: string, source: CspSource | null): DomainResu
 
 export async function runCspCheck(domain: string): Promise<DomainResult> {
   try {
-    const response = await fetchWithTimeout(`https://${domain}`, { timeoutMs: 5000 });
+    const response = await fetchWithTimeout(targetOrigin(domain), { timeoutMs: 5000 });
     const header = response.headers.get("content-security-policy")?.trim();
     if (header) return cspAdapter(domain, { raw: header, source: "header" });
     const html = await response.text();

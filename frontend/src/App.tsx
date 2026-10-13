@@ -231,7 +231,7 @@ export default function App() {
                         value={headRef}
                         onChange={(e) => setHeadRef(e.target.value)}
                         disabled={!baseRef.trim()}
-                        placeholder="head branch (default branch if empty)"
+                        placeholder="head: branch, SHA or refs/pull/N/head"
                         className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-none focus:border-muted disabled:opacity-50"
                       />
                     </div>

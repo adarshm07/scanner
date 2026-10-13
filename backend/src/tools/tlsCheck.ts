@@ -2,7 +2,7 @@ import tls from "tls";
 import { CheckResult, Confidence, Finding, makeFindingId, Severity } from "../schema/finding";
 import { DomainResult } from "./domainResult";
 import { fetchWithTimeout } from "./util";
-import { guardedLookup } from "./netGuard";
+import { assertIpLiteralAllowed, guardedLookup } from "./netGuard";
 
 /**
  * TLS / certificate check (domain mode, passive).
@@ -28,6 +28,23 @@ interface TlsInfo {
 
 function inspectTls(host: string, timeoutMs = 10000): Promise<TlsInfo> {
   return new Promise((resolve) => {
+    const fail = (message: string) =>
+      resolve({
+        connected: false,
+        authorized: false,
+        authorizationError: null,
+        protocol: null,
+        validTo: null,
+        validFrom: null,
+        daysToExpiry: null,
+        issuer: null,
+        error: message,
+      });
+    try {
+      assertIpLiteralAllowed(host);
+    } catch (err) {
+      return fail((err as Error).message);
+    }
     const socket = tls.connect(
       {
         host,
@@ -60,18 +77,6 @@ function inspectTls(host: string, timeoutMs = 10000): Promise<TlsInfo> {
         socket.end();
       }
     );
-    const fail = (message: string) =>
-      resolve({
-        connected: false,
-        authorized: false,
-        authorizationError: null,
-        protocol: null,
-        validTo: null,
-        validFrom: null,
-        daysToExpiry: null,
-        issuer: null,
-        error: message,
-      });
     socket.on("error", (err) => fail(err.message));
     socket.on("timeout", () => {
       socket.destroy();
