@@ -1,12 +1,34 @@
 import express from "express";
 import cors from "cors";
+import { rateLimit } from "express-rate-limit";
 import { router } from "./api/routes";
 import { config } from "./tools/util";
 import { listProviders, hasUsableProvider } from "./llm";
 
 const app = express();
+const corsOrigins = new Set(
+  (process.env.CORS_ORIGINS ?? "http://localhost:5173,http://127.0.0.1:5173")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => callback(null, !origin || corsOrigins.has(origin)),
+  })
+);
+app.use(
+  "/api/scan",
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (_req, res) =>
+      res.status(429).json({ error: "Too many scan requests. Try again later." }),
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/health", (_req, res) =>

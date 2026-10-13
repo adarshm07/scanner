@@ -98,6 +98,7 @@ export interface Report {
   ref: string; // commit hash or scan timestamp
   createdAt: string;
   executiveSummary: string;
+  warning?: string;
   categories: CategoryGroup[];
   checks: CheckResult[]; // domain mode: every probe run, pass or finding
   stats: {

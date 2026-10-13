@@ -55,6 +55,7 @@ export interface Report {
   ref: string;
   createdAt: string;
   executiveSummary: string;
+  warning?: string;
   categories: CategoryGroup[];
   checks: CheckResult[];
   stats: {

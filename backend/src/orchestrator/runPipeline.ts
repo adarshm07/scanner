@@ -55,6 +55,7 @@ export interface PipelineOutput {
   target: string;
   ref: string;
   findings: Finding[];
+  warning?: string;
   checks: CheckResult[]; // domain mode: every probe run, pass or finding
   /** Absolute path to the checked-out repo (repo mode) for snippet hydration. */
   repoDir?: string;
@@ -98,7 +99,7 @@ async function runTracked<T>(
   return findings;
 }
 
-async function cloneRepo(repoUrl: string): Promise<{ dir: string; ref: string }> {
+async function cloneRepo(repoUrl: string): Promise<{ dir: string; ref: string; error?: string }> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
   const clone = await runCommand(
     "git",
@@ -110,7 +111,71 @@ async function cloneRepo(repoUrl: string): Promise<{ dir: string; ref: string }>
     const rev = await runCommand("git", ["rev-parse", "HEAD"], { cwd: dir });
     if (rev.code === 0) ref = rev.stdout.trim();
   }
-  return { dir, ref };
+  return {
+    dir,
+    ref,
+    ...(clone.spawnError || clone.code !== 0
+      ? { error: clone.spawnError || clone.stderr.trim() || `git clone exited with code ${clone.code}` }
+      : {}),
+  };
+}
+
+async function hasScannableFiles(dir: string): Promise<boolean> {
+  const codeExtensions = new Set([
+    ".c", ".cc", ".cpp", ".cs", ".css", ".go", ".h", ".hpp", ".html",
+    ".java", ".js", ".jsx", ".kt", ".php", ".py", ".rb", ".rs", ".scala",
+    ".sh", ".sql", ".swift", ".ts", ".tsx", ".vue", ".xml",
+  ]);
+  const manifests = new Set([
+    "cargo.toml", "composer.json", "dockerfile", "gemfile", "go.mod",
+    "package.json", "pipfile", "pyproject.toml", "requirements.txt",
+  ]);
+  const visit = async (current: string): Promise<boolean> => {
+    const entries = await fs.readdir(current, { withFileTypes: true });
+    for (const entry of entries) {
+      if (entry.name === ".git" || entry.name === "node_modules" || entry.name === "vendor") continue;
+      if (entry.isDirectory()) {
+        if (await visit(path.join(current, entry.name))) return true;
+      } else if (
+        codeExtensions.has(path.extname(entry.name).toLowerCase()) ||
+        manifests.has(entry.name.toLowerCase())
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+  return visit(dir);
+}
+
+function demoFindings(): Finding[] {
+  const examples: Pick<Finding, "skill" | "rule_id" | "severity" | "title" | "location" | "tool_message" | "metadata">[] = [
+    {
+      skill: "demo-hardcoded-secret",
+      rule_id: "demo-hardcoded-secret",
+      severity: "high",
+      title: "[Demo] Hardcoded credential example",
+      location: { file: "src/config.ts", line_start: 12, line_end: 12 },
+      tool_message: "DEMO ONLY: Illustrative hardcoded credential finding; this was not detected in the target repository.",
+      metadata: { demo: true, cwe: "CWE-798" },
+    },
+    {
+      skill: "demo-unsafe-input",
+      rule_id: "demo-unsafe-input",
+      severity: "medium",
+      title: "[Demo] Unvalidated input reaches a sensitive operation",
+      location: { file: "src/routes.ts", line_start: 34, line_end: 34 },
+      tool_message: "DEMO ONLY: Illustrative input-validation finding; this was not detected in the target repository.",
+      metadata: { demo: true, cwe: "CWE-20" },
+    },
+  ];
+  return examples.map((finding) => ({
+    ...finding,
+    category: "backend",
+    finding_id: `${finding.rule_id}-demo`,
+    confidence: "low",
+    raw_snippet: null,
+  }));
 }
 
 export async function runRepoPipeline(
@@ -119,15 +184,36 @@ export async function runRepoPipeline(
   emit: EmitFn = noop
 ): Promise<PipelineOutput> {
   let dir: string;
-  let ref: string;
+  let ref = new Date().toISOString();
+  let warning: string | undefined;
   try {
     const cloned = await cloneRepo(repoUrl);
     dir = cloned.dir;
     ref = cloned.ref;
-  } catch {
-    // Clone failed — run tools against a throwaway dir so demo fallbacks engage.
+    if (cloned.error) {
+      warning = `Repository clone failed (${cloned.error}). No repository code was scanned; showing demo findings.`;
+    } else if (!(await hasScannableFiles(dir))) {
+      warning = "Repository has no scannable code or dependency manifests. No repository code was scanned; showing demo findings.";
+    }
+  } catch (err) {
     dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
-    ref = new Date().toISOString();
+    warning = `Repository clone failed (${(err as Error).message}). No repository code was scanned; showing demo findings.`;
+  }
+
+  if (warning) {
+    emit({ t: "error", message: warning });
+    return {
+      mode: "repo",
+      target: repoUrl,
+      ref,
+      findings: demoFindings(),
+      warning,
+      checks: [],
+      repoDir: dir,
+      cleanup: async () => {
+        await fs.rm(dir, { recursive: true, force: true });
+      },
+    };
   }
 
   const tools = REPO_TOOLS.filter((t) => selected(t.check, scope));

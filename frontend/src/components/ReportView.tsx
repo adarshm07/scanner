@@ -50,6 +50,12 @@ export function ReportView({
         )}
       </header>
 
+      {report.warning && (
+        <div role="alert" className="border-b border-sev-medium/40 bg-sev-medium/10 px-6 py-3 text-[13px] text-sev-medium">
+          {report.warning}
+        </div>
+      )}
+
       {/* title + meta */}
       <section className="flex flex-col gap-5 px-6 pt-7">
         <div className="flex items-baseline gap-4">

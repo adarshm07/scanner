@@ -98,15 +98,12 @@ export default function App() {
           : { domain: target.trim(), attested, checks: chosen, provider: providerId ?? undefined, failOn, triage };
 
       let reportId: string | null = null;
-      let streamError: string | null = null;
 
       await streamScan(endpoint, body, (e) => {
         setScanEvents((prev) => [...prev, e]);
         if (e.t === "done") reportId = e.reportId;
-        if (e.t === "error") streamError = e.message;
       });
 
-      if (streamError) throw new Error(streamError);
       if (!reportId) throw new Error("Scan ended without a report.");
 
       const reportRes = await fetch(`/api/report/${reportId}`);
