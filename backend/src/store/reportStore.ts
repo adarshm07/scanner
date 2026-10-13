@@ -8,18 +8,38 @@ import { Report, TriageResult } from "../schema/finding";
  *   file/domain skips the LLM call entirely (Spec Section 5.4).
  */
 
-const reports = new Map<string, Report>();
+const REPORT_TTL_MS = Number(process.env.REPORT_TTL_MS) || 24 * 60 * 60 * 1000;
+const REPORT_MAX = Number(process.env.REPORT_MAX) || 500;
+const TRIAGE_MAX = 5000;
+
+const reports = new Map<string, { report: Report; savedAt: number }>();
 const triageCache = new Map<string, TriageResult>();
+
+function isExpired(savedAt: number, now = Date.now()): boolean {
+  return now - savedAt > REPORT_TTL_MS;
+}
 
 export const reportStore = {
   save(report: Report): void {
-    reports.set(report.reportId, report);
+    const now = Date.now();
+    // Map iterates in insertion order, so the first entries are the oldest.
+    for (const [id, entry] of reports) {
+      if (!isExpired(entry.savedAt, now) && reports.size < REPORT_MAX) break;
+      reports.delete(id);
+    }
+    reports.set(report.reportId, { report, savedAt: now });
   },
   get(reportId: string): Report | undefined {
-    return reports.get(reportId);
+    const entry = reports.get(reportId);
+    if (!entry) return undefined;
+    if (isExpired(entry.savedAt)) {
+      reports.delete(reportId);
+      return undefined;
+    }
+    return entry.report;
   },
   list(): Report[] {
-    return [...reports.values()];
+    return [...reports.values()].filter((e) => !isExpired(e.savedAt)).map((e) => e.report);
   },
 };
 
@@ -28,6 +48,11 @@ export const triageStore = {
     return triageCache.get(findingId);
   },
   set(result: TriageResult): void {
+    triageCache.delete(result.finding_id);
+    if (triageCache.size >= TRIAGE_MAX) {
+      const oldest = triageCache.keys().next().value;
+      if (oldest !== undefined) triageCache.delete(oldest);
+    }
     triageCache.set(result.finding_id, result);
   },
   has(findingId: string): boolean {

@@ -2,6 +2,7 @@ import tls from "tls";
 import { CheckResult, Confidence, Finding, makeFindingId, Severity } from "../schema/finding";
 import { DomainResult } from "./domainResult";
 import { fetchWithTimeout } from "./util";
+import { guardedLookup } from "./netGuard";
 
 /**
  * TLS / certificate check (domain mode, passive).
@@ -33,6 +34,7 @@ function inspectTls(host: string, timeoutMs = 10000): Promise<TlsInfo> {
         port: 443,
         servername: host,
         timeout: timeoutMs,
+        lookup: guardedLookup,
         // Inspect the cert ourselves; don't let Node's trust store abort the
         // handshake and hide the certificate from us.
         rejectUnauthorized: false,

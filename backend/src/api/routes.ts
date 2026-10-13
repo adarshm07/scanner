@@ -1,8 +1,9 @@
 import { Router, Request, Response } from "express";
-import { runRepoPipeline, runDomainPipeline, Scope } from "../orchestrator/runPipeline";
+import { runRepoPipeline, runDomainPipeline, RepoScanOptions, Scope } from "../orchestrator/runPipeline";
 import { generateReport } from "../orchestrator/report";
 import { reportStore } from "../store/reportStore";
-import { normalizeDomain } from "../tools/util";
+import { normalizeDomain, validateRef, validateRepoUrl } from "../tools/util";
+import { assertPublicHost } from "../tools/netGuard";
 import { listProviders, resolveProvider } from "../llm";
 import { CHECKS, CHECK_IDS } from "../orchestrator/checks";
 import { Severity, SEVERITY_RANK } from "../schema/finding";
@@ -32,11 +33,30 @@ function parseScope(input: unknown, mode: "repo" | "domain"): Scope | null {
   return null;
 }
 
+async function parseRepoTarget(
+  body: Record<string, unknown>
+): Promise<{ repoUrl: string; opts: RepoScanOptions }> {
+  const repoUrl = await validateRepoUrl(body.repoUrl);
+  const baseRef = validateRef(body.baseRef, "baseRef");
+  const headRef = validateRef(body.headRef, "headRef");
+  if (headRef && !baseRef) throw new Error("headRef requires baseRef.");
+  return { repoUrl, opts: { fullHistory: body.fullHistory === true, baseRef, headRef } };
+}
+
+async function parseDomainTarget(domain: unknown): Promise<string> {
+  const host = normalizeDomain(String(domain ?? ""));
+  await assertPublicHost(host);
+  return host;
+}
+
 // POST /api/scan/repo
 router.post("/scan/repo", async (req: Request, res: Response) => {
-  const { repoUrl, checks, provider, failOn, triage, fullHistory } = req.body ?? {};
-  if (typeof repoUrl !== "string" || !/^https?:\/\/|^git@/.test(repoUrl)) {
-    return res.status(400).json({ error: "Valid repoUrl is required." });
+  const { checks, provider, failOn, triage } = req.body ?? {};
+  let target: Awaited<ReturnType<typeof parseRepoTarget>>;
+  try {
+    target = await parseRepoTarget(req.body ?? {});
+  } catch (err) {
+    return res.status(400).json({ error: (err as Error).message });
   }
   const parsedScope = parseScope(checks, "repo");
   if (!parsedScope) {
@@ -47,7 +67,7 @@ router.post("/scan/repo", async (req: Request, res: Response) => {
   const llm =
     triage === false ? null : resolveProvider(typeof provider === "string" ? provider : undefined);
   try {
-    const pipeline = await runRepoPipeline(repoUrl, parsedScope, fullHistory === true);
+    const pipeline = await runRepoPipeline(target.repoUrl, parsedScope, target.opts);
     try {
       const report = await generateReport(pipeline, llm, parseFailOn(failOn));
       reportStore.save(report);
@@ -70,7 +90,7 @@ router.post("/scan/domain", async (req: Request, res: Response) => {
   }
   let host: string;
   try {
-    host = normalizeDomain(String(domain ?? ""));
+    host = await parseDomainTarget(domain);
   } catch (err) {
     return res.status(400).json({ error: (err as Error).message });
   }
@@ -130,10 +150,14 @@ function stepsFor(mode: "repo" | "domain", scope: Scope) {
 
 // POST /api/scan/repo/stream
 router.post("/scan/repo/stream", async (req: Request, res: Response) => {
-  const { repoUrl, checks, provider, failOn, triage, fullHistory } = req.body ?? {};
-  if (typeof repoUrl !== "string" || !/^https?:\/\/|^git@/.test(repoUrl)) {
-    return res.status(400).json({ error: "Valid repoUrl is required." });
+  const { checks, provider, failOn, triage } = req.body ?? {};
+  let target: Awaited<ReturnType<typeof parseRepoTarget>>;
+  try {
+    target = await parseRepoTarget(req.body ?? {});
+  } catch (err) {
+    return res.status(400).json({ error: (err as Error).message });
   }
+  const { repoUrl } = target;
   const scope = parseScope(checks, "repo");
   if (!scope) return res.status(400).json({ error: "Select at least one check." });
 
@@ -141,7 +165,7 @@ router.post("/scan/repo/stream", async (req: Request, res: Response) => {
   const llm = triage === false ? null : resolveProvider(typeof provider === "string" ? provider : undefined);
   emit({ t: "start", mode: "repo", target: repoUrl, startedAt: Date.now(), steps: stepsFor("repo", scope) });
   try {
-    const pipeline = await runRepoPipeline(repoUrl, scope, fullHistory === true, emit);
+    const pipeline = await runRepoPipeline(repoUrl, scope, target.opts, emit);
     try {
       const report = await generateReport(pipeline, llm, parseFailOn(failOn), emit);
       reportStore.save(report);
@@ -163,7 +187,7 @@ router.post("/scan/domain/stream", async (req: Request, res: Response) => {
   }
   let host: string;
   try {
-    host = normalizeDomain(String(domain ?? ""));
+    host = await parseDomainTarget(domain);
   } catch (err) {
     return res.status(400).json({ error: (err as Error).message });
   }

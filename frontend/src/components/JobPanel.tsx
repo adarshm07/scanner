@@ -10,6 +10,8 @@ interface JobPanelProps {
   failOn: string;
   triage: boolean;
   fullHistory: boolean;
+  baseRef: string;
+  headRef: string;
   providerId: string | null;
   estimate: string;
   canSubmit: boolean;
@@ -22,8 +24,11 @@ function touches(p: JobPanelProps): { k: string; v: string }[] {
   const t = p.target.trim() || (p.mode === "repo" ? "the repository" : "the host");
   const modelOn = p.triage && !!p.providerId;
   if (p.mode === "repo") {
+    const scope = p.baseRef
+      ? `Files changed in ${t}${p.headRef ? ` (${p.headRef})` : ""} vs ${p.baseRef}`
+      : `${p.fullHistory ? "Full Git history" : "A shallow clone"} of ${t}`;
     return [
-      { k: "Reads", v: `${p.fullHistory ? "Full Git history" : "A shallow clone"} of ${t}, deleted when the scan ends.` },
+      { k: "Reads", v: `${scope}, deleted when the scan ends.` },
       { k: "Network", v: "Dependency and secret checks may query public advisory sources." },
       { k: "Model", v: modelOn ? "Finding metadata and up to 20 lines of context per finding." : "Nothing. Triage is off." },
     ];
@@ -51,6 +56,8 @@ export function JobPanel(props: JobPanelProps) {
           failOn={props.failOn}
           triage={props.triage}
           fullHistory={props.fullHistory}
+          baseRef={props.baseRef}
+          headRef={props.headRef}
         />
       </div>
 

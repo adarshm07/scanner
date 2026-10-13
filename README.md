@@ -43,8 +43,9 @@ runPipeline  →  filterFindings  →  hydrate snippets  →  triage (batched LL
 | domain | CT subdomains (crt.sh) | [`tools/subdomainCheck.ts`](backend/src/tools/subdomainCheck.ts) |
 
 Each adapter exposes `toolNameAdapter(rawOutput): Finding[]`, isolating all
-tool-specific parsing. Repo tools fall back to demo findings when the CLI isn't
-installed, so the pipeline stays demoable in any environment.
+tool-specific parsing. A repo tool whose CLI isn't installed contributes no
+findings. If the clone fails or the repo has no scannable code, the report has
+zero findings, a warning, and a failed policy (`reason: "scan incomplete"`).
 
 ## Running
 
@@ -74,7 +75,26 @@ usable provider the pipeline runs in **deterministic-only mode**: triage degrade
 to a pass-through verdict and the summary is generated in code. LLM outages during
 a scan also degrade gracefully rather than failing the scan.
 
-For real repo scans, install the CLIs on PATH: `gitleaks`, `semgrep`, `npm`.
+For real repo scans, install the CLIs on PATH: `gitleaks` (**v8.19 or later**;
+full-history scans use `gitleaks git`, which older versions lack), `semgrep`, `npm`.
+
+#### Deployment and target safety
+
+| Env | Default | Purpose |
+| --- | --- | --- |
+| `CORS_ORIGINS` | localhost:5173 | Browser origins allowed to read API responses |
+| `TRUST_PROXY` | unset | Proxy hops to trust for client IPs (set `1` behind Render, Railway, Nginx or a load balancer, or every user shares one rate-limit bucket) |
+| `REPO_HOST_ALLOWLIST` | `github.com,gitlab.com,bitbucket.org` | Hosts repo scans may clone from (https only, no credentials or ports) |
+| `ALLOW_PRIVATE_TARGETS` | `false` | Allow targets resolving to private, loopback or link-local IPs (local fixtures only) |
+| `REPORT_TTL_MS` / `REPORT_MAX` | 24h / 500 | In-memory report retention |
+
+Domain and repo targets are resolved before scanning and refused if any address
+is private, loopback, link-local or reserved. Domain-mode HTTP and TLS connections
+re-check the resolved address at connect time, so DNS rebinding can't bypass this.
+Git clones are restricted to https with redirects disabled.
+
+To scan the local fixtures (`npm run serve:exposed-fixture`, `npm run serve:csp-fixtures`),
+start the backend with `ALLOW_PRIVATE_TARGETS=true`.
 
 ### Frontend
 
@@ -88,18 +108,31 @@ npm run dev            # http://localhost:5173, proxies /api → :4000
 
 | Method | Path | Body | Result |
 | --- | --- | --- | --- |
-| POST | `/api/scan/repo` | `{ repoUrl, scope: string[] \| "all", provider? }` | `{ reportId }` |
-| POST | `/api/scan/domain` | `{ domain, attested: boolean, provider? }` (403 unless `attested === true`) | `{ reportId }` |
+| POST | `/api/scan/repo` | `{ repoUrl, checks?: string[] \| "all", provider?, failOn?, triage?, fullHistory?, baseRef?, headRef? }` | `{ reportId }` |
+| POST | `/api/scan/domain` | `{ domain, attested: boolean, checks?, provider?, failOn?, triage? }` (403 unless `attested === true`) | `{ reportId }` |
 | GET | `/api/report/:reportId` | — | assembled report |
-| GET | `/api/skills` | — | available scope categories |
+| GET | `/api/checks` | — | available checks per mode |
 | GET | `/api/models` | — | LLM providers (id, model, enabled, available) |
+
+Both scan routes also have `/stream` variants that return server-sent progress events.
+
+### Diff (PR) scans
+
+Pass `baseRef` (the PR's base branch or commit) and optionally `headRef` (the PR
+branch; defaults to the repo's default branch). The repo is cloned, diffed with
+`git diff base...head`, and only findings in changed files are reported.
+Dependency findings are kept only when `package.json` or `package-lock.json`
+changed. With `fullHistory`, gitleaks scans only the commits in `base..head`.
+The tools still run over the whole checkout, so diff scans save report noise and
+LLM cost, not tool runtime.
 
 ## Agent skill
 
 [`backend/src/skill/scanner-x.skill.md`](backend/src/skill/scanner-x.skill.md) —
 install into a coding agent. On `/scanner-x` it asks for scope, calls the
-orchestrator, and renders a severity-grouped report. On PR triggers it defaults
-to scanning the diff only and posts the report as a PR comment.
+orchestrator, and renders a severity-grouped report. On PR triggers it passes the
+PR's base and head branches so only changed files are reported, then posts the
+report as a PR comment.
 
 ## Non-goals (hackathon scope)
 

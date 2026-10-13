@@ -1,6 +1,8 @@
 import { spawn } from "child_process";
 import path from "path";
 import dotenv from "dotenv";
+import { Agent, fetch, Response } from "undici";
+import { assertPublicHost, guardedLookup } from "./netGuard";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
@@ -31,6 +33,12 @@ export const config = {
     model: process.env.GEMINI_MODEL ?? "gemini-3.6-flash",
     enabled: envBool(process.env.GEMINI_ENABLED, true),
   },
+  repoHostAllowlist: new Set(
+    (process.env.REPO_HOST_ALLOWLIST ?? "github.com,gitlab.com,bitbucket.org")
+      .split(",")
+      .map((h) => h.trim().toLowerCase())
+      .filter(Boolean)
+  ),
 };
 
 export interface CommandResult {
@@ -95,8 +103,10 @@ export async function toolAvailable(cmd: string): Promise<boolean> {
   return res.spawnError === undefined && res.code !== null;
 }
 
+const guardedAgent = new Agent({ connect: { lookup: guardedLookup } });
+
 /**
- * fetch with an abort timeout. Uses the global fetch (Node 18+).
+ * fetch with an abort timeout. Connections to private/internal addresses are refused.
  */
 export async function fetchWithTimeout(
   url: string,
@@ -110,6 +120,7 @@ export async function fetchWithTimeout(
       headers: opts.headers,
       redirect: "manual",
       signal: controller.signal,
+      dispatcher: guardedAgent,
     });
   } finally {
     clearTimeout(timer);
@@ -129,4 +140,43 @@ export function normalizeDomain(input: string): string {
     throw new Error(`Invalid domain: ${input}`);
   }
   return host;
+}
+
+/**
+ * Accept only credential-free https URLs on an allowlisted host that resolves publicly.
+ */
+export async function validateRepoUrl(input: unknown): Promise<string> {
+  if (typeof input !== "string") throw new Error("Valid repoUrl is required.");
+  let url: URL;
+  try {
+    url = new URL(input.trim());
+  } catch {
+    throw new Error("Valid repoUrl is required.");
+  }
+  if (url.protocol !== "https:") throw new Error("repoUrl must use https://.");
+  if (url.username || url.password) throw new Error("repoUrl must not contain credentials.");
+  if (url.port) throw new Error("repoUrl must not specify a port.");
+  const host = url.hostname.toLowerCase();
+  if (!config.repoHostAllowlist.has(host)) {
+    throw new Error(`Repository host not allowed: ${host}`);
+  }
+  await assertPublicHost(host);
+  url.hash = "";
+  url.search = "";
+  return url.toString();
+}
+
+/** Git ref names safe to pass as arguments (no leading dash, no range syntax). */
+export function validateRef(input: unknown, name: string): string | undefined {
+  if (input === undefined || input === null || input === "") return undefined;
+  if (
+    typeof input !== "string" ||
+    !/^[A-Za-z0-9][A-Za-z0-9._/-]{0,199}$/.test(input) ||
+    input.includes("..") ||
+    input.endsWith(".lock") ||
+    input.endsWith("/")
+  ) {
+    throw new Error(`Invalid ${name}.`);
+  }
+  return input;
 }

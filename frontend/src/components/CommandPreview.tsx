@@ -9,6 +9,8 @@ interface CommandPreviewProps {
   failOn: string;
   triage: boolean;
   fullHistory: boolean;
+  baseRef: string;
+  headRef: string;
 }
 
 /**
@@ -23,6 +25,8 @@ export function CommandPreview({
   failOn,
   triage,
   fullHistory,
+  baseRef,
+  headRef,
 }: CommandPreviewProps) {
   const chosen = checks.filter((c) => selected.has(c.id)).map((c) => c.id);
   const t = target.trim() || (mode === "repo" ? "<owner/repo>" : "<host>");
@@ -34,6 +38,8 @@ export function CommandPreview({
       : []),
     `    --checks ${chosen.join(",") || "<none>"} \\`,
     ...(mode === "repo" && fullHistory ? ["    --full-history \\"] : []),
+    ...(mode === "repo" && baseRef ? [`    --base ${baseRef} \\`] : []),
+    ...(mode === "repo" && baseRef && headRef ? [`    --head ${headRef} \\`] : []),
     `    --fail-on ${failOn}${triage ? " \\" : ""}`,
     ...(triage ? ["    --triage"] : []),
   ];

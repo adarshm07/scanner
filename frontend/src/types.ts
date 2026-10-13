@@ -67,6 +67,7 @@ export interface Report {
     failOn: Severity;
     passed: boolean;
     countAtOrAbove: number;
+    reason?: string;
   };
   ai: {
     provider: ProviderId | null;

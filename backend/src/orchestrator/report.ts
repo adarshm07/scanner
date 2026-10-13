@@ -195,8 +195,9 @@ export async function generateReport(
     stats,
     policy: {
       failOn,
-      passed: countAtOrAbove === 0,
+      passed: countAtOrAbove === 0 && !pipeline.incomplete,
       countAtOrAbove,
+      ...(pipeline.incomplete ? { reason: "scan incomplete" } : {}),
     },
     ai: {
       provider: provider?.id ?? null,

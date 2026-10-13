@@ -6,6 +6,10 @@ import { config } from "./tools/util";
 import { listProviders, hasUsableProvider } from "./llm";
 
 const app = express();
+const trustProxy = process.env.TRUST_PROXY?.trim();
+if (trustProxy) {
+  app.set("trust proxy", /^\d+$/.test(trustProxy) ? Number(trustProxy) : trustProxy);
+}
 const corsOrigins = new Set(
   (process.env.CORS_ORIGINS ?? "http://localhost:5173,http://127.0.0.1:5173")
     .split(",")

@@ -55,13 +55,21 @@ export function gitleaksAdapter(raw: GitleaksRaw[]): Finding[] {
  * Run gitleaks against a repo directory. Returns [] if the CLI is not installed
  * (no fabricated data — install gitleaks to enable secret scanning).
  */
-export async function runGitleaks(repoDir: string, fullHistory = false): Promise<Finding[]> {
+export async function runGitleaks(
+  repoDir: string,
+  opts: { fullHistory?: boolean; logOpts?: string } = {}
+): Promise<Finding[]> {
+  const fullHistory = opts.fullHistory === true;
   if (!(await toolAvailable("gitleaks"))) {
     return [];
   }
   const reportPath = path.join(repoDir, ".scanner-x-gitleaks.json");
   const args = fullHistory
-    ? ["git", "--report-format", "json", "--report-path", reportPath, repoDir]
+    ? [
+        "git",
+        ...(opts.logOpts ? [`--log-opts=${opts.logOpts}`] : []),
+        "--report-format", "json", "--report-path", reportPath, repoDir,
+      ]
     : ["detect", "--source", repoDir, "--no-git", "--report-format", "json", "--report-path", reportPath];
   await runCommand(
     "gitleaks",

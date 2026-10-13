@@ -1,6 +1,7 @@
 import { CheckResult, Finding, makeFindingId } from "../schema/finding";
 import { DomainResult } from "./domainResult";
 import { fetchWithTimeout } from "./util";
+import type { Response } from "undici";
 
 const PATHS = [".git/config", ".git/HEAD", ".env", ".env.local", ".env.production"];
 const MAX_REDIRECTS = 3;

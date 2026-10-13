@@ -44,7 +44,7 @@ Call the orchestrator:
 
 ```
 POST {SCANNER_X_API}/api/scan/repo
-{ "repoUrl": "<repo url>", "scope": ["backend"] | "all" }
+{ "repoUrl": "<https repo url>", "checks": ["secrets", "sast", "deps"] | "all" }
 → { "reportId": "..." }
 ```
 
@@ -70,8 +70,16 @@ Never run active scans (port scans, injection probes). Passive checks only.
 
 ### 4. PR trigger (when wired via CI)
 
-- Default to scanning **the diff only**: restrict findings to files changed in the
-  PR rather than the whole repo, to keep compute and LLM cost down.
+- Scan **the diff only** by passing the PR's base and head branches:
+
+  ```
+  POST {SCANNER_X_API}/api/scan/repo
+  { "repoUrl": "<https repo url>", "baseRef": "<PR base branch>", "headRef": "<PR head branch>" }
+  ```
+
+  Only findings in files changed between base and head are reported. If the
+  report's `policy.reason` is `"scan incomplete"`, say the scan failed (see
+  `warning`) instead of reporting a clean result.
 - Post the final report as a **PR comment**:
   - Executive summary at the top.
   - Findings grouped by severity.

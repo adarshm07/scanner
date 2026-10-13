@@ -21,6 +21,8 @@ export default function App() {
   const [failOn, setFailOn] = useState("high");
   const [triage, setTriage] = useState(true);
   const [fullHistory, setFullHistory] = useState(false);
+  const [baseRef, setBaseRef] = useState("");
+  const [headRef, setHeadRef] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<Report | null>(null);
@@ -96,7 +98,16 @@ export default function App() {
         mode === "repo" ? "/api/scan/repo/stream" : "/api/scan/domain/stream";
       const body =
         mode === "repo"
-          ? { repoUrl: target.trim(), checks: chosen, provider: providerId ?? undefined, failOn, triage, fullHistory }
+          ? {
+              repoUrl: target.trim(),
+              checks: chosen,
+              provider: providerId ?? undefined,
+              failOn,
+              triage,
+              fullHistory,
+              baseRef: baseRef.trim() || undefined,
+              headRef: (baseRef.trim() && headRef.trim()) || undefined,
+            }
           : { domain: target.trim(), attested, checks: chosen, provider: providerId ?? undefined, failOn, triage };
 
       let reportId: string | null = null;
@@ -206,6 +217,29 @@ export default function App() {
                     </span>
                   </label>
                 )}
+                {mode === "repo" && (
+                  <div className="flex flex-col gap-1.5 text-[13px] text-text3">
+                    <span>Scan only changes (optional)</span>
+                    <div className="flex gap-2">
+                      <input
+                        value={baseRef}
+                        onChange={(e) => setBaseRef(e.target.value)}
+                        placeholder="base branch, e.g. main"
+                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-none focus:border-muted"
+                      />
+                      <input
+                        value={headRef}
+                        onChange={(e) => setHeadRef(e.target.value)}
+                        disabled={!baseRef.trim()}
+                        placeholder="head branch (default branch if empty)"
+                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-none focus:border-muted disabled:opacity-50"
+                      />
+                    </div>
+                    <span className="text-[12px] text-muted">
+                      Reports only findings in files changed between base and head, like a PR check.
+                    </span>
+                  </div>
+                )}
                 {mode === "domain" && (
                   <label className="flex cursor-pointer items-start gap-2.5 rounded border border-edge bg-panel/40 p-3 text-[13px] text-text3">
                     <input
@@ -285,6 +319,8 @@ export default function App() {
             failOn={failOn}
             triage={triage}
             fullHistory={fullHistory}
+            baseRef={baseRef.trim()}
+            headRef={headRef.trim()}
             providerId={providerId}
             estimate={estimate}
             canSubmit={canSubmit}

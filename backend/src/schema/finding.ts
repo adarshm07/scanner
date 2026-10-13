@@ -110,6 +110,7 @@ export interface Report {
     failOn: Severity;
     passed: boolean;
     countAtOrAbove: number;
+    reason?: string;
   };
   ai: {
     provider: "gemini" | "claude" | null;

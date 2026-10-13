@@ -27,7 +27,7 @@ export type Scope = string[] | "all";
 
 interface RepoTool {
   check: string;
-  run: (repoDir: string, fullHistory?: boolean) => Promise<Finding[]>;
+  run: (repoDir: string, opts: { fullHistory: boolean; logOpts?: string }) => Promise<Finding[]>;
 }
 
 const REPO_TOOLS: RepoTool[] = [
@@ -56,6 +56,8 @@ export interface PipelineOutput {
   ref: string;
   findings: Finding[];
   warning?: string;
+  /** True when the target wasn't actually scanned; fails the policy. */
+  incomplete?: boolean;
   checks: CheckResult[]; // domain mode: every probe run, pass or finding
   /** Absolute path to the checked-out repo (repo mode) for snippet hydration. */
   repoDir?: string;
@@ -99,29 +101,79 @@ async function runTracked<T>(
   return findings;
 }
 
+export interface RepoScanOptions {
+  fullHistory?: boolean;
+  baseRef?: string;
+  headRef?: string;
+}
+
+// https only, and no redirects, so a clone can't be bounced to an internal host.
+const GIT_SAFE = [
+  "-c", "protocol.allow=never",
+  "-c", "protocol.https.allow=always",
+  "-c", "http.followRedirects=false",
+];
+
+function gitError(res: { spawnError?: string; stderr: string; code: number | null }, what: string): string {
+  return res.spawnError || res.stderr.trim() || `${what} exited with code ${res.code}`;
+}
+
 async function cloneRepo(
   repoUrl: string,
-  fullHistory: boolean
-): Promise<{ dir: string; ref: string; error?: string }> {
+  opts: { fullHistory: boolean; baseRef?: string; headRef?: string }
+): Promise<{ dir: string; ref: string; baseSha?: string; changed?: Set<string>; error?: string }> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
-  const depthArgs = fullHistory ? [] : ["--depth", "1"];
+  const historyArgs = opts.baseRef
+    ? ["--filter=blob:none"]
+    : opts.fullHistory
+      ? []
+      : ["--depth", "1"];
+  const branchArgs = opts.headRef ? ["--branch", opts.headRef] : [];
   const clone = await runCommand(
     "git",
-    ["clone", ...depthArgs, repoUrl, dir],
-    { timeoutMs: fullHistory ? 600000 : 120000 }
+    [...GIT_SAFE, "clone", "--no-tags", ...historyArgs, ...branchArgs, "--", repoUrl, dir],
+    { timeoutMs: opts.fullHistory || opts.baseRef ? 600000 : 120000 }
   );
   let ref = new Date().toISOString();
-  if (!clone.spawnError && clone.code === 0) {
-    const rev = await runCommand("git", ["rev-parse", "HEAD"], { cwd: dir });
-    if (rev.code === 0) ref = rev.stdout.trim();
+  if (clone.spawnError || clone.code !== 0) {
+    return { dir, ref, error: gitError(clone, "git clone") };
   }
-  return {
-    dir,
-    ref,
-    ...(clone.spawnError || clone.code !== 0
-      ? { error: clone.spawnError || clone.stderr.trim() || `git clone exited with code ${clone.code}` }
-      : {}),
-  };
+  const rev = await runCommand("git", ["rev-parse", "HEAD"], { cwd: dir });
+  if (rev.code === 0) ref = rev.stdout.trim();
+  if (!opts.baseRef) return { dir, ref };
+
+  const fetch = await runCommand(
+    "git",
+    [...GIT_SAFE, "fetch", "--no-tags", "origin", "--", opts.baseRef],
+    { cwd: dir, timeoutMs: 300000 }
+  );
+  if (fetch.spawnError || fetch.code !== 0) {
+    return { dir, ref, error: `could not fetch base ref ${opts.baseRef}: ${gitError(fetch, "git fetch")}` };
+  }
+  const base = await runCommand("git", ["rev-parse", "FETCH_HEAD"], { cwd: dir });
+  const baseSha = base.stdout.trim();
+  const diff = await runCommand(
+    "git",
+    ["diff", "--name-only", "-z", `${baseSha}...HEAD`],
+    { cwd: dir, timeoutMs: 120000 }
+  );
+  if (base.code !== 0 || diff.code !== 0) {
+    return { dir, ref, error: `could not diff against ${opts.baseRef}: ${gitError(diff, "git diff")}` };
+  }
+  const changed = new Set(diff.stdout.split("\0").filter(Boolean));
+  return { dir, ref: `${baseSha.slice(0, 12)}...${ref}`, baseSha, changed };
+}
+
+function inChangedFiles(finding: Finding, dirs: string[], changed: Set<string>): boolean {
+  const file = finding.location.file;
+  if (!file) return false;
+  if (finding.skill.startsWith("npm-audit") || file === "package.json") {
+    return changed.has("package.json") || changed.has("package-lock.json");
+  }
+  return dirs.some((dir) => {
+    const rel = path.relative(dir, path.resolve(dir, file)).split(path.sep).join("/");
+    return changed.has(rel);
+  });
 }
 
 async function hasScannableFiles(dir: string): Promise<boolean> {
@@ -152,68 +204,47 @@ async function hasScannableFiles(dir: string): Promise<boolean> {
   return visit(dir);
 }
 
-function demoFindings(): Finding[] {
-  const examples: Pick<Finding, "skill" | "rule_id" | "severity" | "title" | "location" | "tool_message" | "metadata">[] = [
-    {
-      skill: "demo-hardcoded-secret",
-      rule_id: "demo-hardcoded-secret",
-      severity: "high",
-      title: "[Demo] Hardcoded credential example",
-      location: { file: "src/config.ts", line_start: 12, line_end: 12 },
-      tool_message: "DEMO ONLY: Illustrative hardcoded credential finding; this was not detected in the target repository.",
-      metadata: { demo: true, cwe: "CWE-798" },
-    },
-    {
-      skill: "demo-unsafe-input",
-      rule_id: "demo-unsafe-input",
-      severity: "medium",
-      title: "[Demo] Unvalidated input reaches a sensitive operation",
-      location: { file: "src/routes.ts", line_start: 34, line_end: 34 },
-      tool_message: "DEMO ONLY: Illustrative input-validation finding; this was not detected in the target repository.",
-      metadata: { demo: true, cwe: "CWE-20" },
-    },
-  ];
-  return examples.map((finding) => ({
-    ...finding,
-    category: "backend",
-    finding_id: `${finding.rule_id}-demo`,
-    confidence: "low",
-    raw_snippet: null,
-  }));
-}
-
 export async function runRepoPipeline(
   repoUrl: string,
   scope: Scope,
-  fullHistory = false,
+  opts: RepoScanOptions = {},
   emit: EmitFn = noop
 ): Promise<PipelineOutput> {
   let dir: string;
   let ref = new Date().toISOString();
   let warning: string | undefined;
-  const scanHistory = fullHistory && selected("secrets", scope);
+  let baseSha: string | undefined;
+  let changed: Set<string> | undefined;
+  const scanHistory = opts.fullHistory === true && selected("secrets", scope);
   try {
-    const cloned = await cloneRepo(repoUrl, scanHistory);
+    const cloned = await cloneRepo(repoUrl, {
+      fullHistory: scanHistory,
+      baseRef: opts.baseRef,
+      headRef: opts.headRef,
+    });
     dir = cloned.dir;
     ref = cloned.ref;
+    baseSha = cloned.baseSha;
+    changed = cloned.changed;
     if (cloned.error) {
-      warning = `Repository clone failed (${cloned.error}). No repository code was scanned; showing demo findings.`;
+      warning = `Repository clone failed (${cloned.error}). No repository code was scanned.`;
     } else if (!(await hasScannableFiles(dir))) {
-      warning = "Repository has no scannable code or dependency manifests. No repository code was scanned; showing demo findings.";
+      warning = "Repository has no scannable code or dependency manifests. No repository code was scanned.";
     }
   } catch (err) {
     dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
-    warning = `Repository clone failed (${(err as Error).message}). No repository code was scanned; showing demo findings.`;
+    warning = `Repository clone failed (${(err as Error).message}). No repository code was scanned.`;
   }
 
   if (warning) {
-    emit({ t: "error", message: warning });
+    emit({ t: "log", at: Date.now(), source: "clone", message: warning });
     return {
       mode: "repo",
       target: repoUrl,
       ref,
-      findings: demoFindings(),
+      findings: [],
       warning,
+      incomplete: true,
       checks: [],
       repoDir: dir,
       cleanup: async () => {
@@ -222,11 +253,28 @@ export async function runRepoPipeline(
     };
   }
 
+  if (changed) {
+    emit({
+      t: "log",
+      at: Date.now(),
+      source: "clone",
+      message: `Diff mode: ${changed.size} changed ${changed.size === 1 ? "file" : "files"} vs ${opts.baseRef}`,
+    });
+  }
+
+  const toolOpts = {
+    fullHistory: scanHistory,
+    logOpts: baseSha ? `${baseSha}..HEAD` : undefined,
+  };
   const tools = REPO_TOOLS.filter((t) => selected(t.check, scope));
   const results = await Promise.all(
-    tools.map((t) => runTracked(t.check, () => t.run(dir, scanHistory), emit))
+    tools.map((t) => runTracked(t.check, () => t.run(dir, toolOpts), emit))
   );
-  const findings = results.flat();
+  let findings = results.flat();
+  if (changed) {
+    const dirs = [dir, await fs.realpath(dir)];
+    findings = findings.filter((f) => inChangedFiles(f, dirs, changed!));
+  }
 
   return {
     mode: "repo",
