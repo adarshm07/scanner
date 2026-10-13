@@ -13,6 +13,7 @@ import { runDnsCheck } from "../tools/dnsCheck";
 import { runSubdomainCheck } from "../tools/subdomainCheck";
 import { runExposedFiles } from "../tools/exposedFiles";
 import { DomainResult } from "../tools/domainResult";
+import { ToolRun } from "../tools/types";
 import { CHECKS } from "./checks";
 import { EmitFn } from "./events";
 
@@ -27,7 +28,7 @@ export type Scope = string[] | "all";
 
 interface RepoTool {
   check: string;
-  run: (repoDir: string, opts: { fullHistory: boolean; logOpts?: string }) => Promise<Finding[]>;
+  run: (repoDir: string, opts: { fullHistory: boolean; logOpts?: string }) => Promise<ToolRun>;
 }
 
 const REPO_TOOLS: RepoTool[] = [
@@ -75,30 +76,30 @@ function checkName(id: string): string {
 }
 
 /** Run one tool with timing + start/done events. */
-async function runTracked<T>(
+async function runTracked(
   check: string,
-  fn: () => Promise<Finding[]>,
+  fn: () => Promise<ToolRun>,
   emit: EmitFn
-): Promise<Finding[]> {
+): Promise<ToolRun> {
   const start = Date.now();
   emit({ t: "tool", id: check, status: "running", at: start });
-  const findings = await fn();
+  const run = await fn();
   const end = Date.now();
-  emit({
-    t: "tool",
-    id: check,
-    status: "done",
-    at: end,
-    ms: end - start,
-    hits: findings.length,
-  });
+  const hits = run.findings.length;
+  if (run.ran) {
+    emit({ t: "tool", id: check, status: "done", at: end, ms: end - start, hits });
+  } else {
+    emit({ t: "tool", id: check, status: "error", at: end, ms: end - start, hits, message: run.error ?? "did not run" });
+  }
   emit({
     t: "log",
     at: end,
     source: check,
-    message: `${checkName(check)}: ${findings.length} ${findings.length === 1 ? "hit" : "hits"}`,
+    message: run.ran
+      ? `${checkName(check)}: ${hits} ${hits === 1 ? "hit" : "hits"}`
+      : `${checkName(check)}: NOT SCANNED (${run.error ?? "did not run"})`,
   });
-  return findings;
+  return run;
 }
 
 export interface RepoScanOptions {
@@ -117,6 +118,33 @@ const GIT_SAFE = [
 function gitError(res: { spawnError?: string; stderr: string; code: number | null }, what: string): string {
   return res.spawnError || res.stderr.trim() || `${what} exited with code ${res.code}`;
 }
+
+/**
+ * Fetch a ref from origin and return its full SHA. Servers only accept full SHAs, so an
+ * abbreviated one is resolved against the already-cloned history instead.
+ */
+async function resolveRef(dir: string, ref: string): Promise<string | null> {
+  const fetch = await runCommand(
+    "git",
+    [...GIT_SAFE, "fetch", "--no-tags", "origin", "--", ref],
+    { cwd: dir, timeoutMs: 300000 }
+  );
+  if (!fetch.spawnError && fetch.code === 0) {
+    const head = await runCommand("git", ["rev-parse", "FETCH_HEAD"], { cwd: dir });
+    if (head.code === 0) return head.stdout.trim();
+  }
+  if (/^[0-9a-f]{7,39}$/i.test(ref)) {
+    const local = await runCommand(
+      "git",
+      ["rev-parse", "--verify", "--quiet", `${ref}^{commit}`],
+      { cwd: dir }
+    );
+    if (local.code === 0) return local.stdout.trim();
+  }
+  return null;
+}
+
+const REF_HINT = "use a branch name, refs/pull/N/head, or the full 40-character SHA";
 
 async function cloneRepo(
   repoUrl: string,
@@ -142,17 +170,13 @@ async function cloneRepo(
   }
   // Fetch-then-checkout accepts branches, SHAs and refs/pull/N/head (fork PRs), unlike clone --branch.
   if (opts.headRef) {
-    const fetchHead = await runCommand(
-      "git",
-      [...GIT_SAFE, "fetch", "--no-tags", "origin", "--", opts.headRef],
-      { cwd: dir, timeoutMs: 300000 }
-    );
-    if (fetchHead.spawnError || fetchHead.code !== 0) {
-      return { dir, ref, error: `could not fetch head ref ${opts.headRef}: ${gitError(fetchHead, "git fetch")}` };
+    const headSha = await resolveRef(dir, opts.headRef);
+    if (!headSha) {
+      return { dir, ref, error: `could not find head ref ${opts.headRef}; ${REF_HINT}` };
     }
     const checkout = await runCommand(
       "git",
-      [...GIT_SAFE, "checkout", "--detach", "FETCH_HEAD"],
+      [...GIT_SAFE, "checkout", "--detach", headSha],
       { cwd: dir, timeoutMs: 300000 }
     );
     if (checkout.spawnError || checkout.code !== 0) {
@@ -163,26 +187,20 @@ async function cloneRepo(
   if (rev.code === 0) ref = rev.stdout.trim();
   if (!opts.baseRef) return { dir, ref };
 
-  const fetch = await runCommand(
-    "git",
-    [...GIT_SAFE, "fetch", "--no-tags", "origin", "--", opts.baseRef],
-    { cwd: dir, timeoutMs: 300000 }
-  );
-  if (fetch.spawnError || fetch.code !== 0) {
-    return { dir, ref, error: `could not fetch base ref ${opts.baseRef}: ${gitError(fetch, "git fetch")}` };
+  const baseSha = await resolveRef(dir, opts.baseRef);
+  if (!baseSha) {
+    return { dir, ref, error: `could not find base ref ${opts.baseRef}; ${REF_HINT}` };
   }
-  const base = await runCommand("git", ["rev-parse", "FETCH_HEAD"], { cwd: dir });
-  const baseSha = base.stdout.trim();
   const diff = await runCommand(
     "git",
     ["diff", "--name-only", "-z", `${baseSha}...HEAD`],
     { cwd: dir, timeoutMs: 120000 }
   );
-  if (base.code !== 0 || diff.code !== 0) {
+  if (diff.code !== 0) {
     return { dir, ref, error: `could not diff against ${opts.baseRef}: ${gitError(diff, "git diff")}` };
   }
   const changed = new Set(diff.stdout.split("\0").filter(Boolean));
-  return { dir, ref: `${baseSha.slice(0, 12)}...${ref}`, baseSha, changed };
+  return { dir, ref: `${baseSha}...${ref}`, baseSha, changed };
 }
 
 const DEPENDENCY_FILES = new Set([
@@ -194,9 +212,14 @@ function inChangedFiles(finding: Finding, dirs: string[], changed: Set<string>):
   if (finding.skill.startsWith("gitleaks-")) return true;
   const file = finding.location.file;
   if (!file) return false;
-  // npm audit reports against the root, but a nested workspace manifest can change the resolved tree.
+  // Keep a manifest's findings when a dependency file changed in its directory or a workspace below it.
   if (finding.skill.startsWith("npm-audit")) {
-    return [...changed].some((f) => DEPENDENCY_FILES.has(path.posix.basename(f)));
+    const manifestDir = path.posix.dirname(file);
+    return [...changed].some(
+      (f) =>
+        DEPENDENCY_FILES.has(path.posix.basename(f)) &&
+        (manifestDir === "." || f.startsWith(`${manifestDir}/`))
+    );
   }
   return dirs.some((dir) => {
     const rel = path.relative(dir, path.resolve(dir, file)).split(path.sep).join("/");
@@ -295,20 +318,29 @@ export async function runRepoPipeline(
     logOpts: baseSha ? `${baseSha}..HEAD` : undefined,
   };
   const tools = REPO_TOOLS.filter((t) => selected(t.check, scope));
-  const results = await Promise.all(
+  const runs = await Promise.all(
     tools.map((t) => runTracked(t.check, () => t.run(dir, toolOpts), emit))
   );
-  let findings = results.flat();
+  let findings = runs.flatMap((r) => r.findings);
   if (changed) {
     const dirs = [dir, await fs.realpath(dir)];
     findings = findings.filter((f) => inChangedFiles(f, dirs, changed!));
   }
+  const skipped = tools
+    .map((t, i) => ({ check: t.check, run: runs[i] }))
+    .filter(({ run }) => !run.ran);
+  const skippedWarning = skipped.length
+    ? `Not scanned: ${skipped
+        .map(({ check, run }) => `${checkName(check)} (${run.error ?? "did not run"})`)
+        .join(", ")}.`
+    : undefined;
 
   return {
     mode: "repo",
     target: repoUrl,
     ref,
     findings,
+    ...(skippedWarning ? { warning: skippedWarning, incomplete: true } : {}),
     checks: [],
     repoDir: dir,
     cleanup: async () => {

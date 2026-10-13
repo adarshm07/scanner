@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { Finding, makeFindingId } from "../schema/finding";
-import { runCommand, toolAvailable } from "./util";
+import { describeFailure, runCommand, toolAvailable } from "./util";
+import { ToolRun } from "./types";
 
 /**
  * gitleaks — secret detection (repo mode).
@@ -52,19 +53,20 @@ export function gitleaksAdapter(raw: GitleaksRaw[]): Finding[] {
 }
 
 /**
- * Run gitleaks against a repo directory. Returns [] if the CLI is not installed
- * (no fabricated data — install gitleaks to enable secret scanning).
+ * Run gitleaks against a repo directory. Exit code 1 means either "leaks found" or a
+ * fatal error, so success is judged by whether a parseable report was written.
  */
 export async function runGitleaks(
   repoDir: string,
   opts: { fullHistory?: boolean; logOpts?: string } = {}
-): Promise<Finding[]> {
+): Promise<ToolRun> {
   // A commit range (diff mode) always scans history, so secrets added then removed in the PR are caught.
   const scanGit = opts.fullHistory === true || !!opts.logOpts;
   if (!(await toolAvailable("gitleaks"))) {
-    return [];
+    return { findings: [], ran: false, error: "gitleaks not installed" };
   }
   const reportPath = path.join(repoDir, ".scanner-x-gitleaks.json");
+  await fs.rm(reportPath, { force: true });
   const args = scanGit
     ? [
         "git",
@@ -72,17 +74,18 @@ export async function runGitleaks(
         "--report-format", "json", "--report-path", reportPath, repoDir,
       ]
     : ["detect", "--source", repoDir, "--no-git", "--report-format", "json", "--report-path", reportPath];
-  await runCommand(
-    "gitleaks",
-    args,
-    { cwd: repoDir, timeoutMs: scanGit ? 600000 : 120000 }
-  );
+  const timeoutMs = scanGit ? 600000 : 120000;
+  const res = await runCommand("gitleaks", args, { cwd: repoDir, timeoutMs });
+  if (res.spawnError || res.timedOut) {
+    return { findings: [], ran: false, error: describeFailure(res, timeoutMs) };
+  }
   try {
     const content = await fs.readFile(reportPath, "utf8");
     await fs.rm(reportPath, { force: true });
     const parsed = JSON.parse(content) as GitleaksRaw[];
-    return gitleaksAdapter(Array.isArray(parsed) ? parsed : []);
+    if (!Array.isArray(parsed)) throw new Error("unexpected report format");
+    return { findings: gitleaksAdapter(parsed), ran: true };
   } catch {
-    return [];
+    return { findings: [], ran: false, error: describeFailure(res, timeoutMs) };
   }
 }

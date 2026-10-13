@@ -46,6 +46,7 @@ export interface CommandResult {
   stdout: string;
   stderr: string;
   spawnError?: string;
+  timedOut?: boolean;
 }
 
 /**
@@ -62,10 +63,12 @@ export function runCommand(
     let stdout = "";
     let stderr = "";
     let settled = false;
+    let timedOut = false;
 
     const timer = opts.timeoutMs
       ? setTimeout(() => {
           if (!settled) {
+            timedOut = true;
             child.kill("SIGKILL");
           }
         }, opts.timeoutMs)
@@ -85,7 +88,7 @@ export function runCommand(
       if (settled) return;
       settled = true;
       if (timer) clearTimeout(timer);
-      resolve({ code, stdout, stderr });
+      resolve({ code, stdout, stderr, ...(timedOut ? { timedOut } : {}) });
     });
 
     if (opts.input) {
@@ -93,6 +96,14 @@ export function runCommand(
       child.stdin.end();
     }
   });
+}
+
+/** Short reason a command produced no usable output, for "not scanned" warnings. */
+export function describeFailure(res: CommandResult, timeoutMs?: number): string {
+  if (res.spawnError) return res.spawnError;
+  if (res.timedOut) return `timed out${timeoutMs ? ` after ${Math.round(timeoutMs / 1000)}s` : ""}`;
+  const lastLine = res.stderr.trim().split("\n").pop()?.trim();
+  return (lastLine || `exited with code ${res.code}`).slice(0, 200);
 }
 
 /**

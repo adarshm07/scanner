@@ -12,6 +12,7 @@ export type ScanEvent =
     }
   | { t: "tool"; id: string; status: "running"; at: number }
   | { t: "tool"; id: string; status: "done"; at: number; ms: number; hits: number }
+  | { t: "tool"; id: string; status: "error"; at: number; ms: number; hits: number; message: string }
   | { t: "log"; at: number; source: string; message: string }
   | { t: "stage"; id: string; name: string; status: "running" | "done"; at: number; ms?: number; detail?: string }
   | { t: "done"; reportId: string; at: number; raw: number; findings: number }

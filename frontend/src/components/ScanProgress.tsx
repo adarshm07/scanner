@@ -7,7 +7,7 @@ interface Row {
   check: string; // human check name
   startAt?: number;
   endAt?: number;
-  status: "pending" | "running" | "done";
+  status: "pending" | "running" | "done" | "error";
   detail?: string;
 }
 
@@ -53,6 +53,11 @@ function derive(events: ScanEvent[]): Derived {
         if (e.status === "running") {
           r.status = "running";
           r.startAt = e.at;
+        } else if (e.status === "error") {
+          r.status = "error";
+          r.endAt = e.at;
+          r.detail = `not scanned: ${e.message}`;
+          rawHits += e.hits;
         } else {
           r.status = "done";
           r.endAt = e.at;
@@ -193,6 +198,10 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
                   <svg width={13} height={13} viewBox="0 0 12 12" aria-hidden="true">
                     <path d="M2.5 6.5 L5 9 L9.5 3.5" fill="none" stroke="#56B982" strokeWidth={1.8} />
                   </svg>
+                ) : r.status === "error" ? (
+                  <svg width={13} height={13} viewBox="0 0 12 12" aria-label="Not scanned">
+                    <path d="M2 2 L10 10 M10 2 L2 10" stroke="#F0506E" strokeWidth={1.8} />
+                  </svg>
                 ) : r.status === "running" ? (
                   <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-sev-medium" />
                 ) : (
@@ -211,7 +220,12 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
                   }}
                 />
               </span>
-              <span className="font-mono text-[12.5px] text-text3">{r.detail ?? (r.status === "running" ? "running…" : "")}</span>
+              <span
+                className={`truncate font-mono text-[12.5px] ${r.status === "error" ? "text-sev-critical" : "text-text3"}`}
+                title={r.detail}
+              >
+                {r.detail ?? (r.status === "running" ? "running…" : "")}
+              </span>
               <span className="text-right font-mono text-[12.5px] text-muted">
                 {ms > 0 ? `${(ms / 1000).toFixed(1)}s` : ""}
               </span>

@@ -7,6 +7,12 @@ function severityOf(f: { severity: Severity; triage: { adjusted_severity: Severi
   return f.triage?.adjusted_severity ?? f.severity;
 }
 
+/** Diff scans store `<base>...<head>`; show both sides so it's clear the head was scanned. */
+function formatRef(ref: string): string {
+  const [base, head] = ref.split("...");
+  return head ? `${base.slice(0, 7)}…${head.slice(0, 7)}` : ref.slice(0, 12);
+}
+
 export function ReportView({
   report,
   onNewScan,
@@ -34,7 +40,7 @@ export function ReportView({
           <span className="max-w-[280px] truncate text-ink3">{report.target}</span>
         </nav>
         <div className="flex-grow" />
-        <span className="font-mono text-[12.5px] text-muted">{report.ref.slice(0, 12)}</span>
+        <span className="font-mono text-[12.5px] text-muted" title={report.ref}>{formatRef(report.ref)}</span>
         {report.ai.llmFallbackUsed && (
           <span className="rounded border border-sev-medium/50 bg-sev-medium/10 px-2 py-0.5 text-[11px] font-mono text-sev-medium">
             llm fallback used
@@ -64,7 +70,7 @@ export function ReportView({
         </div>
         <dl className="m-0 grid grid-cols-2 gap-4 text-[13px] sm:grid-cols-4">
           {[
-            ["Ref", report.ref.slice(0, 12)],
+            ["Ref", formatRef(report.ref)],
             ["Findings", `${total} of ${report.stats.totalRaw} raw`],
             ["Policy", `--fail-on ${report.policy.failOn}`],
             ["Finished", new Date(report.createdAt).toLocaleString()],
