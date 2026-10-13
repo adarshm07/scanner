@@ -27,7 +27,7 @@ export type Scope = string[] | "all";
 
 interface RepoTool {
   check: string;
-  run: (repoDir: string) => Promise<Finding[]>;
+  run: (repoDir: string, fullHistory?: boolean) => Promise<Finding[]>;
 }
 
 const REPO_TOOLS: RepoTool[] = [
@@ -99,12 +99,16 @@ async function runTracked<T>(
   return findings;
 }
 
-async function cloneRepo(repoUrl: string): Promise<{ dir: string; ref: string; error?: string }> {
+async function cloneRepo(
+  repoUrl: string,
+  fullHistory: boolean
+): Promise<{ dir: string; ref: string; error?: string }> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
+  const depthArgs = fullHistory ? [] : ["--depth", "1"];
   const clone = await runCommand(
     "git",
-    ["clone", "--depth", "1", repoUrl, dir],
-    { timeoutMs: 120000 }
+    ["clone", ...depthArgs, repoUrl, dir],
+    { timeoutMs: fullHistory ? 600000 : 120000 }
   );
   let ref = new Date().toISOString();
   if (!clone.spawnError && clone.code === 0) {
@@ -181,13 +185,15 @@ function demoFindings(): Finding[] {
 export async function runRepoPipeline(
   repoUrl: string,
   scope: Scope,
+  fullHistory = false,
   emit: EmitFn = noop
 ): Promise<PipelineOutput> {
   let dir: string;
   let ref = new Date().toISOString();
   let warning: string | undefined;
+  const scanHistory = fullHistory && selected("secrets", scope);
   try {
-    const cloned = await cloneRepo(repoUrl);
+    const cloned = await cloneRepo(repoUrl, scanHistory);
     dir = cloned.dir;
     ref = cloned.ref;
     if (cloned.error) {
@@ -218,7 +224,7 @@ export async function runRepoPipeline(
 
   const tools = REPO_TOOLS.filter((t) => selected(t.check, scope));
   const results = await Promise.all(
-    tools.map((t) => runTracked(t.check, () => t.run(dir), emit))
+    tools.map((t) => runTracked(t.check, () => t.run(dir, scanHistory), emit))
   );
   const findings = results.flat();
 

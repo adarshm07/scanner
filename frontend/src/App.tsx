@@ -20,6 +20,7 @@ export default function App() {
   const [attested, setAttested] = useState(false);
   const [failOn, setFailOn] = useState("high");
   const [triage, setTriage] = useState(true);
+  const [fullHistory, setFullHistory] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<Report | null>(null);
@@ -55,6 +56,7 @@ export default function App() {
   }, [modeChecks]);
 
   const toggle = (id: string) => {
+    if (id === "secrets" && selected.has(id)) setFullHistory(false);
     setSelected((prev) => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
@@ -94,7 +96,7 @@ export default function App() {
         mode === "repo" ? "/api/scan/repo/stream" : "/api/scan/domain/stream";
       const body =
         mode === "repo"
-          ? { repoUrl: target.trim(), checks: chosen, provider: providerId ?? undefined, failOn, triage }
+          ? { repoUrl: target.trim(), checks: chosen, provider: providerId ?? undefined, failOn, triage, fullHistory }
           : { domain: target.trim(), attested, checks: chosen, provider: providerId ?? undefined, failOn, triage };
 
       let reportId: string | null = null;
@@ -185,6 +187,25 @@ export default function App() {
                   })}
                 </div>
                 <DomainInput mode={mode} value={target} onChange={setTarget} />
+                {mode === "repo" && (
+                  <label className="flex cursor-pointer items-start gap-2.5 text-[13px] text-text3">
+                    <input
+                      type="checkbox"
+                      className="mt-0.5 h-4 w-4 accent-[#E3E7EA]"
+                      checked={fullHistory}
+                      disabled={!selected.has("secrets")}
+                      onChange={(e) => setFullHistory(e.target.checked)}
+                    />
+                    <span className="flex flex-col gap-0.5">
+                      <span>Scan full Git history</span>
+                      <span className="text-[12px] text-muted">
+                        {selected.has("secrets")
+                          ? "Gitleaks checks every commit. Fetching full history can take much longer."
+                          : "Select the Secrets check to enable history scanning."}
+                      </span>
+                    </span>
+                  </label>
+                )}
                 {mode === "domain" && (
                   <label className="flex cursor-pointer items-start gap-2.5 rounded border border-edge bg-panel/40 p-3 text-[13px] text-text3">
                     <input
@@ -263,6 +284,7 @@ export default function App() {
             selected={selected}
             failOn={failOn}
             triage={triage}
+            fullHistory={fullHistory}
             providerId={providerId}
             estimate={estimate}
             canSubmit={canSubmit}

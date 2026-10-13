@@ -9,6 +9,7 @@ interface JobPanelProps {
   selected: Set<string>;
   failOn: string;
   triage: boolean;
+  fullHistory: boolean;
   providerId: string | null;
   estimate: string;
   canSubmit: boolean;
@@ -22,7 +23,7 @@ function touches(p: JobPanelProps): { k: string; v: string }[] {
   const modelOn = p.triage && !!p.providerId;
   if (p.mode === "repo") {
     return [
-      { k: "Reads", v: `A shallow clone of ${t}, deleted when the scan ends.` },
+      { k: "Reads", v: `${p.fullHistory ? "Full Git history" : "A shallow clone"} of ${t}, deleted when the scan ends.` },
       { k: "Network", v: "Dependency and secret checks may query public advisory sources." },
       { k: "Model", v: modelOn ? "Finding metadata and up to 20 lines of context per finding." : "Nothing. Triage is off." },
     ];
@@ -49,6 +50,7 @@ export function JobPanel(props: JobPanelProps) {
           selected={props.selected}
           failOn={props.failOn}
           triage={props.triage}
+          fullHistory={props.fullHistory}
         />
       </div>
 

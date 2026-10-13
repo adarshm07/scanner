@@ -34,7 +34,7 @@ function parseScope(input: unknown, mode: "repo" | "domain"): Scope | null {
 
 // POST /api/scan/repo
 router.post("/scan/repo", async (req: Request, res: Response) => {
-  const { repoUrl, checks, provider, failOn, triage } = req.body ?? {};
+  const { repoUrl, checks, provider, failOn, triage, fullHistory } = req.body ?? {};
   if (typeof repoUrl !== "string" || !/^https?:\/\/|^git@/.test(repoUrl)) {
     return res.status(400).json({ error: "Valid repoUrl is required." });
   }
@@ -47,7 +47,7 @@ router.post("/scan/repo", async (req: Request, res: Response) => {
   const llm =
     triage === false ? null : resolveProvider(typeof provider === "string" ? provider : undefined);
   try {
-    const pipeline = await runRepoPipeline(repoUrl, parsedScope);
+    const pipeline = await runRepoPipeline(repoUrl, parsedScope, fullHistory === true);
     try {
       const report = await generateReport(pipeline, llm, parseFailOn(failOn));
       reportStore.save(report);
@@ -130,7 +130,7 @@ function stepsFor(mode: "repo" | "domain", scope: Scope) {
 
 // POST /api/scan/repo/stream
 router.post("/scan/repo/stream", async (req: Request, res: Response) => {
-  const { repoUrl, checks, provider, failOn, triage } = req.body ?? {};
+  const { repoUrl, checks, provider, failOn, triage, fullHistory } = req.body ?? {};
   if (typeof repoUrl !== "string" || !/^https?:\/\/|^git@/.test(repoUrl)) {
     return res.status(400).json({ error: "Valid repoUrl is required." });
   }
@@ -141,7 +141,7 @@ router.post("/scan/repo/stream", async (req: Request, res: Response) => {
   const llm = triage === false ? null : resolveProvider(typeof provider === "string" ? provider : undefined);
   emit({ t: "start", mode: "repo", target: repoUrl, startedAt: Date.now(), steps: stepsFor("repo", scope) });
   try {
-    const pipeline = await runRepoPipeline(repoUrl, scope, emit);
+    const pipeline = await runRepoPipeline(repoUrl, scope, fullHistory === true, emit);
     try {
       const report = await generateReport(pipeline, llm, parseFailOn(failOn), emit);
       reportStore.save(report);

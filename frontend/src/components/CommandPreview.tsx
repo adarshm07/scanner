@@ -8,6 +8,7 @@ interface CommandPreviewProps {
   selected: Set<string>;
   failOn: string;
   triage: boolean;
+  fullHistory: boolean;
 }
 
 /**
@@ -21,6 +22,7 @@ export function CommandPreview({
   selected,
   failOn,
   triage,
+  fullHistory,
 }: CommandPreviewProps) {
   const chosen = checks.filter((c) => selected.has(c.id)).map((c) => c.id);
   const t = target.trim() || (mode === "repo" ? "<owner/repo>" : "<host>");
@@ -31,6 +33,7 @@ export function CommandPreview({
       ? [`    --attest ${attested ? "authorized" : "<required>"} \\`]
       : []),
     `    --checks ${chosen.join(",") || "<none>"} \\`,
+    ...(mode === "repo" && fullHistory ? ["    --full-history \\"] : []),
     `    --fail-on ${failOn}${triage ? " \\" : ""}`,
     ...(triage ? ["    --triage"] : []),
   ];
