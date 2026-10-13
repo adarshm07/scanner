@@ -56,10 +56,14 @@ export interface CommandResult {
 export function runCommand(
   cmd: string,
   args: string[],
-  opts: { cwd?: string; timeoutMs?: number; input?: string } = {}
+  opts: { cwd?: string; timeoutMs?: number; input?: string; env?: Record<string, string> } = {}
 ): Promise<CommandResult> {
   return new Promise((resolve) => {
-    const child = spawn(cmd, args, { cwd: opts.cwd, shell: false });
+    const child = spawn(cmd, args, {
+      cwd: opts.cwd,
+      shell: false,
+      env: opts.env ? { ...process.env, ...opts.env } : process.env,
+    });
     let stdout = "";
     let stderr = "";
     let settled = false;
@@ -106,12 +110,18 @@ export function describeFailure(res: CommandResult, timeoutMs?: number): string 
   return (lastLine || `exited with code ${res.code}`).slice(0, 200);
 }
 
-/**
- * Check whether a CLI is available on PATH.
- */
-export async function toolAvailable(cmd: string): Promise<boolean> {
-  const res = await runCommand(cmd, ["--version"], { timeoutMs: 5000 });
-  return res.spawnError === undefined && res.code !== null;
+export type ToolCheck = { ok: true } | { ok: false; error: string };
+
+/** Distinguishes a missing CLI from one that hangs or fails, so warnings point at the right fix. */
+export async function checkTool(cmd: string, env?: Record<string, string>): Promise<ToolCheck> {
+  const res = await runCommand(cmd, ["--version"], { timeoutMs: 15000, env });
+  if (res.spawnError) {
+    return { ok: false, error: /ENOENT/.test(res.spawnError) ? `${cmd} not installed` : res.spawnError };
+  }
+  if (res.timedOut) return { ok: false, error: `${cmd} --version timed out` };
+  if (res.code === 0) return { ok: true };
+  const firstLine = res.stderr.trim().split("\n")[0]?.trim().slice(0, 160);
+  return { ok: false, error: `${cmd} --version exited ${res.code}${firstLine ? `: ${firstLine}` : ""}` };
 }
 
 const guardedAgent = new Agent({ connect: { lookup: guardedLookup } });

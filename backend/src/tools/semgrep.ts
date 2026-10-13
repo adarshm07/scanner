@@ -1,5 +1,5 @@
 import { Finding, makeFindingId, Severity, Confidence } from "../schema/finding";
-import { describeFailure, runCommand, toolAvailable } from "./util";
+import { checkTool, describeFailure, runCommand } from "./util";
 import { ToolRun } from "./types";
 
 /**
@@ -89,15 +89,18 @@ export function semgrepAdapter(raw: SemgrepRaw): Finding[] {
 }
 
 const SEMGREP_TIMEOUT_MS = 180000;
+// Without these, semgrep phones home on startup and hangs ~30s when offline.
+const SEMGREP_ENV = { SEMGREP_ENABLE_VERSION_CHECK: "0", SEMGREP_SEND_METRICS: "off" };
 
 export async function runSemgrep(repoDir: string): Promise<ToolRun> {
-  if (!(await toolAvailable("semgrep"))) {
-    return { findings: [], ran: false, error: "semgrep not installed" };
-  }
+  const check = await checkTool("semgrep", SEMGREP_ENV);
+  if (!check.ok) return { findings: [], ran: false, error: check.error };
+  // A local rules file (SEMGREP_CONFIG) lets air-gapped runners skip the registry download.
+  const rules = process.env.SEMGREP_CONFIG?.trim() || "p/security-audit";
   const res = await runCommand(
     "semgrep",
-    ["--config", "p/security-audit", "--json", "--quiet", repoDir],
-    { cwd: repoDir, timeoutMs: SEMGREP_TIMEOUT_MS }
+    ["--config", rules, "--json", "--quiet", "--metrics=off", repoDir],
+    { cwd: repoDir, timeoutMs: SEMGREP_TIMEOUT_MS, env: SEMGREP_ENV }
   );
   let parsed: SemgrepRaw;
   try {

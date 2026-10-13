@@ -13,6 +13,13 @@ function formatRef(ref: string): string {
   return head ? `${base.slice(0, 7)}…${head.slice(0, 7)}` : ref.slice(0, 12);
 }
 
+function failReason(policy: Report["policy"]): string {
+  const parts: string[] = [];
+  if (policy.reason) parts.push(policy.reason);
+  if (policy.countAtOrAbove > 0) parts.push(`${policy.countAtOrAbove} at or above ${policy.failOn}`);
+  return parts.join(" · ");
+}
+
 export function ReportView({
   report,
   onNewScan,
@@ -97,7 +104,7 @@ export function ReportView({
                 <path d="M2 2 L10 10 M10 2 L2 10" stroke="#F0506E" strokeWidth={2} />
               </svg>
               <span className="font-mono text-sev-critical">
-                check failed — {report.policy.reason ?? `${report.policy.countAtOrAbove} at or above ${report.policy.failOn}`}
+                check failed — {failReason(report.policy)}
               </span>
             </>
           )}

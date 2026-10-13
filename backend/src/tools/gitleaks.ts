@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { Finding, makeFindingId } from "../schema/finding";
-import { describeFailure, runCommand, toolAvailable } from "./util";
+import { checkTool, describeFailure, runCommand } from "./util";
 import { ToolRun } from "./types";
 
 /**
@@ -62,9 +62,8 @@ export async function runGitleaks(
 ): Promise<ToolRun> {
   // A commit range (diff mode) always scans history, so secrets added then removed in the PR are caught.
   const scanGit = opts.fullHistory === true || !!opts.logOpts;
-  if (!(await toolAvailable("gitleaks"))) {
-    return { findings: [], ran: false, error: "gitleaks not installed" };
-  }
+  const check = await checkTool("gitleaks");
+  if (!check.ok) return { findings: [], ran: false, error: check.error };
   const reportPath = path.join(repoDir, ".scanner-x-gitleaks.json");
   await fs.rm(reportPath, { force: true });
   const args = scanGit

@@ -27,23 +27,27 @@ function emptySeverityCounts(): Record<Severity, number> {
   return { critical: 0, high: 0, medium: 0, low: 0 };
 }
 
+const plural = (n: number, word: string, many = `${word}s`) => `${n} ${n === 1 ? word : many}`;
+
 async function executiveSummary(
   provider: LlmProvider | null,
   target: string,
   mode: string,
   categories: CategoryGroup[],
-  stats: Report["stats"]
+  stats: Report["stats"],
+  coverageWarning?: string
 ): Promise<string> {
   const deterministic = () => {
+    const prefix = coverageWarning ? `Coverage incomplete — ${coverageWarning} ` : "";
     const order: Severity[] = ["critical", "high", "medium", "low"];
     const parts = order
       .filter((s) => stats.bySeverity[s] > 0)
       .map((s) => `${stats.bySeverity[s]} ${s}`);
     if (stats.totalAfterFilter === 0) {
-      return `Scan of ${target} (${mode} mode) surfaced no findings above the configured severity floor.`;
+      return `${prefix}Scan of ${target} (${mode} mode) surfaced no findings above the configured severity floor.`;
     }
     const topSeverity = order.find((s) => stats.bySeverity[s] > 0);
-    return `Scan of ${target} (${mode} mode) surfaced ${stats.totalAfterFilter} findings across ${categories.length} categories (${parts.join(", ")}). Review the ${topSeverity} items first.`;
+    return `${prefix}Scan of ${target} (${mode} mode) surfaced ${plural(stats.totalAfterFilter, "finding")} across ${plural(categories.length, "category", "categories")} (${parts.join(", ")}). Review the ${topSeverity} items first.`;
   };
 
   if (!provider) return deterministic();
@@ -65,7 +69,7 @@ async function executiveSummary(
         digest,
         null,
         2
-      )}`,
+      )}${coverageWarning ? `\nCoverage warning: ${coverageWarning} Say so first.` : ""}`,
       maxTokens: 600,
     });
     return summary.trim();
@@ -179,7 +183,8 @@ export async function generateReport(
     pipeline.target,
     pipeline.mode,
     categories,
-    { ...stats, totalAfterFilter: finalAfterFilter }
+    { ...stats, totalAfterFilter: finalAfterFilter },
+    pipeline.incomplete ? pipeline.warning : undefined
   );
 
   return {

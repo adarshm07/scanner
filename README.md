@@ -87,6 +87,7 @@ full-history scans use `gitleaks git`, which older versions lack), `semgrep`, `n
 | `REPO_HOST_ALLOWLIST` | `github.com,gitlab.com,bitbucket.org` | Hosts repo scans may clone from (https only, no credentials or ports) |
 | `ALLOW_PRIVATE_TARGETS` | `false` | Allow targets resolving to private, loopback or link-local IPs (local fixtures only) |
 | `REPORT_TTL_MS` / `REPORT_MAX` | 24h / 500 | In-memory report retention |
+| `SEMGREP_CONFIG` | `p/security-audit` | Semgrep rules; point at a local rules file for offline/air-gapped runners |
 
 Domain and repo targets are resolved before scanning and refused if any address
 is private, loopback, link-local or reserved. Domain-mode HTTP and TLS connections

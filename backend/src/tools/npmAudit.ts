@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { Finding, makeFindingId, Severity } from "../schema/finding";
+import { Category, Finding, makeFindingId, Severity } from "../schema/finding";
 import { describeFailure, runCommand } from "./util";
 import { ToolRun } from "./types";
 
@@ -43,7 +43,11 @@ function mapSeverity(npm: string): Severity {
   }
 }
 
-export function npmAuditAdapter(raw: NpmAuditRaw, manifest = "package.json"): Finding[] {
+export function npmAuditAdapter(
+  raw: NpmAuditRaw,
+  manifest = "package.json",
+  category: Category = "backend"
+): Finding[] {
   const vulns = raw.vulnerabilities ?? {};
   const findings: Finding[] = [];
   for (const [pkg, adv] of Object.entries(vulns)) {
@@ -53,7 +57,7 @@ export function npmAuditAdapter(raw: NpmAuditRaw, manifest = "package.json"): Fi
     const ruleId = detail?.url ? detail.url : `npm-advisory-${pkg}`;
     findings.push({
       skill: `npm-audit-${pkg}`,
-      category: "backend",
+      category,
       finding_id: makeFindingId({ file: manifest, rule_id: `${pkg}:${adv.range ?? ""}` }),
       rule_id: ruleId,
       severity: mapSeverity(adv.severity),
@@ -80,6 +84,20 @@ export function npmAuditAdapter(raw: NpmAuditRaw, manifest = "package.json"): Fi
 const SKIP_DIRS = new Set(["node_modules", ".git", "vendor"]);
 const LOCKFILES = ["package-lock.json", "npm-shrinkwrap.json"];
 const AUDIT_TIMEOUT_MS = 120000;
+const FRONTEND_DIRS = /(^|\/)(frontend|client|web|ui|app|www)(\/|$)/i;
+const FRONTEND_DEPS = ["react", "vue", "svelte", "@angular/core", "next", "nuxt", "vite"];
+
+async function categoryForManifest(dir: string, rel: string): Promise<Category> {
+  if (FRONTEND_DIRS.test(rel)) return "frontend";
+  try {
+    const pkg = JSON.parse(await fs.readFile(path.join(dir, "package.json"), "utf8"));
+    const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+    if (FRONTEND_DEPS.some((d) => d in deps)) return "frontend";
+  } catch {
+    // Unreadable manifest: default to backend.
+  }
+  return "backend";
+}
 
 interface ManifestDir {
   dir: string;
@@ -131,7 +149,8 @@ export async function runNpmAudit(repoDir: string): Promise<ToolRun> {
         errors.push(`${rel}: ${parsed.error.code ?? parsed.error.summary ?? "npm audit error"}`);
         continue;
       }
-      findings.push(...npmAuditAdapter(parsed, path.posix.join(rel, "package.json")));
+      const category = await categoryForManifest(dir, rel);
+      findings.push(...npmAuditAdapter(parsed, path.posix.join(rel, "package.json"), category));
     } catch {
       errors.push(`${rel}: ${describeFailure(res, AUDIT_TIMEOUT_MS)}`);
     }
