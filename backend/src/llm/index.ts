@@ -7,6 +7,7 @@ import {
 } from "./provider";
 import { ClaudeProvider } from "./claude";
 import { GeminiProvider } from "./gemini";
+import { OpenAiProvider } from "./openai";
 
 export type { LlmMessage, LlmProvider, ProviderId } from "./provider";
 
@@ -50,6 +51,24 @@ function entries(): ProviderEntry[] {
           config.claude.enabled && config.claude.apiKey.trim().length > 0,
       },
       create: () => new ClaudeProvider(config.claude.apiKey, config.claude.model),
+    },
+    {
+      descriptor: {
+        id: "openai",
+        label: "OpenAI",
+        model: config.openai.model,
+        enabled: config.openai.enabled,
+        available:
+          config.openai.enabled &&
+          config.openai.apiKey.trim().length > 0 &&
+          config.openai.baseURL.trim().length > 0,
+      },
+      create: () =>
+        new OpenAiProvider(
+          config.openai.apiKey,
+          config.openai.baseURL,
+          config.openai.model
+        ),
     },
   ];
 }

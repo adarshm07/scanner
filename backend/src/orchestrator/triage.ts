@@ -24,8 +24,8 @@ const SYSTEM_PROMPT = `You are a security triage assistant reviewing findings pr
 For EACH finding provided, return:
 - adjusted_severity: one of "critical", "high", "medium", "low"
 - verdict: one of "true_positive" (real, confirmed), "false_positive" (likely a false positive), "needs_review" (needs manual review)
-- explanation: 1-3 sentences, plain language, no jargon the developer would need to look up
-- suggested_fix: concrete, specific to this finding's location — not a generic best-practice statement
+- explanation: 2-4 sentences, plain language. Cover, in order: what is actually wrong, the realistic impact if an attacker exploits it (or the realistic benign cause if it is likely a scan artifact), and how likely/urgent it is for THIS target. Name the specific host, file, header, or package involved.
+- suggested_fix: a short numbered list of concrete steps (separated by "\n"), most likely cause first. Include exact commands, config snippets, header values, or version bumps where applicable (e.g. an openssl command, an nginx/Apache directive, a DNS record). End with one step explaining how to verify the fix. Never answer with only "verify" or "investigate" — give the developer something to run or change.
 
 General principles for every finding:
 - Do not simply restate the tool's severity as your adjusted_severity — that defeats the purpose of this step. Only match it when your own reasoning independently arrives at the same conclusion.
@@ -46,6 +46,14 @@ csp-strength: Look at how much of the policy is actually weakened, not just whet
 cookie-security-* (cookie security flags): Missing SameSite alone is low severity — browser defaults vary and this is rarely the sole enabler of an attack. Missing HttpOnly is only high severity if the cookie name or context suggests it holds a session/auth token; a clearly non-sensitive cookie (theme, locale, consent-banner state) missing HttpOnly is low, regardless of what the deterministic check assigned. Use the surrounding cookies set in the same response and the app's apparent purpose to judge sensitivity.
 
 cors-* (CORS misconfiguration): A wildcard or reflected Access-Control-Allow-Origin WITHOUT Access-Control-Allow-Credentials is often an intentional public API design choice — do not default to high severity for this combination alone. Reserve high/critical for the specific combination of a reflected or wildcarded origin together with credentials allowed, which lets arbitrary sites make authenticated requests and read the responses.
+
+tls-* (certificate/TLS checks): The scanner connects from one network, so a verification failure can be a real misconfiguration OR an artifact of a TLS-inspecting proxy on the scanner's side. Use metadata (error code, issuer, subject, expiry, SANs) to tell them apart: an issuer that is a corporate/proxy CA suggests an artifact (verdict "needs_review", lower severity); a certificate whose issuer equals its subject, a missing intermediate (UNABLE_TO_VERIFY_LEAF_SIGNATURE), expiry, or hostname mismatch is a real defect (verdict "true_positive"). In suggested_fix include a ready-to-run check such as \`openssl s_client -connect HOST:443 -servername HOST -showcerts </dev/null\` or \`curl -vI https://HOST\` from an unproxied network, then the specific remedy for the likely cause (install the full chain/fullchain.pem on the server, renew with a public CA such as Let's Encrypt, fix SANs), and state what the user-visible impact is (browser warnings, API clients failing).
+
+header-* (HTTP security headers): State what attack the missing/weak header enables and give the exact header line to add plus where to set it (nginx add_header, Express helmet, CDN rule). Do not rate a missing informational header above low.
+
+dns-* (SPF/DMARC/DNSSEC etc.): Explain the concrete abuse (e.g. spoofed email from the domain) and give the exact TXT record to publish, starting from a safe value and noting any staged rollout (e.g. DMARC p=none then quarantine).
+
+subdomain-ct-enumeration: This is informational attack-surface data. Point out which subdomains look sensitive (staging, admin, internal, dev, vpn) and recommend reviewing or decommissioning them; keep severity low unless a clearly sensitive name is exposed.
 
 exposed-sensitive-file: The detection logic already validates the response body shape (e.g. requires recognizable git config syntax or env-variable syntax) before emitting a finding, so false positives here are very unlikely. Keep the tool's assigned severity unless you have a specific, stated reason to change it — do not downgrade this one on general "might be a false positive" reasoning.
 
@@ -153,7 +161,7 @@ async function triageBatch(
   const response = await callLlmJson<TriageLlmResponse>(provider, {
     system: SYSTEM_PROMPT,
     user,
-    maxTokens: 3000,
+    maxTokens: 6000,
   });
 
   const byId = new Map(response.results.map((r) => [r.finding_id, r]));

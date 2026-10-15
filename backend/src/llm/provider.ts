@@ -3,7 +3,7 @@
  * system+user message into text; JSON coercion is shared here.
  */
 
-export type ProviderId = "claude" | "gemini";
+export type ProviderId = "claude" | "gemini" | "openai";
 
 export interface LlmMessage {
   system: string;

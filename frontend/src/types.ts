@@ -95,7 +95,7 @@ export type ScanEvent =
   | { t: "done"; reportId: string; at: number; raw: number; findings: number }
   | { t: "error"; message: string };
 
-export type ProviderId = "claude" | "gemini";
+export type ProviderId = "claude" | "gemini" | "openai";
 
 export interface ProviderDescriptor {
   id: ProviderId;

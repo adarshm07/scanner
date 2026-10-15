@@ -33,6 +33,12 @@ export const config = {
     model: process.env.GEMINI_MODEL ?? "gemini-3.6-flash",
     enabled: envBool(process.env.GEMINI_ENABLED, true),
   },
+  openai: {
+    apiKey: process.env.OPENAI_API_KEY ?? "",
+    baseURL: process.env.OPENAI_BASE_URL ?? "",
+    model: process.env.OPENAI_MODEL ?? "global-openai-chat-models/gpt-4o-mini",
+    enabled: envBool(process.env.OPENAI_ENABLED, false),
+  },
   repoHostAllowlist: new Set(
     (process.env.REPO_HOST_ALLOWLIST ?? "github.com,gitlab.com,bitbucket.org")
       .split(",")

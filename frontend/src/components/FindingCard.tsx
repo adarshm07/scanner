@@ -67,7 +67,7 @@ export function FindingCard({ finding }: { finding: ReportFinding }) {
             {finding.triage?.suggested_fix && (
               <div className="flex flex-col gap-1.5">
                 <h4 className="m-0 text-[13px] font-semibold text-ink3">Fix</h4>
-                <p className="m-0">{finding.triage.suggested_fix}</p>
+                <p className="m-0 whitespace-pre-line">{finding.triage.suggested_fix}</p>
               </div>
             )}
             {finding.triage?.explanation && (
