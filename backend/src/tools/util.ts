@@ -36,7 +36,7 @@ export const config = {
   openai: {
     apiKey: process.env.OPENAI_API_KEY ?? "",
     baseURL: process.env.OPENAI_BASE_URL ?? "",
-    model: process.env.OPENAI_MODEL ?? "global-openai-chat-models/gpt-4o-mini",
+    model: process.env.OPENAI_MODEL ?? "global-openai-chat-models/gpt-4-1-nano",
     enabled: envBool(process.env.OPENAI_ENABLED, false),
   },
   repoHostAllowlist: new Set(

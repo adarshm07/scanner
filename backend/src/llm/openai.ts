@@ -2,8 +2,7 @@ import OpenAI from "openai";
 import { LlmMessage, LlmProvider } from "./provider";
 
 /**
- * OpenAI-compatible provider (TrueFoundry gateway). Streams the response and
- * concatenates the deltas.
+ * OpenAI-compatible provider (TrueFoundry gateway), non-streaming.
  */
 export class OpenAiProvider implements LlmProvider {
   readonly id = "openai" as const;
@@ -21,19 +20,15 @@ export class OpenAiProvider implements LlmProvider {
   }
 
   async generate(msg: LlmMessage): Promise<string> {
-    const stream = await this.client.chat.completions.create({
+    const res = await this.client.chat.completions.create({
       model: this.model,
       max_tokens: msg.maxTokens ?? 2048,
       messages: [
         { role: "system", content: msg.system },
         { role: "user", content: msg.user },
       ],
-      stream: true,
+      stream: false,
     });
-    let out = "";
-    for await (const chunk of stream) {
-      out += chunk.choices[0]?.delta?.content ?? "";
-    }
-    return out;
+    return res.choices[0]?.message?.content ?? "";
   }
 }
