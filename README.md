@@ -37,7 +37,7 @@ runPipeline  →  filterFindings  →  hydrate snippets  →  triage (batched LL
 | repo | gitleaks (secrets) | [`tools/gitleaks.ts`](backend/src/tools/gitleaks.ts) |
 | repo | semgrep (`p/security-audit`) | [`tools/semgrep.ts`](backend/src/tools/semgrep.ts) |
 | repo | npm audit (deps) | [`tools/npmAudit.ts`](backend/src/tools/npmAudit.ts) |
-| domain | TLS / cert (+ SSL Labs) | [`tools/tlsCheck.ts`](backend/src/tools/tlsCheck.ts) |
+| domain | TLS / cert chain (+ SSL Labs) | [`tools/tlsCheck.ts`](backend/src/tools/tlsCheck.ts) |
 | domain | HTTP security headers | [`tools/headerCheck.ts`](backend/src/tools/headerCheck.ts) |
 | domain | DNS (SPF/DKIM/DMARC) | [`tools/dnsCheck.ts`](backend/src/tools/dnsCheck.ts) |
 | domain | CT subdomains (crt.sh) | [`tools/subdomainCheck.ts`](backend/src/tools/subdomainCheck.ts) |
@@ -46,6 +46,18 @@ Each adapter exposes `toolNameAdapter(rawOutput): Finding[]`, isolating all
 tool-specific parsing. A repo tool whose CLI isn't installed contributes no
 findings. If the clone fails or the repo has no scannable code, the report has
 zero findings, a warning, and a failed policy (`reason: "scan incomplete"`).
+
+- **Dependencies without a lockfile:** when a `package.json` has no
+  `package-lock.json`, the scanner resolves one in a temporary directory
+  (`npm install --package-lock-only --ignore-scripts`, registry pinned; the repo is
+  never modified) and audits that. Those findings are tagged `lockfileGenerated`,
+  since installed versions may differ.
+- **TLS evidence:** the TLS check captures the full certificate chain, checks the
+  hostname, and diagnoses why trust failed: self-signed, missing intermediate,
+  private CA, expired chain certificate, or an HTTPS-inspecting proxy on the
+  scanner's own network (Zscaler, Netskope, antivirus, ...). Proxy interception is
+  reported as an *inconclusive* check with a note, not as a finding. Findings show
+  the evidence and a ready-to-run `openssl` command to verify it.
 
 ## Running
 
@@ -126,7 +138,9 @@ Pass `baseRef` (the PR's base branch or commit) and optionally `headRef` (the PR
 head: a branch, commit SHA, or a PR ref such as `refs/pull/N/head` (GitHub) or
 `refs/merge-requests/N/head` (GitLab) for fork PRs; defaults to the
 repo's default branch). The repo is cloned, diffed with `git diff base...head`,
-and only findings in changed files are reported. Dependency findings are kept
+and only findings in changed files are reported. The report shows how many files
+changed, and a base that resolves to the same commit as the head is refused with a
+clear error instead of producing an empty report. Dependency findings are kept
 when any `package.json` or lockfile changed, including nested workspace
 manifests. Gitleaks always scans the commits in `base..head`, so a secret added
 and then removed within the PR is still reported. The other tools still run over
@@ -174,19 +188,93 @@ How tokens are handled:
 - In CI (GitHub Actions, GitLab CI, Bitbucket Pipelines, Azure Pipelines) the repo is
   already checked out, so no token is needed there.
 
-## Agent skill
+## CLI
 
-[`backend/src/skill/scanner-x.skill.md`](backend/src/skill/scanner-x.skill.md) —
-install into a coding agent. On `/scanner-x` it asks for scope, calls the
-orchestrator, and renders a severity-grouped report. On PR triggers it passes the
-PR's base and head branches so only changed files are reported, then posts the
-report as a PR comment.
+Scan a local checkout without the web server (local dev, CI, coding agents):
+
+```bash
+cd backend && npm ci && npm run build
+node dist/cli.js --path ../some-repo --fail-on high --sarif out.sarif --json out.json
+node dist/cli.js --path . --base origin/main      # only changes since origin/main
+node dist/cli.js --help
+```
+
+Exit codes: `0` policy passed, `1` policy failed or scan incomplete, `2` usage
+error. In diff mode the base must exist in the local history, and a base equal to
+`HEAD` is refused (there is nothing to compare). LLM triage is off unless you pass
+`--triage gemini|claude|openai`, because it sends code snippets to the provider.
+
+`--sarif` writes SARIF 2.1.0, which GitHub code scanning and most code-review tools
+import. Each result carries a stable fingerprint, a `security-severity` score, and
+the triage explanation and fix when triage ran.
+
+## GitHub Action
+
+Runs on pull requests, annotates the diff through code scanning, and fails the
+check when findings reach `fail-on`:
+
+```yaml
+# .github/workflows/scanner-x.yml
+name: Scanner-X
+on: pull_request
+permissions:
+  contents: read
+  security-events: write   # upload SARIF to code scanning
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # diff mode needs the PR base commit
+      - uses: adarshm07/scanner@main
+        with:
+          fail-on: high      # critical | high | medium | low
+          # checks: secrets,sast,deps
+          # diff-only: "true"   # only report files the PR changes
+          # triage: gemini      # optional; needs GEMINI_API_KEY in env
+```
+
+The action installs gitleaks and semgrep if they aren't on the runner, builds the
+CLI, writes a job summary, uploads `scanner-x.sarif`, and then enforces the policy.
+On `pull_request` it scans only the PR's changes (secrets in every PR commit); on
+other events it scans the whole repo. Inputs reach the scripts through environment
+variables, never inline, so they can't inject shell commands. Linux runners only.
+
+## Agent skill (Claude Code, Codex)
+
+[`skills/scanner-x/SKILL.md`](skills/scanner-x/SKILL.md) lets a coding agent run
+Scanner-X on the project you have open: it picks the scope (whole repo, or just
+the branch's changes), runs the CLI, reads the JSON report, triages each finding
+by reading the code around it, and helps fix them, then re-scans to verify. The
+agent does the triage itself, so no API key is needed and no code is sent to a
+second model.
+
+Install:
+
+```bash
+git clone https://github.com/adarshm07/scanner ~/.scanner-x
+(cd ~/.scanner-x/backend && npm ci && npm run build)
+brew install gitleaks semgrep            # or your platform's equivalent
+
+# Claude Code: all projects (or copy into <project>/.claude/skills/ for one)
+mkdir -p ~/.claude/skills && cp -r ~/.scanner-x/skills/scanner-x ~/.claude/skills/
+
+# Codex
+mkdir -p ~/.codex/skills && cp -r ~/.scanner-x/skills/scanner-x ~/.codex/skills/
+```
+
+Then ask "run a security scan" or use `/scanner-x`. Set `SCANNER_X_HOME` if you
+cloned somewhere other than `~/.scanner-x`. If your Codex version doesn't load
+skills from that folder, add a line to the project's `AGENTS.md`:
+`For security scans, follow ~/.scanner-x/skills/scanner-x/SKILL.md.`
 
 ## Non-goals (hackathon scope)
 
 - No active scanning (port scans, injection probes) — passive checks only.
 - No DNS-based domain ownership verification — self-attestation checkbox only.
 - No accounts/auth — session-based report IDs.
+- CLI and Action cover repo mode only; domain scans run through the web app/API.
 - No plugin loader — the tool integrations are hardcoded; the schema is designed
   so plugins are possible later.
 

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { Agent, fetch, Response } from "undici";
 import { allowPrivateTargets, assertIpLiteralAllowed, assertPublicHost, guardedLookup } from "./netGuard";
 
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
 
 function envBool(value: string | undefined, fallback: boolean): boolean {
   if (value === undefined) return fallback;

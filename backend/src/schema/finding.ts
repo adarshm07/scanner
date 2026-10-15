@@ -84,7 +84,7 @@ export type ScanMode = "repo" | "domain";
 export interface CheckResult {
   group: string; // "TLS", "Certificate & DNS", "HTTP headers", "Email auth (DNS)"
   name: string; // "TLS protocol", "Expiry", "Content-Security-Policy"
-  result: "pass" | "finding";
+  result: "pass" | "finding" | "inconclusive";
   severity?: Severity; // set when result === "finding"
   observed: string; // "TLSv1.3 negotiated", "valid until 2026-11-21 (59 days)"
   remediation?: string;
@@ -99,6 +99,10 @@ export interface Report {
   createdAt: string;
   executiveSummary: string;
   warning?: string;
+  /** Informational notes that don't affect the policy (e.g. an inconclusive check). */
+  notes?: string[];
+  /** Diff (PR) scans only. */
+  diff?: { baseRef: string; baseSha: string; headSha: string; changedFiles: number };
   categories: CategoryGroup[];
   checks: CheckResult[]; // domain mode: every probe run, pass or finding
   stats: {

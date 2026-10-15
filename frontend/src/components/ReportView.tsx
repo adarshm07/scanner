@@ -69,15 +69,24 @@ export function ReportView({
         </div>
       )}
 
+      {report.notes?.map((note) => (
+        <div key={note} role="note" className="border-b border-line bg-panel/60 px-6 py-3 text-[13px] text-text3">
+          {note}
+        </div>
+      ))}
+
       {/* title + meta */}
       <section className="flex flex-col gap-5 px-6 pt-7">
         <div className="flex items-baseline gap-4">
           <h1 className="m-0 text-[26px] font-semibold tracking-[-0.02em]">{report.target}</h1>
           <span className="font-mono text-[13px] text-muted capitalize">{report.mode} scan</span>
         </div>
-        <dl className="m-0 grid grid-cols-2 gap-4 text-[13px] sm:grid-cols-4">
+        <dl className={`m-0 grid grid-cols-2 gap-4 text-[13px] ${report.diff ? "sm:grid-cols-5" : "sm:grid-cols-4"}`}>
           {[
             ["Ref", formatRef(report.ref)],
+            ...(report.diff
+              ? [["Diff", `${report.diff.changedFiles} ${report.diff.changedFiles === 1 ? "file" : "files"} changed vs ${report.diff.baseRef}`]]
+              : []),
             ["Findings", `${total} of ${report.stats.totalRaw} raw`],
             ["Policy", `--fail-on ${report.policy.failOn}`],
             ["Finished", new Date(report.createdAt).toLocaleString()],

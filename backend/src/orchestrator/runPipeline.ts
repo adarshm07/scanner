@@ -61,12 +61,23 @@ export interface PipelineOutput {
   ref: string;
   findings: Finding[];
   warning?: string;
+  /** Informational notes for the report; never fail the policy. */
+  notes?: string[];
   /** True when the target wasn't actually scanned; fails the policy. */
   incomplete?: boolean;
+  /** Diff (PR) scans: what was compared and how many files changed. */
+  diff?: DiffInfo;
   checks: CheckResult[]; // domain mode: every probe run, pass or finding
   /** Absolute path to the checked-out repo (repo mode) for snippet hydration. */
   repoDir?: string;
   cleanup: () => Promise<void>;
+}
+
+export interface DiffInfo {
+  baseRef: string;
+  baseSha: string;
+  headSha: string;
+  changedFiles: number;
 }
 
 function selected(check: string, scope: Scope): boolean {
@@ -157,7 +168,7 @@ const REF_HINT =
 async function cloneRepo(
   repoUrl: string,
   opts: { fullHistory: boolean; baseRef?: string; headRef?: string }
-): Promise<{ dir: string; ref: string; baseSha?: string; changed?: Set<string>; error?: string }> {
+): Promise<{ dir: string; ref: string; baseSha?: string; changed?: Set<string>; error?: string; refError?: boolean }> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
   const env = gitEnv(repoUrl);
   const historyArgs = opts.baseRef
@@ -181,7 +192,7 @@ async function cloneRepo(
   if (opts.headRef) {
     const headSha = await resolveRef(dir, opts.headRef, env);
     if (!headSha) {
-      return { dir, ref, error: `could not find head ref ${opts.headRef}; ${REF_HINT}` };
+      return { dir, ref, refError: true, error: `could not find head ref ${opts.headRef}; ${REF_HINT}` };
     }
     const checkout = await runCommand(
       "git",
@@ -189,7 +200,7 @@ async function cloneRepo(
       { cwd: dir, timeoutMs: 300000, env }
     );
     if (checkout.spawnError || checkout.code !== 0) {
-      return { dir, ref, error: `could not check out ${opts.headRef}: ${gitError(checkout, "git checkout")}` };
+      return { dir, ref, refError: true, error: `could not check out ${opts.headRef}: ${gitError(checkout, "git checkout")}` };
     }
   }
   const rev = await runCommand("git", ["rev-parse", "HEAD"], { cwd: dir });
@@ -198,18 +209,35 @@ async function cloneRepo(
 
   const baseSha = await resolveRef(dir, opts.baseRef, env);
   if (!baseSha) {
-    return { dir, ref, error: `could not find base ref ${opts.baseRef}; ${REF_HINT}` };
+    return { dir, ref, refError: true, error: `could not find base ref ${opts.baseRef}; ${REF_HINT}` };
+  }
+  const diffed = await diffAgainst(dir, opts.baseRef, baseSha, ref, env);
+  if ("error" in diffed) return { dir, ref, refError: true, error: diffed.error };
+  return { dir, ref: `${baseSha}...${ref}`, baseSha, changed: diffed.changed };
+}
+
+/** Files changed between base and head, refusing a comparison of a commit with itself. */
+async function diffAgainst(
+  dir: string,
+  baseRef: string,
+  baseSha: string,
+  headSha: string,
+  env?: Record<string, string>
+): Promise<{ changed: Set<string> } | { error: string }> {
+  if (baseSha === headSha) {
+    return {
+      error: `base ${baseRef} and head are the same commit (${headSha.slice(0, 7)}), so there is nothing to compare. Clear the base for a full scan, or set head to a branch or PR`,
+    };
   }
   const diff = await runCommand(
     "git",
-    ["diff", "--name-only", "-z", `${baseSha}...HEAD`],
+    ["diff", "--name-only", "-z", `${baseSha}...${headSha}`],
     { cwd: dir, timeoutMs: 120000, env }
   );
   if (diff.code !== 0) {
-    return { dir, ref, error: `could not diff against ${opts.baseRef}: ${gitError(diff, "git diff")}` };
+    return { error: `could not diff against ${baseRef}: ${gitError(diff, "git diff")}` };
   }
-  const changed = new Set(diff.stdout.split("\0").filter(Boolean));
-  return { dir, ref: `${baseSha}...${ref}`, baseSha, changed };
+  return { changed: new Set(diff.stdout.split("\0").filter(Boolean)) };
 }
 
 const DEPENDENCY_FILES = new Set([
@@ -264,79 +292,66 @@ async function hasScannableFiles(dir: string): Promise<boolean> {
   return visit(dir);
 }
 
-export async function runRepoPipeline(
-  repoUrl: string,
-  scope: Scope,
-  opts: RepoScanOptions = {},
-  emit: EmitFn = noop
-): Promise<PipelineOutput> {
-  let dir: string;
-  let ref = new Date().toISOString();
-  let warning: string | undefined;
-  let baseSha: string | undefined;
-  let changed: Set<string> | undefined;
-  const scanHistory = opts.fullHistory === true && selected("secrets", scope);
-  try {
-    const cloned = await cloneRepo(repoUrl, {
-      fullHistory: scanHistory,
-      baseRef: opts.baseRef,
-      headRef: opts.headRef,
-    });
-    dir = cloned.dir;
-    ref = cloned.ref;
-    baseSha = cloned.baseSha;
-    changed = cloned.changed;
-    if (cloned.error) {
-      warning = `Repository clone failed (${cloned.error}). No repository code was scanned.`;
-    } else if (!(await hasScannableFiles(dir))) {
-      warning = "Repository has no scannable code or dependency manifests. No repository code was scanned.";
-    }
-  } catch (err) {
-    dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
-    warning = `Repository clone failed (${redactSecrets((err as Error).message)}). No repository code was scanned.`;
-  }
+interface CheckoutScan {
+  target: string;
+  ref: string;
+  scanHistory: boolean;
+  baseRef?: string;
+  baseSha?: string;
+  changed?: Set<string>;
+  env: Record<string, string>;
+  /** Remove the directory afterwards (true for temp clones, false for a user's checkout). */
+  removeDir: boolean;
+}
 
-  if (warning) {
+function incompleteOutput(target: string, ref: string, dir: string, warning: string, removeDir: boolean): PipelineOutput {
+  return {
+    mode: "repo",
+    target,
+    ref,
+    findings: [],
+    warning,
+    incomplete: true,
+    checks: [],
+    repoDir: dir,
+    cleanup: async () => {
+      if (removeDir) await fs.rm(dir, { recursive: true, force: true });
+    },
+  };
+}
+
+/** Run the selected repo tools over an existing checkout (cloned or local). */
+async function scanCheckout(dir: string, scope: Scope, c: CheckoutScan, emit: EmitFn): Promise<PipelineOutput> {
+  if (!(await hasScannableFiles(dir))) {
+    const warning = "Repository has no scannable code or dependency manifests. No repository code was scanned.";
     emit({ t: "log", at: Date.now(), source: "clone", message: warning });
-    return {
-      mode: "repo",
-      target: repoUrl,
-      ref,
-      findings: [],
-      warning,
-      incomplete: true,
-      checks: [],
-      repoDir: dir,
-      cleanup: async () => {
-        await fs.rm(dir, { recursive: true, force: true });
-      },
-    };
+    return incompleteOutput(c.target, c.ref, dir, warning, c.removeDir);
   }
 
-  if (changed) {
+  if (c.changed) {
     emit({
       t: "log",
       at: Date.now(),
       source: "clone",
-      message: `Diff mode: ${changed.size} changed ${changed.size === 1 ? "file" : "files"} vs ${opts.baseRef}`,
+      message: `Diff mode: ${c.changed.size} changed ${c.changed.size === 1 ? "file" : "files"} vs ${c.baseRef}`,
     });
   }
 
   const toolOpts = {
-    fullHistory: scanHistory,
-    logOpts: baseSha ? `${baseSha}..HEAD` : undefined,
+    fullHistory: c.scanHistory,
+    logOpts: c.baseSha ? `${c.baseSha}..HEAD` : undefined,
     // Partial (blob-less) clones fetch blobs lazily while gitleaks reads history; those
     // fetches need the same auth header and no-prompt settings as the clone.
-    env: gitEnv(repoUrl),
+    env: c.env,
   };
   const tools = REPO_TOOLS.filter((t) => selected(t.check, scope));
   const runs = await Promise.all(
     tools.map((t) => runTracked(t.check, () => t.run(dir, toolOpts), emit))
   );
   let findings = runs.flatMap((r) => r.findings);
-  if (changed) {
+  if (c.changed) {
     const dirs = [dir, await fs.realpath(dir)];
-    findings = findings.filter((f) => inChangedFiles(f, dirs, changed!));
+    findings = findings.filter((f) => inChangedFiles(f, dirs, c.changed!));
   }
   const skipped = tools
     .map((t, i) => ({ check: t.check, run: runs[i] }))
@@ -346,19 +361,108 @@ export async function runRepoPipeline(
         .map(({ check, run }) => `${checkName(check)} (${run.error ?? "did not run"})`)
         .join(", ")}.`
     : undefined;
+  const headSha = c.ref.includes("...") ? c.ref.split("...")[1] : c.ref;
 
   return {
     mode: "repo",
-    target: repoUrl,
-    ref,
+    target: c.target,
+    ref: c.ref,
     findings,
     ...(skippedWarning ? { warning: skippedWarning, incomplete: true } : {}),
+    ...(c.changed && c.baseSha && c.baseRef
+      ? { diff: { baseRef: c.baseRef, baseSha: c.baseSha, headSha, changedFiles: c.changed.size } }
+      : {}),
     checks: [],
     repoDir: dir,
     cleanup: async () => {
-      await fs.rm(dir, { recursive: true, force: true });
+      if (c.removeDir) await fs.rm(dir, { recursive: true, force: true });
     },
   };
+}
+
+export async function runRepoPipeline(
+  repoUrl: string,
+  scope: Scope,
+  opts: RepoScanOptions = {},
+  emit: EmitFn = noop
+): Promise<PipelineOutput> {
+  const scanHistory = opts.fullHistory === true && selected("secrets", scope);
+  let cloned: Awaited<ReturnType<typeof cloneRepo>>;
+  try {
+    cloned = await cloneRepo(repoUrl, {
+      fullHistory: scanHistory,
+      baseRef: opts.baseRef,
+      headRef: opts.headRef,
+    });
+  } catch (err) {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
+    const warning = `Repository clone failed (${redactSecrets((err as Error).message)}). No repository code was scanned.`;
+    emit({ t: "log", at: Date.now(), source: "clone", message: warning });
+    return incompleteOutput(repoUrl, new Date().toISOString(), dir, warning, true);
+  }
+  if (cloned.error) {
+    const warning = cloned.refError
+      ? `Diff scan not possible: ${cloned.error}. No repository code was scanned.`
+      : `Repository clone failed (${cloned.error}). No repository code was scanned.`;
+    emit({ t: "log", at: Date.now(), source: "clone", message: warning });
+    return incompleteOutput(repoUrl, cloned.ref, cloned.dir, warning, true);
+  }
+  return scanCheckout(
+    cloned.dir,
+    scope,
+    {
+      target: repoUrl,
+      ref: cloned.ref,
+      scanHistory,
+      baseRef: opts.baseRef,
+      baseSha: cloned.baseSha,
+      changed: cloned.changed,
+      env: gitEnv(repoUrl),
+      removeDir: true,
+    },
+    emit
+  );
+}
+
+/**
+ * Scan a repository that is already checked out locally (CLI / CI), without cloning.
+ * Diff mode resolves baseRef from the local history (e.g. a CI checkout with full history);
+ * the directory is never modified or deleted.
+ */
+export async function runLocalRepoPipeline(
+  repoDir: string,
+  scope: Scope,
+  opts: { baseRef?: string; fullHistory?: boolean; target?: string } = {},
+  emit: EmitFn = noop
+): Promise<PipelineOutput> {
+  const dir = await fs.realpath(repoDir);
+  const target = opts.target ?? dir;
+  const env = { GIT_TERMINAL_PROMPT: "0", GCM_INTERACTIVE: "never" };
+  const scanHistory = opts.fullHistory === true && selected("secrets", scope);
+  const head = await runCommand("git", ["rev-parse", "HEAD"], { cwd: dir, env });
+  const ref = head.code === 0 ? head.stdout.trim() : new Date().toISOString();
+  if (!opts.baseRef) {
+    return scanCheckout(dir, scope, { target, ref, scanHistory, env, removeDir: false }, emit);
+  }
+  if (head.code !== 0) {
+    return incompleteOutput(target, ref, dir, `Diff mode needs a git checkout, but ${dir} is not one. No repository code was scanned.`, false);
+  }
+  const base = await runCommand("git", ["rev-parse", "--verify", "--quiet", `${opts.baseRef}^{commit}`], { cwd: dir, env });
+  if (base.code !== 0) {
+    const warning = `Could not find base ref ${opts.baseRef} in the local history (in CI, check out with full history, e.g. actions/checkout fetch-depth: 0). No repository code was scanned.`;
+    return incompleteOutput(target, ref, dir, warning, false);
+  }
+  const baseSha = base.stdout.trim();
+  const diffed = await diffAgainst(dir, opts.baseRef, baseSha, ref, env);
+  if ("error" in diffed) {
+    return incompleteOutput(target, ref, dir, `${diffed.error}. No repository code was scanned.`, false);
+  }
+  return scanCheckout(
+    dir,
+    scope,
+    { target, ref: `${baseSha}...${ref}`, scanHistory, baseRef: opts.baseRef, baseSha, changed: diffed.changed, env, removeDir: false },
+    emit
+  );
 }
 
 export async function runDomainPipeline(
@@ -385,12 +489,14 @@ export async function runDomainPipeline(
   );
   const findings = results.flatMap((r) => r.findings);
   const checks = results.flatMap((r) => r.checks);
+  const notes = results.flatMap((r) => r.notes ?? []);
   return {
     mode: "domain",
     target: host,
     ref: new Date().toISOString(),
     findings,
     checks,
+    ...(notes.length ? { notes } : {}),
     cleanup: async () => {},
   };
 }

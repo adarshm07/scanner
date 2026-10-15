@@ -41,7 +41,7 @@ export interface CategoryGroup {
 export interface CheckResult {
   group: string;
   name: string;
-  result: "pass" | "finding";
+  result: "pass" | "finding" | "inconclusive";
   severity?: Severity;
   observed: string;
   remediation?: string;
@@ -56,6 +56,8 @@ export interface Report {
   createdAt: string;
   executiveSummary: string;
   warning?: string;
+  notes?: string[];
+  diff?: { baseRef: string; baseSha: string; headSha: string; changedFiles: number };
   categories: CategoryGroup[];
   checks: CheckResult[];
   stats: {

@@ -4,4 +4,6 @@ import { CheckResult, Finding } from "../schema/finding";
 export interface DomainResult {
   findings: Finding[];
   checks: CheckResult[];
+  /** Non-failing context for the report, e.g. a check that was inconclusive. */
+  notes?: string[];
 }
