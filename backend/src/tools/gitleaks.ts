@@ -58,7 +58,7 @@ export function gitleaksAdapter(raw: GitleaksRaw[]): Finding[] {
  */
 export async function runGitleaks(
   repoDir: string,
-  opts: { fullHistory?: boolean; logOpts?: string } = {}
+  opts: { fullHistory?: boolean; logOpts?: string; env?: Record<string, string> } = {}
 ): Promise<ToolRun> {
   // A commit range (diff mode) always scans history, so secrets added then removed in the PR are caught.
   const scanGit = opts.fullHistory === true || !!opts.logOpts;
@@ -74,7 +74,8 @@ export async function runGitleaks(
       ]
     : ["detect", "--source", repoDir, "--no-git", "--report-format", "json", "--report-path", reportPath];
   const timeoutMs = scanGit ? 600000 : 120000;
-  const res = await runCommand("gitleaks", args, { cwd: repoDir, timeoutMs });
+  // gitleaks runs git internally; pass the repo's git env so lazy blob fetches can authenticate.
+  const res = await runCommand("gitleaks", args, { cwd: repoDir, timeoutMs, env: opts.env });
   if (res.spawnError || res.timedOut) {
     return { findings: [], ran: false, error: describeFailure(res, timeoutMs) };
   }

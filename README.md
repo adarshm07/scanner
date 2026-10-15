@@ -123,13 +123,56 @@ Both scan routes also have `/stream` variants that return server-sent progress e
 ### Diff (PR) scans
 
 Pass `baseRef` (the PR's base branch or commit) and optionally `headRef` (the PR
-head: a branch, commit SHA, or `refs/pull/N/head` for fork PRs; defaults to the
+head: a branch, commit SHA, or a PR ref such as `refs/pull/N/head` (GitHub) or
+`refs/merge-requests/N/head` (GitLab) for fork PRs; defaults to the
 repo's default branch). The repo is cloned, diffed with `git diff base...head`,
 and only findings in changed files are reported. Dependency findings are kept
 when any `package.json` or lockfile changed, including nested workspace
 manifests. Gitleaks always scans the commits in `base..head`, so a secret added
 and then removed within the PR is still reported. The other tools still run over
 the whole checkout, so diff scans save report noise and LLM cost, not tool runtime.
+
+### Private repositories
+
+Public repos clone anonymously. To scan private repos, give the backend a
+**read-only** token per git host in `backend/.env` (never in `.env.example` or the
+repo URL; URLs with credentials are rejected).
+
+| Host | Token and minimum permission | Variable |
+| --- | --- | --- |
+| GitHub | Fine-grained PAT, *Contents: Read-only* | `GITHUB_TOKEN`, `GITHUB_OWNERS` |
+| GitLab (cloud or self-hosted) | Personal/group/project access token, `read_repository` | `GITLAB_TOKEN`, `GITLAB_OWNERS`, `GITLAB_HOST` |
+| Bitbucket Cloud | API token or repository access token with repository read | `BITBUCKET_TOKEN`, `BITBUCKET_USERNAME`, `BITBUCKET_OWNERS` |
+| Azure DevOps | PAT with *Code: Read* | `AZURE_DEVOPS_TOKEN`, `AZURE_DEVOPS_OWNERS` |
+| Anything else (Gitea, Bitbucket Server, more hosts) | Token with repo read | `GIT_CREDENTIALS` (JSON) |
+
+`*_OWNERS` lists the users, orgs or groups (the first path segment of the repo URL)
+a token may be used for. Set it: anyone who can reach the API can scan every repo
+the token can read, and the server warns at startup when a token has no owner
+restriction. For Bitbucket, check Atlassian's current docs for the username that
+goes with your token type (`x-bitbucket-api-token-auth` for API tokens, the default,
+or `x-token-auth` for access tokens).
+
+```bash
+GITHUB_TOKEN=github_pat_...
+GITHUB_OWNERS=adarshm07
+
+# Several hosts, or a self-hosted server, in one variable (keep it on one line):
+GIT_CREDENTIALS=[{"host":"gitlab.mycompany.com","username":"oauth2","token":"glpat-...","owners":["platform"]}]
+REPO_HOST_ALLOWLIST=github.com,gitlab.com,bitbucket.org,dev.azure.com,gitlab.mycompany.com
+REPO_PRIVATE_HOSTS=gitlab.mycompany.com   # only if it resolves to an internal IP
+```
+
+How tokens are handled:
+
+- Sent to git as an HTTP `Authorization` header scoped to that one host, through
+  `GIT_CONFIG_*` environment variables, so they never appear in the process list,
+  the clone URL, error messages or reports (errors are also redacted).
+- Git credential helpers are disabled for scans (`credential.helper=`), so the
+  scanner never falls back to a login saved on the server (such as the macOS
+  Keychain), and git never prompts (`GIT_TERMINAL_PROMPT=0`).
+- In CI (GitHub Actions, GitLab CI, Bitbucket Pipelines, Azure Pipelines) the repo is
+  already checked out, so no token is needed there.
 
 ## Agent skill
 
