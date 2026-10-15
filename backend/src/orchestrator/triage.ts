@@ -47,7 +47,7 @@ cookie-security-* (cookie security flags): Missing SameSite alone is low severit
 
 cors-* (CORS misconfiguration): A wildcard or reflected Access-Control-Allow-Origin WITHOUT Access-Control-Allow-Credentials is often an intentional public API design choice — do not default to high severity for this combination alone. Reserve high/critical for the specific combination of a reflected or wildcarded origin together with credentials allowed, which lets arbitrary sites make authenticated requests and read the responses.
 
-tls-* (certificate/TLS checks): The scanner connects from one network, so a verification failure can be a real misconfiguration OR an artifact of a TLS-inspecting proxy on the scanner's side. Use metadata (error code, issuer, subject, expiry, SANs) to tell them apart: an issuer that is a corporate/proxy CA suggests an artifact (verdict "needs_review", lower severity); a certificate whose issuer equals its subject, a missing intermediate (UNABLE_TO_VERIFY_LEAF_SIGNATURE), expiry, or hostname mismatch is a real defect (verdict "true_positive"). In suggested_fix include a ready-to-run check such as \`openssl s_client -connect HOST:443 -servername HOST -showcerts </dev/null\` or \`curl -vI https://HOST\` from an unproxied network, then the specific remedy for the likely cause (install the full chain/fullchain.pem on the server, renew with a public CA such as Let's Encrypt, fix SANs), and state what the user-visible impact is (browser warnings, API clients failing).
+tls-* (certificate/TLS checks): The scanner has already diagnosed the cause and collected the evidence: metadata.cause (self-signed | missing-intermediate | private-ca | expired-chain | unknown), metadata.chain (leaf first, root last), metadata.authorizationError, metadata.sslLabsGrade (a public-internet vantage point, or null when no cached result), and metadata.altNames for hostname mismatches. Base your verdict on that evidence and name the specific certificates involved. Findings caused by an HTTPS-inspecting proxy on the scanner's side are already filtered out, so do not suggest that as the default explanation, and never tell the reader to \"verify from another network\": the scanner already cross-checked with SSL Labs where possible. For private-ca, say it is expected for internal-only hosts and only a problem if the site is public. Explanation: the impact on real visitors (browser warnings, failing API clients and webhooks, interception risk). suggested_fix: the remedy for the diagnosed cause with the exact command or server directive (e.g. nginx ssl_certificate fullchain.pem, certbot), then end with the command in metadata.verifyCommand as the verification step.
 
 header-* (HTTP security headers): State what attack the missing/weak header enables and give the exact header line to add plus where to set it (nginx add_header, Express helmet, CDN rule). Do not rate a missing informational header above low.
 
@@ -103,8 +103,11 @@ function passthrough(f: Finding): TriageResult {
     verdict: "needs_review",
     adjusted_severity: f.severity,
     explanation: f.tool_message,
+    // Use the check's own remedy when it has one (e.g. TLS findings), not a generic line.
     suggested_fix:
-      "Review the flagged code/configuration and remediate per the tool guidance.",
+      typeof f.metadata?.remediation === "string" && f.metadata.remediation
+        ? f.metadata.remediation
+        : "Review the flagged code/configuration and remediate per the tool guidance.",
   };
 }
 

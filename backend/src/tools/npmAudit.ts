@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import os from "os";
 import path from "path";
 import { Category, Finding, makeFindingId, Severity } from "../schema/finding";
 import { describeFailure, runCommand } from "./util";
@@ -102,6 +103,8 @@ async function categoryForManifest(dir: string, rel: string): Promise<Category> 
 interface ManifestDir {
   dir: string;
   hasLockfile: boolean;
+  /** package.json declares npm workspaces (members share this directory's lockfile). */
+  isWorkspaceRoot: boolean;
 }
 
 async function findManifestDirs(root: string): Promise<ManifestDir[]> {
@@ -110,7 +113,13 @@ async function findManifestDirs(root: string): Promise<ManifestDir[]> {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     const files = new Set(entries.filter((e) => e.isFile()).map((e) => e.name));
     if (files.has("package.json")) {
-      out.push({ dir, hasLockfile: LOCKFILES.some((f) => files.has(f)) });
+      let isWorkspaceRoot = false;
+      try {
+        isWorkspaceRoot = !!JSON.parse(await fs.readFile(path.join(dir, "package.json"), "utf8")).workspaces;
+      } catch {
+        /* unreadable manifest: treat as a plain package */
+      }
+      out.push({ dir, hasLockfile: LOCKFILES.some((f) => files.has(f)), isWorkspaceRoot });
     }
     for (const e of entries) {
       if (e.isDirectory() && !SKIP_DIRS.has(e.name)) await walk(path.join(dir, e.name));
@@ -120,39 +129,94 @@ async function findManifestDirs(root: string): Promise<ManifestDir[]> {
   return out;
 }
 
+const REGISTRY = "--registry=https://registry.npmjs.org/";
+const LOCK_TIMEOUT_MS = 180000;
+
+/** First meaningful "npm error" line (npm ends stderr with a pointer to its log file). */
+function npmErrorLine(res: { stderr: string }): string | null {
+  const line = res.stderr
+    .split("\n")
+    .map((l) => l.replace(/^npm (error|ERR!)\s*/, "").trim())
+    .find((l, i, all) => l && !/complete log of this run/i.test(l) && /^npm (error|ERR!)/.test(res.stderr.split("\n")[i] ?? ""));
+  return line ? line.slice(0, 200) : null;
+}
+
+type AuditOutcome = { raw: NpmAuditRaw } | { error: string };
+
+async function audit(cwd: string): Promise<AuditOutcome> {
+  // Pin the registry so a repo's own .npmrc can't point npm at another host.
+  const res = await runCommand("npm", ["audit", "--json", REGISTRY], { cwd, timeoutMs: AUDIT_TIMEOUT_MS });
+  try {
+    if (res.spawnError || res.timedOut) throw new Error();
+    const parsed = JSON.parse(res.stdout) as NpmAuditRaw;
+    if (parsed.error) return { error: parsed.error.code ?? parsed.error.summary ?? "npm audit error" };
+    return { raw: parsed };
+  } catch {
+    return { error: describeFailure(res, AUDIT_TIMEOUT_MS) };
+  }
+}
+
+/**
+ * Resolve a lockfile for a manifest that has none, in a throwaway directory so the scanned
+ * checkout is never modified. Only package.json files are copied (plus workspace members'),
+ * install scripts never run, and the registry is pinned.
+ */
+async function auditWithGeneratedLockfile(dir: string, members: string[]): Promise<AuditOutcome> {
+  const tmp = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-lock-"));
+  try {
+    await fs.copyFile(path.join(dir, "package.json"), path.join(tmp, "package.json"));
+    for (const member of members) {
+      const rel = path.relative(dir, member);
+      await fs.mkdir(path.join(tmp, rel), { recursive: true });
+      await fs.copyFile(path.join(member, "package.json"), path.join(tmp, rel, "package.json"));
+    }
+    const base = [
+      "install", "--package-lock-only", "--package-lock=true", "--ignore-scripts",
+      "--no-audit", "--no-fund", REGISTRY,
+    ];
+    let res = await runCommand("npm", base, { cwd: tmp, timeoutMs: LOCK_TIMEOUT_MS });
+    // Peer-dependency conflicts (ERESOLVE, and some npm resolver crashes on them) are common in
+    // app repos; retry resolving them the way npm 6 did.
+    if (!res.spawnError && !res.timedOut && res.code !== 0) {
+      res = await runCommand("npm", [...base, "--legacy-peer-deps"], { cwd: tmp, timeoutMs: LOCK_TIMEOUT_MS });
+    }
+    if (res.spawnError || res.timedOut || res.code !== 0) {
+      return { error: `could not resolve dependencies without a lockfile (${npmErrorLine(res) ?? describeFailure(res, LOCK_TIMEOUT_MS)})` };
+    }
+    return await audit(tmp);
+  } finally {
+    await fs.rm(tmp, { recursive: true, force: true });
+  }
+}
+
 export async function runNpmAudit(repoDir: string): Promise<ToolRun> {
   const manifests = await findManifestDirs(repoDir);
   if (manifests.length === 0) return { findings: [], ran: true };
-  const lockDirs = manifests.filter((m) => m.hasLockfile).map((m) => m.dir);
-  // Workspace members share the root lockfile; auditing them separately fails with ENOLOCK.
+  const isUnder = (dir: string, parent: string) => parent !== dir && dir.startsWith(parent + path.sep);
+  // Workspace members share an ancestor's lockfile (real or generated); audit them through it.
   const coveredByAncestor = (dir: string) =>
-    lockDirs.some((lock) => lock !== dir && dir.startsWith(lock + path.sep));
+    manifests.some((m) => (m.hasLockfile || m.isWorkspaceRoot) && isUnder(dir, m.dir));
 
   const findings: Finding[] = [];
   const errors: string[] = [];
-  for (const { dir, hasLockfile } of manifests) {
+  for (const { dir, hasLockfile, isWorkspaceRoot } of manifests) {
     const rel = path.relative(repoDir, dir).split(path.sep).join("/") || ".";
-    if (!hasLockfile) {
-      if (!coveredByAncestor(dir)) errors.push(`${rel}: no package-lock.json`);
+    if (!hasLockfile && coveredByAncestor(dir)) continue;
+
+    const members = isWorkspaceRoot ? manifests.filter((m) => isUnder(m.dir, dir)).map((m) => m.dir) : [];
+    const outcome = hasLockfile ? await audit(dir) : await auditWithGeneratedLockfile(dir, members);
+    if ("error" in outcome) {
+      errors.push(`${rel}: ${outcome.error}`);
       continue;
     }
-    const res = await runCommand(
-      "npm",
-      // Pin the registry so a repo's own .npmrc can't point npm at another host.
-      ["audit", "--json", "--registry=https://registry.npmjs.org/"],
-      { cwd: dir, timeoutMs: AUDIT_TIMEOUT_MS }
-    );
-    try {
-      if (res.spawnError || res.timedOut) throw new Error();
-      const parsed = JSON.parse(res.stdout) as NpmAuditRaw;
-      if (parsed.error) {
-        errors.push(`${rel}: ${parsed.error.code ?? parsed.error.summary ?? "npm audit error"}`);
-        continue;
+    const category = await categoryForManifest(dir, rel);
+    const manifest = path.posix.join(rel, "package.json");
+    for (const f of npmAuditAdapter(outcome.raw, manifest, category)) {
+      if (!hasLockfile) {
+        f.tool_message += ` Versions were resolved by the scanner from ${manifest} because the repo has no lockfile, so the versions you actually install may differ.`;
+        f.metadata = { ...f.metadata, lockfileGenerated: true };
       }
-      const category = await categoryForManifest(dir, rel);
-      findings.push(...npmAuditAdapter(parsed, path.posix.join(rel, "package.json"), category));
-    } catch {
-      errors.push(`${rel}: ${describeFailure(res, AUDIT_TIMEOUT_MS)}`);
+      findings.push(f);
     }
   }
   return { findings, ran: errors.length === 0, error: errors.join("; ") || undefined };

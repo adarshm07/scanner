@@ -16,7 +16,8 @@ export function ChecksTable({ checks }: { checks: CheckResult[] }) {
   }
   // Findings first within each group, then passes.
   for (const list of groups.values()) {
-    list.sort((a, b) => (a.result === b.result ? 0 : a.result === "finding" ? -1 : 1));
+    const rank = { finding: 0, inconclusive: 1, pass: 2 } as const;
+    list.sort((a, b) => rank[a.result] - rank[b.result]);
   }
   // Groups with findings first.
   const ordered = [...groups.entries()].sort((a, b) => {
@@ -26,7 +27,8 @@ export function ChecksTable({ checks }: { checks: CheckResult[] }) {
   });
 
   const totalFindings = checks.filter((c) => c.result === "finding").length;
-  const totalPass = checks.length - totalFindings;
+  const totalInconclusive = checks.filter((c) => c.result === "inconclusive").length;
+  const totalPass = checks.length - totalFindings - totalInconclusive;
 
   return (
     <section aria-labelledby="checks-h" className="flex flex-col pt-8">
@@ -51,14 +53,17 @@ export function ChecksTable({ checks }: { checks: CheckResult[] }) {
 
       {ordered.map(([group, rows]) => {
         const findings = rows.filter((r) => r.result === "finding").length;
-        const passes = rows.length - findings;
+        const unclear = rows.filter((r) => r.result === "inconclusive").length;
+        const passes = rows.length - findings - unclear;
         return (
           <div key={group} className="flex flex-col">
             <div className="flex items-baseline gap-3 border-y border-line bg-panel2 px-6 py-2.5">
               <h3 className="m-0 text-[14px] font-semibold">{group}</h3>
               <span className="font-mono text-[12.5px] text-muted">
                 {findings > 0 && `${findings} ${findings === 1 ? "finding" : "findings"}`}
-                {findings > 0 && passes > 0 && ", "}
+                {findings > 0 && (unclear > 0 || passes > 0) && ", "}
+                {unclear > 0 && `${unclear} inconclusive`}
+                {unclear > 0 && passes > 0 && ", "}
                 {passes > 0 && `${passes} passed`}
               </span>
             </div>
@@ -74,6 +79,13 @@ export function ChecksTable({ checks }: { checks: CheckResult[] }) {
                         <path d="M2.5 6.5 L5 9 L9.5 3.5" fill="none" stroke="#56B982" strokeWidth={1.8} />
                       </svg>
                       <span className="font-mono text-[13px] text-[#56B982]">pass</span>
+                    </>
+                  ) : r.result === "inconclusive" ? (
+                    <>
+                      <svg width={12} height={12} viewBox="0 0 12 12" aria-hidden="true">
+                        <circle cx={6} cy={6} r={4.5} fill="none" stroke="#8D979F" strokeWidth={1.5} strokeDasharray="2 1.6" />
+                      </svg>
+                      <span className="font-mono text-[13px] text-muted">inconclusive</span>
                     </>
                   ) : (
                     <>
@@ -100,6 +112,7 @@ export function ChecksTable({ checks }: { checks: CheckResult[] }) {
 
       <p className="px-6 pt-3 text-[12.5px] text-muted">
         {totalPass} passed · {totalFindings} {totalFindings === 1 ? "finding" : "findings"}
+        {totalInconclusive > 0 && ` · ${totalInconclusive} inconclusive`}
       </p>
     </section>
   );

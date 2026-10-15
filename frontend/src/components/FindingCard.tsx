@@ -26,6 +26,11 @@ export function FindingCard({ finding }: { finding: ReportFinding }) {
   const verdict = finding.triage ? VERDICT[finding.triage.verdict] : null;
   const cwe = typeof finding.metadata?.cwe === "string" ? finding.metadata.cwe : null;
   const owasp = typeof finding.metadata?.owasp === "string" ? finding.metadata.owasp : null;
+  const evidence = Array.isArray(finding.metadata?.evidence)
+    ? (finding.metadata.evidence as unknown[]).filter((e): e is string => typeof e === "string")
+    : [];
+  const verifyCommand =
+    typeof finding.metadata?.verifyCommand === "string" ? finding.metadata.verifyCommand : null;
 
   return (
     <div id={`f-${finding.finding_id}`} className="flex flex-col border-b border-line2">
@@ -64,16 +69,43 @@ export function FindingCard({ finding }: { finding: ReportFinding }) {
               <h4 className="m-0 text-[13px] font-semibold text-ink3">What the scanner found</h4>
               <p className="m-0">{finding.tool_message}</p>
             </div>
+            {evidence.length > 0 && (
+              <div className="flex flex-col gap-1.5">
+                <h4 className="m-0 text-[13px] font-semibold text-ink3">Evidence</h4>
+                <ul className="m-0 flex list-none flex-col gap-1 p-0 font-mono text-[12.5px] text-text3">
+                  {evidence.map((e) => (
+                    <li key={e} className="break-words">{e}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {finding.triage?.suggested_fix && (
               <div className="flex flex-col gap-1.5">
                 <h4 className="m-0 text-[13px] font-semibold text-ink3">Fix</h4>
                 <p className="m-0 whitespace-pre-line">{finding.triage.suggested_fix}</p>
               </div>
             )}
-            {finding.triage?.explanation && (
+            {finding.triage?.explanation && finding.triage.explanation !== finding.tool_message && (
               <div className="flex flex-col gap-1.5">
                 <h4 className="m-0 text-[13px] font-semibold text-ink3">Triage</h4>
                 <p className="m-0">{finding.triage.explanation}</p>
+              </div>
+            )}
+            {verifyCommand && (
+              <div className="flex flex-col gap-1.5">
+                <h4 className="m-0 text-[13px] font-semibold text-ink3">Check it yourself</h4>
+                <div className="flex items-start gap-2">
+                  <pre className="m-0 min-w-0 flex-1 overflow-x-auto border border-line bg-ink2 px-3 py-2 font-mono text-[12.5px] text-text3">
+                    {verifyCommand}
+                  </pre>
+                  <button
+                    type="button"
+                    onClick={() => navigator.clipboard?.writeText(verifyCommand).catch(() => {})}
+                    className="h-8 shrink-0 rounded border border-edge px-2.5 text-[12.5px] text-text3 hover:bg-hover"
+                  >
+                    Copy
+                  </button>
+                </div>
               </div>
             )}
             <dl className="m-0 grid grid-cols-[64px_minmax(0,1fr)] gap-x-3 gap-y-1.5 border-t border-line pt-3 text-[12.5px]">

@@ -195,6 +195,8 @@ export async function generateReport(
     createdAt: new Date().toISOString(),
     executiveSummary: summary,
     warning: pipeline.warning,
+    notes: pipeline.notes,
+    diff: pipeline.diff,
     categories,
     checks: pipeline.checks,
     stats,

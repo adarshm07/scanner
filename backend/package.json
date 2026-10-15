@@ -10,6 +10,7 @@
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "scan": "node dist/cli.js",
     "serve:exposed-fixture": "node fixtures/serve-exposed-files.js",
     "serve:csp-fixtures": "node fixtures/serve-csp-fixtures.js"
   },
@@ -29,5 +30,8 @@
     "@types/node": "^20.14.10",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.3"
+  },
+  "bin": {
+    "scanner-x": "dist/cli.js"
   }
 }
