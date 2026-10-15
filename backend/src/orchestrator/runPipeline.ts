@@ -14,6 +14,7 @@ import { runSubdomainCheck } from "../tools/subdomainCheck";
 import { runExposedFiles } from "../tools/exposedFiles";
 import { DomainResult } from "../tools/domainResult";
 import { ToolRun } from "../tools/types";
+import { gitEnv, redactSecrets } from "../tools/gitAuth";
 import { CHECKS } from "./checks";
 import { EmitFn } from "./events";
 
@@ -28,7 +29,10 @@ export type Scope = string[] | "all";
 
 interface RepoTool {
   check: string;
-  run: (repoDir: string, opts: { fullHistory: boolean; logOpts?: string }) => Promise<ToolRun>;
+  run: (
+    repoDir: string,
+    opts: { fullHistory: boolean; logOpts?: string; env?: Record<string, string> }
+  ) => Promise<ToolRun>;
 }
 
 const REPO_TOOLS: RepoTool[] = [
@@ -108,26 +112,29 @@ export interface RepoScanOptions {
   headRef?: string;
 }
 
-// https only, and no redirects, so a clone can't be bounced to an internal host.
+// https only, no redirects (a clone can't be bounced to an internal host), and no credential
+// helpers: private repos authenticate only with tokens configured in gitAuth.ts, never with
+// whatever login the server's user has saved (e.g. the macOS Keychain).
 const GIT_SAFE = [
   "-c", "protocol.allow=never",
   "-c", "protocol.https.allow=always",
   "-c", "http.followRedirects=false",
+  "-c", "credential.helper=",
 ];
 
 function gitError(res: { spawnError?: string; stderr: string; code: number | null }, what: string): string {
-  return res.spawnError || res.stderr.trim() || `${what} exited with code ${res.code}`;
+  return redactSecrets(res.spawnError || res.stderr.trim() || `${what} exited with code ${res.code}`);
 }
 
 /**
  * Fetch a ref from origin and return its full SHA. Servers only accept full SHAs, so an
  * abbreviated one is resolved against the already-cloned history instead.
  */
-async function resolveRef(dir: string, ref: string): Promise<string | null> {
+async function resolveRef(dir: string, ref: string, env: Record<string, string>): Promise<string | null> {
   const fetch = await runCommand(
     "git",
     [...GIT_SAFE, "fetch", "--no-tags", "origin", "--", ref],
-    { cwd: dir, timeoutMs: 300000 }
+    { cwd: dir, timeoutMs: 300000, env }
   );
   if (!fetch.spawnError && fetch.code === 0) {
     const head = await runCommand("git", ["rev-parse", "FETCH_HEAD"], { cwd: dir });
@@ -144,13 +151,15 @@ async function resolveRef(dir: string, ref: string): Promise<string | null> {
   return null;
 }
 
-const REF_HINT = "use a branch name, refs/pull/N/head, or the full 40-character SHA";
+const REF_HINT =
+  "use a branch name, a PR/MR ref (refs/pull/N/head on GitHub, refs/merge-requests/N/head on GitLab), or the full 40-character SHA";
 
 async function cloneRepo(
   repoUrl: string,
   opts: { fullHistory: boolean; baseRef?: string; headRef?: string }
 ): Promise<{ dir: string; ref: string; baseSha?: string; changed?: Set<string>; error?: string }> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
+  const env = gitEnv(repoUrl);
   const historyArgs = opts.baseRef
     ? ["--filter=blob:none"]
     : opts.fullHistory
@@ -162,7 +171,7 @@ async function cloneRepo(
   const clone = await runCommand(
     "git",
     [...GIT_SAFE, "clone", "--no-tags", ...persistArgs, ...historyArgs, ...checkoutArgs, "--", repoUrl, dir],
-    { timeoutMs: opts.fullHistory || opts.baseRef ? 600000 : 120000 }
+    { timeoutMs: opts.fullHistory || opts.baseRef ? 600000 : 120000, env }
   );
   let ref = new Date().toISOString();
   if (clone.spawnError || clone.code !== 0) {
@@ -170,14 +179,14 @@ async function cloneRepo(
   }
   // Fetch-then-checkout accepts branches, SHAs and refs/pull/N/head (fork PRs), unlike clone --branch.
   if (opts.headRef) {
-    const headSha = await resolveRef(dir, opts.headRef);
+    const headSha = await resolveRef(dir, opts.headRef, env);
     if (!headSha) {
       return { dir, ref, error: `could not find head ref ${opts.headRef}; ${REF_HINT}` };
     }
     const checkout = await runCommand(
       "git",
       [...GIT_SAFE, "checkout", "--detach", headSha],
-      { cwd: dir, timeoutMs: 300000 }
+      { cwd: dir, timeoutMs: 300000, env }
     );
     if (checkout.spawnError || checkout.code !== 0) {
       return { dir, ref, error: `could not check out ${opts.headRef}: ${gitError(checkout, "git checkout")}` };
@@ -187,14 +196,14 @@ async function cloneRepo(
   if (rev.code === 0) ref = rev.stdout.trim();
   if (!opts.baseRef) return { dir, ref };
 
-  const baseSha = await resolveRef(dir, opts.baseRef);
+  const baseSha = await resolveRef(dir, opts.baseRef, env);
   if (!baseSha) {
     return { dir, ref, error: `could not find base ref ${opts.baseRef}; ${REF_HINT}` };
   }
   const diff = await runCommand(
     "git",
     ["diff", "--name-only", "-z", `${baseSha}...HEAD`],
-    { cwd: dir, timeoutMs: 120000 }
+    { cwd: dir, timeoutMs: 120000, env }
   );
   if (diff.code !== 0) {
     return { dir, ref, error: `could not diff against ${opts.baseRef}: ${gitError(diff, "git diff")}` };
@@ -284,7 +293,7 @@ export async function runRepoPipeline(
     }
   } catch (err) {
     dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
-    warning = `Repository clone failed (${(err as Error).message}). No repository code was scanned.`;
+    warning = `Repository clone failed (${redactSecrets((err as Error).message)}). No repository code was scanned.`;
   }
 
   if (warning) {
@@ -316,6 +325,9 @@ export async function runRepoPipeline(
   const toolOpts = {
     fullHistory: scanHistory,
     logOpts: baseSha ? `${baseSha}..HEAD` : undefined,
+    // Partial (blob-less) clones fetch blobs lazily while gitleaks reads history; those
+    // fetches need the same auth header and no-prompt settings as the clone.
+    env: gitEnv(repoUrl),
   };
   const tools = REPO_TOOLS.filter((t) => selected(t.check, scope));
   const runs = await Promise.all(

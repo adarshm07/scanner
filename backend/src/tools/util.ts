@@ -40,7 +40,15 @@ export const config = {
     enabled: envBool(process.env.OPENAI_ENABLED, false),
   },
   repoHostAllowlist: new Set(
-    (process.env.REPO_HOST_ALLOWLIST ?? "github.com,gitlab.com,bitbucket.org")
+    (process.env.REPO_HOST_ALLOWLIST ?? "github.com,gitlab.com,bitbucket.org,dev.azure.com")
+      .split(",")
+      .map((h) => h.trim().toLowerCase())
+      .filter(Boolean)
+  ),
+  // Self-hosted git servers that resolve to internal addresses (e.g. a company GitLab).
+  // Only these hosts skip the private-address check; ALLOW_PRIVATE_TARGETS stays off.
+  repoPrivateHosts: new Set(
+    (process.env.REPO_PRIVATE_HOSTS ?? "")
       .split(",")
       .map((h) => h.trim().toLowerCase())
       .filter(Boolean)
@@ -187,7 +195,8 @@ export function normalizeDomain(input: string): string {
 }
 
 /**
- * Accept only credential-free https URLs on an allowlisted host that resolves publicly.
+ * Accept only credential-free https URLs on an allowlisted host that resolves publicly
+ * (or is listed in REPO_PRIVATE_HOSTS).
  */
 export async function validateRepoUrl(input: unknown): Promise<string> {
   if (typeof input !== "string") throw new Error("Valid repoUrl is required.");
@@ -198,13 +207,20 @@ export async function validateRepoUrl(input: unknown): Promise<string> {
     throw new Error("Valid repoUrl is required.");
   }
   if (url.protocol !== "https:") throw new Error("repoUrl must use https://.");
-  if (url.username || url.password) throw new Error("repoUrl must not contain credentials.");
+  // Azure DevOps "Clone" URLs carry the org as a username (https://org@dev.azure.com/...);
+  // it isn't a credential, so drop it. Anything with a password is still refused.
+  if (url.username && !url.password && url.hostname.toLowerCase() === "dev.azure.com") {
+    url.username = "";
+  }
+  if (url.username || url.password) {
+    throw new Error("repoUrl must not contain credentials. Configure tokens in backend/.env instead.");
+  }
   if (url.port) throw new Error("repoUrl must not specify a port.");
   const host = url.hostname.toLowerCase();
   if (!config.repoHostAllowlist.has(host)) {
     throw new Error(`Repository host not allowed: ${host}`);
   }
-  await assertPublicHost(host);
+  if (!config.repoPrivateHosts.has(host)) await assertPublicHost(host);
   url.hash = "";
   url.search = "";
   return url.toString();
