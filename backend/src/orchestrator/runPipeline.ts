@@ -5,7 +5,7 @@ import { CheckResult, Finding, ScanMode } from "../schema/finding";
 import { runCommand } from "../tools/util";
 import { runGitleaks } from "../tools/gitleaks";
 import { runSemgrep } from "../tools/semgrep";
-import { runNpmAudit } from "../tools/npmAudit";
+import { runDependencyScan } from "../tools/dependencies";
 import { runTlsCheck } from "../tools/tlsCheck";
 import { runHeaderCheck } from "../tools/headerCheck";
 import { runCspCheck } from "../tools/cspCheck";
@@ -38,7 +38,7 @@ interface RepoTool {
 const REPO_TOOLS: RepoTool[] = [
   { check: "secrets", run: runGitleaks },
   { check: "sast", run: runSemgrep },
-  { check: "deps", run: runNpmAudit },
+  { check: "deps", run: runDependencyScan },
 ];
 
 interface DomainTool {
@@ -242,7 +242,15 @@ async function diffAgainst(
 
 const DEPENDENCY_FILES = new Set([
   "package.json", "package-lock.json", "npm-shrinkwrap.json", "yarn.lock", "pnpm-lock.yaml",
+  "requirements.txt", "Pipfile", "Pipfile.lock", "pyproject.toml", "poetry.lock", "uv.lock", "pdm.lock",
+  "pom.xml", "build.gradle", "build.gradle.kts", "gradle.lockfile", "buildscript-gradle.lockfile",
+  "Cargo.toml", "Cargo.lock", "go.mod", "go.sum", "Gemfile", "Gemfile.lock", "composer.json", "composer.lock",
+  "packages.lock.json", "pubspec.yaml", "pubspec.lock", "mix.exs", "mix.lock", "conan.lock",
 ]);
+const isDependencyFile = (f: string) => {
+  const base = path.posix.basename(f);
+  return DEPENDENCY_FILES.has(base) || /^requirements([-_.][\w.-]+)?\.txt$/i.test(base) || base.endsWith(".csproj");
+};
 
 function inChangedFiles(finding: Finding, dirs: string[], changed: Set<string>): boolean {
   // Gitleaks already scanned only the PR's commit range.
@@ -250,11 +258,11 @@ function inChangedFiles(finding: Finding, dirs: string[], changed: Set<string>):
   const file = finding.location.file;
   if (!file) return false;
   // Keep a manifest's findings when a dependency file changed in its directory or a workspace below it.
-  if (finding.skill.startsWith("npm-audit")) {
+  if (finding.skill.startsWith("npm-audit") || finding.skill.startsWith("osv-")) {
     const manifestDir = path.posix.dirname(file);
     return [...changed].some(
       (f) =>
-        DEPENDENCY_FILES.has(path.posix.basename(f)) &&
+        isDependencyFile(f) &&
         (manifestDir === "." || f.startsWith(`${manifestDir}/`))
     );
   }
@@ -271,8 +279,9 @@ async function hasScannableFiles(dir: string): Promise<boolean> {
     ".sh", ".sql", ".swift", ".ts", ".tsx", ".vue", ".xml",
   ]);
   const manifests = new Set([
-    "cargo.toml", "composer.json", "dockerfile", "gemfile", "go.mod",
-    "package.json", "pipfile", "pyproject.toml", "requirements.txt",
+    "cargo.toml", "cargo.lock", "composer.json", "dockerfile", "gemfile", "go.mod",
+    "package.json", "pipfile", "pyproject.toml", "requirements.txt", "poetry.lock", "uv.lock",
+    "pom.xml", "build.gradle", "build.gradle.kts", "gradle.lockfile", "packages.lock.json",
   ]);
   const visit = async (current: string): Promise<boolean> => {
     const entries = await fs.readdir(current, { withFileTypes: true });
@@ -362,6 +371,7 @@ async function scanCheckout(dir: string, scope: Scope, c: CheckoutScan, emit: Em
         .join(", ")}.`
     : undefined;
   const headSha = c.ref.includes("...") ? c.ref.split("...")[1] : c.ref;
+  const notes = runs.flatMap((r) => r.notes ?? []);
 
   return {
     mode: "repo",
@@ -369,6 +379,7 @@ async function scanCheckout(dir: string, scope: Scope, c: CheckoutScan, emit: Em
     ref: c.ref,
     findings,
     ...(skippedWarning ? { warning: skippedWarning, incomplete: true } : {}),
+    ...(notes.length ? { notes } : {}),
     ...(c.changed && c.baseSha && c.baseRef
       ? { diff: { baseRef: c.baseRef, baseSha: c.baseSha, headSha, changedFiles: c.changed.size } }
       : {}),

@@ -1,6 +1,6 @@
 ---
 name: scanner-x
-description: Run a Scanner-X security scan (secrets, code/SAST, vulnerable dependencies) on the current repository or just its branch changes, then explain and fix the findings. Use when the user asks for a security scan, security review or audit of their code, a branch or a PR, or mentions Scanner-X.
+description: Run a Scanner-X security scan (secrets, code/SAST, vulnerable dependencies in JavaScript, Python, Java, Rust, Go and more) on the current repository or just its branch changes, then explain and fix the findings. Use when the user asks for a security scan, security review or audit of their code, a branch or a PR, or mentions Scanner-X.
 ---
 
 # Scanner-X security scan
@@ -20,10 +20,16 @@ The CLI lives in the Scanner-X repository at `backend/dist/cli.js`.
    `git clone https://github.com/adarshm07/scanner ~/.scanner-x`.
 3. If `backend/dist/cli.js` is missing or older than the sources, build it:
    `cd "$SCANNER_X_HOME/backend" && npm ci && npm run build`.
-4. Check the scanners: `command -v gitleaks semgrep`. If one is missing, tell the user
-   how to install it (macOS: `brew install gitleaks semgrep`; Linux: `pipx install semgrep`
-   and a gitleaks release binary). The scan still runs, but the report will say those
-   checks were not scanned.
+4. Check the scanners with the setup script that ships with this skill (in this skill's
+   `scripts/` folder, or `$SCANNER_X_HOME/skills/scanner-x/scripts/`):
+   `bash <skill dir>/scripts/setup.sh --check`.
+   If anything is missing, ask the user once: "Install gitleaks, semgrep and osv-scanner
+   now? (Homebrew if available, otherwise user-level installs into ~/.scanner-x/bin; no
+   sudo)". On yes, run `bash <skill dir>/scripts/setup.sh`. On no, continue: the report
+   will mark the missing checks as not scanned.
+   - gitleaks: secrets. semgrep: code patterns. osv-scanner: dependencies for Python,
+     Java, Rust, Go, Ruby, PHP, .NET and yarn/pnpm (npm projects use npm audit).
+   - On Windows, run Scanner-X inside WSL.
 
 ## 2. Choose the scope
 
@@ -74,10 +80,12 @@ Open the file at `location` and read enough surrounding code to judge it. Decide
 - **semgrep-\***: real when the flagged input is attacker-controlled at that call site
   (request params, body, headers, file contents from users). A value built only from
   constants or server config is not the same risk.
-- **npm-audit-\***: the vulnerable package is real. If the advisory needs a feature the
+- **npm-audit-\*** and **osv-\*** (dependencies, any language): the vulnerable package is real. If the advisory needs a feature the
   project does not use, keep it but lower its priority and say why. If
   `metadata.lockfileGenerated` is true, note that versions were resolved by the scanner,
   so the installed versions may differ.
+  Check `metadata.fixedVersions` for the upgrade target and say which manifest to edit
+  (`metadata.ecosystem` tells you: PyPI, Maven, crates.io, Go, ...).
 
 ## 6. Report to the user
 

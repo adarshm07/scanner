@@ -112,7 +112,9 @@ async function findManifestDirs(root: string): Promise<ManifestDir[]> {
   const walk = async (dir: string) => {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     const files = new Set(entries.filter((e) => e.isFile()).map((e) => e.name));
-    if (files.has("package.json")) {
+    // yarn/pnpm projects are scanned by OSV-Scanner from their own lockfile; resolving an
+    // npm lockfile for them would report different versions (and duplicates).
+    if (files.has("package.json") && !files.has("yarn.lock") && !files.has("pnpm-lock.yaml")) {
       let isWorkspaceRoot = false;
       try {
         isWorkspaceRoot = !!JSON.parse(await fs.readFile(path.join(dir, "package.json"), "utf8")).workspaces;
