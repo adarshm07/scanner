@@ -1,4 +1,5 @@
 import type { Check } from "../types";
+import { CopyBlock } from "./CopyBlock";
 
 interface CommandPreviewProps {
   mode: "repo" | "domain";
@@ -11,47 +12,62 @@ interface CommandPreviewProps {
   fullHistory: boolean;
   baseRef: string;
   headRef: string;
+  providerId: string | null;
+}
+
+const CLI = "node ~/.scanner-x/backend/dist/cli.js";
+
+/** Shell-quote a value only when it needs it. */
+function q(v: string): string {
+  return /^[\w@%+=:,./~-]+$/.test(v) ? v : `'${v.replace(/'/g, `'\\''`)}'`;
+}
+
+function repoDir(url: string): string {
+  const last = url.replace(/\/+$/, "").split("/").pop() ?? "";
+  return last.replace(/\.git$/, "") || "repo";
 }
 
 /**
- * Live CLI equivalent of the current form selections (design "command" panel).
+ * Runnable equivalent of the current form: the local CLI for repo scans (set up from the
+ * "Terminal" tab below), the HTTP API for domain scans (the CLI only scans repositories).
  */
-export function CommandPreview({
-  mode,
-  target,
-  attested,
-  checks,
-  selected,
-  failOn,
-  triage,
-  fullHistory,
-  baseRef,
-  headRef,
-}: CommandPreviewProps) {
-  const chosen = checks.filter((c) => selected.has(c.id)).map((c) => c.id);
-  const t = target.trim() || (mode === "repo" ? "<owner/repo>" : "<host>");
+export function CommandPreview(p: CommandPreviewProps) {
+  const chosen = p.checks.filter((c) => p.selected.has(c.id)).map((c) => c.id);
+  const target = p.target.trim();
 
-  const lines: string[] = [
-    `$ scanner-x scan ${mode} ${t} \\`,
-    ...(mode === "domain"
-      ? [`    --attest ${attested ? "authorized" : "<required>"} \\`]
-      : []),
-    `    --checks ${chosen.join(",") || "<none>"} \\`,
-    ...(mode === "repo" && fullHistory ? ["    --full-history \\"] : []),
-    ...(mode === "repo" && baseRef ? [`    --base ${baseRef} \\`] : []),
-    ...(mode === "repo" && baseRef && headRef ? [`    --head ${headRef} \\`] : []),
-    `    --fail-on ${failOn}${triage ? " \\" : ""}`,
-    ...(triage ? ["    --triage"] : []),
-  ];
+  if (p.mode === "repo") {
+    const url = target || "<repo url>";
+    const dir = target ? repoDir(target) : "<repo>";
+    const flags = [
+      "--path .",
+      chosen.length && chosen.length < p.checks.length ? `--checks ${chosen.join(",")}` : null,
+      p.baseRef ? `--base ${q(p.baseRef)}` : null,
+      p.fullHistory ? "--full-history" : null,
+      `--fail-on ${p.failOn}`,
+      p.triage && p.providerId ? `--triage ${p.providerId}` : null,
+    ].filter((f): f is string => !!f);
+    const lines = [
+      `git clone ${q(url)}`,
+      `cd ${q(dir)}`,
+      ...(p.baseRef && p.headRef ? [`git checkout ${q(p.headRef)}`] : []),
+      `${CLI} \\\n  ${flags.join(" \\\n  ")}`,
+    ];
+    return <CopyBlock label="Terminal" text={lines.join("\n")} />;
+  }
 
-  return (
-    <figure className="m-0 border border-line bg-ink2">
-      <figcaption className="border-b border-line bg-panel px-3 py-1.5 text-[11.5px] text-muted">
-        Command
-      </figcaption>
-      <pre className="m-0 overflow-x-auto p-3 font-mono text-[12px] leading-[1.7] text-text3">
-        {lines.join("\n")}
-      </pre>
-    </figure>
-  );
+  const body = JSON.stringify({
+    domain: target || "<host>",
+    attested: p.attested,
+    checks: chosen,
+    failOn: p.failOn,
+    triage: p.triage,
+    ...(p.triage && p.providerId ? { provider: p.providerId } : {}),
+  });
+  const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost:5173";
+  const text = [
+    `curl -X POST ${origin}/api/scan/domain \\`,
+    `  -H 'Content-Type: application/json' \\`,
+    `  -d ${q(body)}`,
+  ].join("\n");
+  return <CopyBlock label="API" text={text} />;
 }

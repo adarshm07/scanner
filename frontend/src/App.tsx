@@ -6,6 +6,7 @@ import { ModelSelector } from "./components/ModelSelector";
 import { JobPanel } from "./components/JobPanel";
 import { ScanProgress } from "./components/ScanProgress";
 import { ReportView } from "./components/ReportView";
+import { WorkflowPanel } from "./components/WorkflowPanel";
 import { streamScan } from "./lib/scanStream";
 
 type Mode = "repo" | "domain";
@@ -169,7 +170,7 @@ export default function App() {
         <div className="mb-8">
           <h1 className="m-0 text-[26px] font-semibold tracking-[-0.02em]">New scan</h1>
         </div>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start">
           {/* left: numbered sections */}
           <div className="flex flex-col">
             {/* 01 Target */}
@@ -225,14 +226,14 @@ export default function App() {
                         value={baseRef}
                         onChange={(e) => setBaseRef(e.target.value)}
                         placeholder="base branch, e.g. main"
-                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
+                        className="h-[34px] min-w-0 flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
                       />
                       <input
                         value={headRef}
                         onChange={(e) => setHeadRef(e.target.value)}
                         disabled={!baseRef.trim()}
                         placeholder="head: branch, SHA or PR/MR ref"
-                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted disabled:opacity-50"
+                        className="h-[34px] min-w-0 flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted disabled:opacity-50"
                       />
                     </div>
                     <span className="text-[12px] text-muted">
@@ -329,6 +330,8 @@ export default function App() {
             error={error}
           />
         </div>
+
+        <WorkflowPanel />
       </main>
     </div>
   );
