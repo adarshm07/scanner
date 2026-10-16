@@ -3,6 +3,7 @@ import path from "path";
 import { Finding, makeFindingId } from "../schema/finding";
 import { checkTool, describeFailure, runCommand } from "./util";
 import { ToolRun } from "./types";
+import { attachSecret } from "./secrets";
 
 /**
  * gitleaks — secret detection (repo mode).
@@ -24,32 +25,39 @@ interface GitleaksRaw {
 
 export function gitleaksAdapter(raw: GitleaksRaw[]): Finding[] {
   return raw.map((r) => {
-    const ruleId = r.RuleID ?? "gitleaks-generic";
-    const file = r.File ?? "unknown";
-    const line = r.StartLine ?? 0;
-    return {
-      skill: `gitleaks-${ruleId}`,
-      category: "backend",
-      finding_id: makeFindingId({ file, line_start: line, rule_id: ruleId }),
-      rule_id: ruleId,
-      // Leaked secrets are treated as high severity by default.
-      severity: "high",
-      confidence: "medium",
-      title: r.Description ?? `Potential secret detected (${ruleId})`,
-      location: {
-        file,
-        line_start: r.StartLine,
-        line_end: r.EndLine ?? r.StartLine,
-      },
-      raw_snippet: null,
-      tool_message: r.Description ?? "Hardcoded secret detected by gitleaks.",
-      metadata: {
-        cwe: "CWE-798",
-        owasp: "A07:2021-Identification and Authentication Failures",
-        tags: r.Tags ?? [],
-      },
-    } satisfies Finding;
+    const finding = toFinding(r);
+    // Kept only in memory (non-enumerable) so the report step can mask it everywhere.
+    attachSecret(finding, r.Secret);
+    return finding;
   });
+}
+
+function toFinding(r: GitleaksRaw): Finding {
+  const ruleId = r.RuleID ?? "gitleaks-generic";
+  const file = r.File ?? "unknown";
+  const line = r.StartLine ?? 0;
+  return {
+    skill: `gitleaks-${ruleId}`,
+    category: "backend",
+    finding_id: makeFindingId({ file, line_start: line, rule_id: ruleId }),
+    rule_id: ruleId,
+    // Leaked secrets are treated as high severity by default.
+    severity: "high",
+    confidence: "medium",
+    title: r.Description ?? `Potential secret detected (${ruleId})`,
+    location: {
+      file,
+      line_start: r.StartLine,
+      line_end: r.EndLine ?? r.StartLine,
+    },
+    raw_snippet: null,
+    tool_message: r.Description ?? "Hardcoded secret detected by gitleaks.",
+    metadata: {
+      cwe: "CWE-798",
+      owasp: "A07:2021-Identification and Authentication Failures",
+      tags: r.Tags ?? [],
+    },
+  } satisfies Finding;
 }
 
 /**

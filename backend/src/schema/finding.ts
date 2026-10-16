@@ -117,7 +117,7 @@ export interface Report {
     reason?: string;
   };
   ai: {
-    provider: "gemini" | "claude" | "openai" | null;
+    provider: "gemini" | "claude" | "openai" | "agent" | null;
     triageEnabled: boolean;
     llmFallbackUsed: boolean;
   };

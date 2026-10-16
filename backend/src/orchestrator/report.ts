@@ -10,6 +10,7 @@ import { callLlm, LlmProvider } from "../llm";
 import { PipelineOutput } from "./runPipeline";
 import { filterFindings } from "./filterFindings";
 import { hydrateSnippets } from "./hydrate";
+import { maskFinding, secretsOf } from "../tools/secrets";
 import { triageCategory } from "./triage";
 import { EmitFn } from "./events";
 
@@ -88,6 +89,9 @@ export async function generateReport(
   failOn: Severity = "high",
   emit: EmitFn = () => {}
 ): Promise<Report> {
+  // Collect detected secret values before filtering (which may copy findings and drop the
+  // non-enumerable value), so every snippet and message can be masked before triage.
+  const secrets = secretsOf(pipeline.findings);
   const dedupStart = Date.now();
   emit({ t: "stage", id: "dedup", name: "Merge hits", status: "running", at: dedupStart });
   const { groups, totalRaw, totalAfterFilter } = filterFindings(
@@ -116,6 +120,8 @@ export async function generateReport(
     if (pipeline.mode === "repo" && pipeline.repoDir) {
       await hydrateSnippets(findings, pipeline.repoDir);
     }
+    // Never send, store or export a detected secret value: mask it in every finding.
+    for (const f of findings) maskFinding(f, secrets);
 
     const triageOut = await triageCategory(provider, category, name, findings);
     llmFallbackUsed = llmFallbackUsed || triageOut.llmFallbackUsed;

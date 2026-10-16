@@ -72,7 +72,7 @@ export interface Report {
     reason?: string;
   };
   ai: {
-    provider: ProviderId | null;
+    provider: ProviderId | "agent" | null;
     triageEnabled: boolean;
     llmFallbackUsed: boolean;
   };
