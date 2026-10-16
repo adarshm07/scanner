@@ -46,7 +46,9 @@ export function JobPanel(props: JobPanelProps) {
       <h2 className="m-0 text-[15px] font-semibold">Job</h2>
 
       <div className="flex flex-col gap-2">
-        <p className="text-[12.5px] text-muted">Equivalent CLI</p>
+        <p className="text-[12.5px] text-muted">
+          {props.mode === "repo" ? "Same scan from your terminal" : "Same scan via the API"}
+        </p>
         <CommandPreview
           mode={props.mode}
           target={props.target}
@@ -58,6 +60,7 @@ export function JobPanel(props: JobPanelProps) {
           fullHistory={props.fullHistory}
           baseRef={props.baseRef}
           headRef={props.headRef}
+          providerId={props.providerId}
         />
       </div>
 
