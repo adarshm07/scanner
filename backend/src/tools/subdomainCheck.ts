@@ -1,10 +1,12 @@
 import { CheckResult, Finding, makeFindingId } from "../schema/finding";
 import { DomainResult } from "./domainResult";
+import { findTakeovers, takeoverAdapter } from "./takeover";
 import { fetchWithTimeout } from "./util";
 
 /**
- * Subdomain enumeration via certificate transparency logs (domain mode, passive).
- * Queries the public crt.sh API — no active probing of the discovered hosts.
+ * Subdomain enumeration via certificate transparency logs (crt.sh), then a takeover check:
+ * DNS lookups for every subdomain, and one GET to those whose CNAME points at a known
+ * hosting service (to read its "nothing here" page).
  */
 
 interface CrtShEntry {
@@ -76,26 +78,34 @@ export function subdomainAdapter(host: string, subdomains: string[]): DomainResu
 }
 
 export async function runSubdomainCheck(host: string): Promise<DomainResult> {
+  const unavailable = (why: string): DomainResult => ({
+    findings: [],
+    checks: [{ group: "Subdomains", name: "CT enumeration", result: "inconclusive", observed: why, source: "subdomains" }],
+    notes: [`Subdomains: certificate transparency lookup failed (${why}), so subdomains and takeovers were not checked.`],
+  });
+  let names: string[];
   try {
     const res = await fetchWithTimeout(
       `https://crt.sh/?q=${encodeURIComponent(`%.${host}`)}&output=json`,
       { timeoutMs: 15000 }
     );
-    if (!res.ok) return { findings: [], checks: [] };
+    if (!res.ok) return unavailable(`crt.sh returned HTTP ${res.status}`);
     const entries = (await res.json()) as CrtShEntry[];
-    const names = new Set<string>();
+    const set = new Set<string>();
     for (const e of entries) {
-      const values = (e.name_value ?? e.common_name ?? "").split("\n");
-      for (const v of values) {
+      for (const v of (e.name_value ?? e.common_name ?? "").split("\n")) {
         const name = v.trim().toLowerCase();
-        if (name && !name.startsWith("*.") && name.endsWith(host)) {
-          names.add(name);
-        }
+        if (name && !name.startsWith("*.") && name.endsWith(`.${host}`)) set.add(name);
       }
     }
-    names.delete(host);
-    return subdomainAdapter(host, [...names].sort());
-  } catch {
-    return { findings: [], checks: [] };
+    names = [...set].sort();
+  } catch (err) {
+    return unavailable((err as Error).message);
   }
+
+  const listing = subdomainAdapter(host, names);
+  if (names.length === 0) return listing;
+  const { results, checked } = await findTakeovers(names);
+  const takeover = takeoverAdapter(host, results, checked, names.length);
+  return { findings: [...takeover.findings, ...listing.findings], checks: [...listing.checks, ...takeover.checks] };
 }

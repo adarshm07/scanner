@@ -48,6 +48,22 @@ export interface CheckResult {
   source: string;
 }
 
+export interface FixSnippet {
+  id: string;
+  label: string;
+  file: string;
+  language: string;
+  snippet: string;
+  notes: string[];
+}
+
+export interface FixPlan {
+  detected: string | null;
+  detectedFrom: string | null;
+  changes: string[];
+  platforms: FixSnippet[];
+}
+
 export interface Report {
   reportId: string;
   mode: "repo" | "domain";
@@ -57,6 +73,8 @@ export interface Report {
   executiveSummary: string;
   warning?: string;
   notes?: string[];
+  /** Domain scans: copy-paste config for header, cookie and HTTPS findings. */
+  fixes?: FixPlan;
   diff?: { baseRef: string; baseSha: string; headSha: string; changedFiles: number };
   categories: CategoryGroup[];
   checks: CheckResult[];

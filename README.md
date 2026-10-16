@@ -4,7 +4,7 @@ AI-assisted security review that composes **deterministic, open-source scanning
 tools** with a **thin LLM triage layer**. Two entry points share one backend:
 
 1. **PR / Agent Skill** (`/scanner-x`) — interactive, scope-driven scans for repos and PRs.
-2. **Domain Recon Web App** — passive security report for a domain (TLS, headers, DNS, CT subdomains).
+2. **Domain Recon Web App** — security report for a domain you own: TLS, headers, cookies, CORS, DNS (email auth, CAA, DNSSEC), subdomain takeover and exposed files, with copy-paste fixes for your server.
 
 ## Core design principle
 
@@ -39,9 +39,14 @@ runPipeline  →  filterFindings  →  hydrate snippets  →  triage (batched LL
 | repo | npm audit (JavaScript deps) | [`tools/npmAudit.ts`](backend/src/tools/npmAudit.ts) |
 | repo | OSV-Scanner (Python, Java, Rust, Go, Ruby, PHP, .NET, yarn/pnpm deps) | [`tools/osvScanner.ts`](backend/src/tools/osvScanner.ts) |
 | domain | TLS / cert chain (+ SSL Labs) | [`tools/tlsCheck.ts`](backend/src/tools/tlsCheck.ts) |
-| domain | HTTP security headers | [`tools/headerCheck.ts`](backend/src/tools/headerCheck.ts) |
-| domain | DNS (SPF/DKIM/DMARC) | [`tools/dnsCheck.ts`](backend/src/tools/dnsCheck.ts) |
-| domain | CT subdomains (crt.sh) | [`tools/subdomainCheck.ts`](backend/src/tools/subdomainCheck.ts) |
+| domain | HTTP headers, cookie flags, CORS, HTTP→HTTPS redirect, HSTS preload | [`tools/headerCheck.ts`](backend/src/tools/headerCheck.ts) |
+| domain | Fix snippets (nginx, Apache, IIS, Express, Next.js, Vercel, Netlify, Cloudflare) | [`tools/fixConfig.ts`](backend/src/tools/fixConfig.ts) |
+| domain | Content-Security-Policy grading | [`tools/cspCheck.ts`](backend/src/tools/cspCheck.ts) |
+| domain | DNS: SPF, DKIM, DMARC, MTA-STS, CAA, DNSSEC | [`tools/dnsCheck.ts`](backend/src/tools/dnsCheck.ts) |
+| domain | CT subdomains (crt.sh) + subdomain takeover | [`tools/subdomainCheck.ts`](backend/src/tools/subdomainCheck.ts), [`tools/takeover.ts`](backend/src/tools/takeover.ts) |
+| domain | Exposed files (~30 paths + source maps, catch-all aware) | [`tools/exposedFiles.ts`](backend/src/tools/exposedFiles.ts) |
+
+Unit tests for the domain checks: `cd backend && npm test`.
 
 Each adapter exposes `toolNameAdapter(rawOutput): Finding[]`, isolating all
 tool-specific parsing. A repo tool whose CLI isn't installed contributes no
@@ -126,6 +131,7 @@ startup warning. IP literals are otherwise refused at connect time.
 cd frontend
 npm install
 npm run dev            # http://localhost:5173, proxies /api → :4000
+                       # API_TARGET=http://localhost:4001 npm run dev  → another backend
 ```
 
 ## API

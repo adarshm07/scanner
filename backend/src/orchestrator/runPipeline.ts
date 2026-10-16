@@ -13,6 +13,7 @@ import { runDnsCheck } from "../tools/dnsCheck";
 import { runSubdomainCheck } from "../tools/subdomainCheck";
 import { runExposedFiles } from "../tools/exposedFiles";
 import { DomainResult } from "../tools/domainResult";
+import { buildFixPlan, FixPlan } from "../tools/fixConfig";
 import { ToolRun } from "../tools/types";
 import { gitEnv, redactSecrets } from "../tools/gitAuth";
 import { CHECKS } from "./checks";
@@ -68,6 +69,8 @@ export interface PipelineOutput {
   /** Diff (PR) scans: what was compared and how many files changed. */
   diff?: DiffInfo;
   checks: CheckResult[]; // domain mode: every probe run, pass or finding
+  /** Domain scans: copy-paste config fixes for header/cookie/HTTPS findings. */
+  fixes?: FixPlan;
   /** Absolute path to the checked-out repo (repo mode) for snippet hydration. */
   repoDir?: string;
   cleanup: () => Promise<void>;
@@ -501,6 +504,8 @@ export async function runDomainPipeline(
   const findings = results.flatMap((r) => r.findings);
   const checks = results.flatMap((r) => r.checks);
   const notes = results.flatMap((r) => r.notes ?? []);
+  const fixInput = results.find((r) => r.fix)?.fix;
+  const fixes = fixInput ? buildFixPlan(host, fixInput) : null;
   return {
     mode: "domain",
     target: host,
@@ -508,6 +513,7 @@ export async function runDomainPipeline(
     findings,
     checks,
     ...(notes.length ? { notes } : {}),
+    ...(fixes ? { fixes } : {}),
     cleanup: async () => {},
   };
 }

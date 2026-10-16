@@ -1,3 +1,4 @@
+import type { FixPlan } from "../tools/fixConfig";
 import { createHash } from "crypto";
 
 /**
@@ -104,6 +105,8 @@ export interface Report {
   /** Diff (PR) scans only. */
   diff?: { baseRef: string; baseSha: string; headSha: string; changedFiles: number };
   categories: CategoryGroup[];
+  /** Domain scans: copy-paste config for the header, cookie and HTTPS findings. */
+  fixes?: FixPlan;
   checks: CheckResult[]; // domain mode: every probe run, pass or finding
   stats: {
     totalRaw: number;
