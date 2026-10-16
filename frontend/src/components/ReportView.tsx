@@ -39,14 +39,14 @@ export function ReportView({
   return (
     <div className="border border-line bg-ink">
       {/* header */}
-      <header className="flex h-[52px] flex-shrink-0 items-center gap-7 border-b border-line px-6">
+      <header className="flex h-[52px] shrink-0 items-center gap-7 border-b border-line px-6">
         <div className="text-[15px] font-semibold tracking-[-0.01em]">Scanner-X</div>
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] text-muted">
           <span className="capitalize">{report.mode}</span>
           <span aria-hidden>/</span>
           <span className="max-w-[280px] truncate text-ink3">{report.target}</span>
         </nav>
-        <div className="flex-grow" />
+        <div className="grow" />
         <span className="font-mono text-[12.5px] text-muted" title={report.ref}>{formatRef(report.ref)}</span>
         {report.ai.llmFallbackUsed && (
           <span className="rounded border border-sev-medium/50 bg-sev-medium/10 px-2 py-0.5 text-[11px] font-mono text-sev-medium">
@@ -143,7 +143,7 @@ export function ReportView({
               </div>
             );
           })}
-          <div className="flex-grow" />
+          <div className="grow" />
           <p className="m-0 max-w-[340px] text-right text-[13px] text-muted">
             One block per finding, most severe first.
           </p>
@@ -193,7 +193,7 @@ export function ReportView({
               </span>
             ))}
           </div>
-          <div className="flex-grow" />
+          <div className="grow" />
           <span className="text-[13px] text-muted">Grouped by category</span>
         </div>
 

@@ -28,7 +28,7 @@ export function ScopeSelector({ checks, selected, onToggle }: ScopeSelectorProps
               }`}
             >
               <span
-                className={`mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-[3px] border ${
+                className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-[3px] border ${
                   on ? "border-ink3 bg-ink3" : "border-edge bg-transparent"
                 }`}
               >
@@ -42,7 +42,7 @@ export function ScopeSelector({ checks, selected, onToggle }: ScopeSelectorProps
                 <span className="flex items-baseline gap-2">
                   <span className="text-[14px] font-medium">{check.name}</span>
                   <span className="truncate font-mono text-[11.5px] text-dim">{check.tools}</span>
-                  <span className="flex-grow" />
+                  <span className="grow" />
                   <span className="font-mono text-[11.5px] text-dim">{check.est}</span>
                 </span>
                 <span className="mt-0.5 block text-[12.5px] leading-snug text-muted">

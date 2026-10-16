@@ -4,7 +4,7 @@ import { rateLimit } from "express-rate-limit";
 import { router } from "./api/routes";
 import { config } from "./tools/util";
 import { allowPrivateTargets } from "./tools/netGuard";
-import { describeGitCredentials, loadGitCredentials } from "./tools/gitAuth";
+import { describeGitCredentials, ignoredGitCredentials, loadGitCredentials } from "./tools/gitAuth";
 import { listProviders, hasUsableProvider } from "./llm";
 
 const app = express();
@@ -53,11 +53,17 @@ app.listen(config.port, () => {
   const gitCreds = describeGitCredentials();
   if (gitCreds.length) {
     console.log(`Private repo access configured for: ${gitCreds.join("; ")}`);
-    if (loadGitCredentials().some((c) => c.owners.length === 0)) {
+    if (loadGitCredentials().some((c) => c.owners.includes("*"))) {
       console.warn(
-        "WARNING: a git token has no owner restriction. Anyone who can reach this API can scan every repo that token can read; set *_OWNERS or \"owners\" in GIT_CREDENTIALS."
+        "WARNING: a git token is allowed for any owner (*_OWNERS=*). Anyone who can reach this API can scan every repo that token can read."
       );
     }
+  }
+  const ignored = ignoredGitCredentials();
+  if (ignored.length) {
+    console.log(
+      `Git token(s) for ${ignored.join(", ")} ignored: no owners listed. Set GITHUB_OWNERS (etc.) to the users/orgs to allow, or * for any.`
+    );
   }
   const usable = listProviders().filter((p) => p.available);
   if (hasUsableProvider()) {

@@ -20,7 +20,7 @@ export function ModelSelector({ providers, value, onChange }: ModelSelectorProps
       <select
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value as ProviderId)}
-        className="h-10 w-full rounded border border-edge bg-ink2 px-3 text-[13.5px] text-ink3 outline-none focus:border-muted"
+        className="h-10 w-full rounded border border-edge bg-ink2 px-3 text-[13.5px] text-ink3 outline-hidden focus:border-muted"
       >
         {providers.length === 0 && <option value="">Deterministic only</option>}
         {providers.map((p) => (

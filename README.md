@@ -169,9 +169,10 @@ repo URL; URLs with credentials are rejected).
 | Anything else (Gitea, Bitbucket Server, more hosts) | Token with repo read | `GIT_CREDENTIALS` (JSON) |
 
 `*_OWNERS` lists the users, orgs or groups (the first path segment of the repo URL)
-a token may be used for. Set it: anyone who can reach the API can scan every repo
-the token can read, and the server warns at startup when a token has no owner
-restriction. For Bitbucket, check Atlassian's current docs for the username that
+a token may be used for, and is **required**: a token without owners is ignored (and
+logged at startup), so a `GITHUB_TOKEN` exported in your shell for other tools is
+never used by accident. Set it to `*` to allow any owner; the server then warns that
+anyone who can reach the API can scan every repo the token can read. For Bitbucket, check Atlassian's current docs for the username that
 goes with your token type (`x-bitbucket-api-token-auth` for API tokens, the default,
 or `x-token-auth` for access tokens).
 

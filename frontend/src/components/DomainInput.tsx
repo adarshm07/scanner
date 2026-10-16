@@ -16,7 +16,7 @@ export function DomainInput({ mode, value, onChange }: DomainInputProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={isRepo ? "https://github.com/org/repo" : "example.com"}
-        className="h-10 w-full rounded border border-edge bg-ink2 px-3 font-mono text-[13.5px] text-ink3 outline-none placeholder:text-dim focus:border-muted"
+        className="h-10 w-full rounded border border-edge bg-ink2 px-3 font-mono text-[13.5px] text-ink3 outline-hidden placeholder:text-dim focus:border-muted"
       />
     </div>
   );
