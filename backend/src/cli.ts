@@ -15,6 +15,7 @@ import { CHECKS } from "./orchestrator/checks";
 import { resolveProvider, listProviders } from "./llm";
 import { Report, Severity, SEVERITY_RANK } from "./schema/finding";
 import { ScanEvent } from "./orchestrator/events";
+import { applyTriage } from "./orchestrator/applyTriage";
 
 const USAGE = `Usage: scanner-x [options]
 
@@ -35,7 +36,14 @@ Options:
   --quiet               Only print the final summary
   -h, --help            Show this help
 
-Exit codes: 0 policy passed, 1 policy failed or scan incomplete, 2 usage error.`;
+Exit codes: 0 policy passed, 1 policy failed or scan incomplete, 2 usage error.
+
+Merge verdicts from your own reviewer (e.g. a coding agent) into a saved report:
+  scanner-x apply-triage --report <scan.json> --triage <verdicts.json>
+                         [--json <out.json>] [--sarif <out.sarif>] [--path <repo>] [--fail-on <sev>]
+  verdicts.json: [{ "finding_id", "verdict": "true_positive"|"false_positive"|"needs_review",
+                    "adjusted_severity"?, "explanation", "suggested_fix"? }, ...]
+  --json defaults to overwriting --report. Same exit codes.`;
 
 interface Args {
   path: string;
@@ -122,7 +130,8 @@ function summary(report: Report): string {
   for (const f of all.slice(0, 25)) {
     const sev = f.triage?.adjusted_severity ?? f.severity;
     const loc = f.location.file ? `${f.location.file}${f.location.line_start ? `:${f.location.line_start}` : ""}` : f.location.url ?? "";
-    lines.push(`  [${sev}] ${f.title} (${loc})`);
+    const verdict = f.triage && f.triage.verdict !== "needs_review" ? ` [${f.triage.verdict.replace("_", " ")}]` : "";
+    lines.push(`  [${sev}] ${f.title} (${loc})${verdict}`);
   }
   if (all.length > 25) lines.push(`  … ${all.length - 25} more (see --json or --sarif output)`);
   lines.push(
@@ -133,7 +142,69 @@ function summary(report: Report): string {
   return lines.join("\n");
 }
 
+async function applyTriageCommand(argv: string[]): Promise<number> {
+  const opts: Record<string, string> = {};
+  for (let i = 0; i < argv.length; i++) {
+    const flag = argv[i];
+    if (flag === "-h" || flag === "--help") {
+      process.stdout.write(`${USAGE}\n`);
+      return 0;
+    }
+    if (!["--report", "--triage", "--json", "--sarif", "--path", "--fail-on"].includes(flag)) {
+      process.stderr.write(`scanner-x apply-triage: unknown option: ${flag}\n`);
+      return 2;
+    }
+    const v = argv[++i];
+    if (v === undefined || v.startsWith("--")) {
+      process.stderr.write(`scanner-x apply-triage: ${flag} needs a value\n`);
+      return 2;
+    }
+    opts[flag.slice(2)] = v;
+  }
+  if (!opts.report || !opts.triage) {
+    process.stderr.write("scanner-x apply-triage: --report and --triage are required\n");
+    return 2;
+  }
+  if (opts["fail-on"] && !(opts["fail-on"] in SEVERITY_RANK)) {
+    process.stderr.write("scanner-x apply-triage: --fail-on must be critical, high, medium or low\n");
+    return 2;
+  }
+  let report: Report;
+  let entries: unknown;
+  try {
+    report = JSON.parse(await fs.readFile(path.resolve(opts.report), "utf8")) as Report;
+    entries = JSON.parse(await fs.readFile(path.resolve(opts.triage), "utf8"));
+  } catch (err) {
+    process.stderr.write(`scanner-x apply-triage: could not read input (${(err as Error).message})\n`);
+    return 2;
+  }
+  let result;
+  try {
+    result = applyTriage(report, entries, { failOn: opts["fail-on"] as Severity | undefined });
+  } catch (err) {
+    process.stderr.write(`scanner-x apply-triage: ${(err as Error).message}\n`);
+    return 2;
+  }
+  for (const id of result.unknownIds) process.stderr.write(`  ! unknown finding_id ${id} (ignored)\n`);
+  for (const msg of result.invalid) process.stderr.write(`  ! ${msg} (ignored)\n`);
+  process.stderr.write(
+    `Applied ${result.applied} verdict(s); ${result.removedAsFalsePositive} false positive(s) removed.\n`
+  );
+
+  const out = path.resolve(opts.json ?? opts.report);
+  await fs.writeFile(out, JSON.stringify(result.report, null, 2));
+  if (opts.sarif) {
+    const root = path.resolve(opts.path ?? process.cwd());
+    const sarifPath = path.resolve(opts.sarif);
+    await fs.mkdir(path.dirname(sarifPath), { recursive: true });
+    await fs.writeFile(sarifPath, JSON.stringify(toSarif(result.report, [root, await fs.realpath(root)]), null, 2));
+  }
+  process.stdout.write(`${summary(result.report)}\n`);
+  return result.report.policy.passed ? 0 : 1;
+}
+
 async function main(): Promise<number> {
+  if (process.argv[2] === "apply-triage") return applyTriageCommand(process.argv.slice(3));
   let args: Args | "help";
   try {
     args = parseArgs(process.argv.slice(2));

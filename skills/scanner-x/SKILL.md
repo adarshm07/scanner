@@ -89,6 +89,39 @@ Open the file at `location` and read enough surrounding code to judge it. Decide
    the end with the reason.
 
 **Never print a secret's full value.** Show at most the first 4 characters followed by `…`.
+The report already masks detected secrets (e.g. `sk_l****`), but you may see the real value
+when you open the file yourself.
+
+## 6b. Save your triage into the report
+
+Write your verdicts so the report files carry them, exactly like Scanner-X's built-in AI
+triage would (false positives removed, severities adjusted, policy recomputed). Do this
+after every triaged scan; it's how your analysis reaches the JSON, SARIF (GitHub code
+scanning) and anyone the user shares the report with.
+
+```bash
+cat > "${TMPDIR:-/tmp}/scanner-x-verdicts.json" <<'JSON'
+[
+  {
+    "finding_id": "<id from the report>",
+    "verdict": "true_positive",
+    "adjusted_severity": "high",
+    "explanation": "Why it matters here, naming the file and line.",
+    "suggested_fix": "The concrete change or command."
+  }
+]
+JSON
+node "$SCANNER_X_HOME/backend/dist/cli.js" apply-triage \
+  --report "$OUT" --triage "${TMPDIR:-/tmp}/scanner-x-verdicts.json" --quiet
+```
+
+Fields: `verdict` is `true_positive`, `false_positive` or `needs_review`;
+`adjusted_severity` (optional) is `critical`, `high`, `medium` or `low`; `explanation` is
+required; `suggested_fix` is optional. Add `--sarif scanner-x.sarif --path <repo root>`
+when the user wants a SARIF file. Use the exact `finding_id`
+values from the report. Never put a secret's value in a verdict. The command prints
+any entries it ignored; fix and re-run if needed. Mention the output paths to the user, and
+only write files inside their repo (such as the SARIF) if they ask for them.
 
 ## 7. Fix (only with the user's go-ahead)
 

@@ -204,6 +204,19 @@ error. In diff mode the base must exist in the local history, and a base equal t
 `HEAD` is refused (there is nothing to compare). LLM triage is off unless you pass
 `--triage gemini|claude|openai`, because it sends code snippets to the provider.
 
+Verdicts from another reviewer, such as the coding agent running the skill, can be
+merged into a saved report with the same effect as the built-in triage (false
+positives removed, severities adjusted, policy recomputed):
+
+```bash
+node dist/cli.js apply-triage --report scan.json --triage verdicts.json --sarif out.sarif
+```
+
+**Secrets are masked before any AI call.** Values found by gitleaks are replaced
+(e.g. `sk_l****`) in every snippet, message and metadata field before triage, so they
+never reach the model or its gateway logs, and never appear in the saved report, JSON
+or SARIF.
+
 `--sarif` writes SARIF 2.1.0, which GitHub code scanning and most code-review tools
 import. Each result carries a stable fingerprint, a `security-severity` score, and
 the triage explanation and fix when triage ran.
