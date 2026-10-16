@@ -12,7 +12,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "scan": "node dist/cli.js",
     "serve:exposed-fixture": "node fixtures/serve-exposed-files.js",
-    "serve:csp-fixtures": "node fixtures/serve-csp-fixtures.js"
+    "serve:csp-fixtures": "node fixtures/serve-csp-fixtures.js",
+    "test": "tsx --test test/*.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.27.3",

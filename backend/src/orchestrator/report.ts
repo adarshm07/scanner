@@ -202,6 +202,7 @@ export async function generateReport(
     executiveSummary: summary,
     warning: pipeline.warning,
     notes: pipeline.notes,
+    ...(pipeline.fixes ? { fixes: pipeline.fixes } : {}),
     diff: pipeline.diff,
     categories,
     checks: pipeline.checks,

@@ -6,7 +6,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      "/api": "http://localhost:4000",
+      // API_TARGET points the dev server at another backend (e.g. one started on :4001).
+      "/api": process.env.API_TARGET ?? "http://localhost:4000",
     },
   },
 });

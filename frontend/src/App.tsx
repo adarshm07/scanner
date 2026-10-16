@@ -16,7 +16,10 @@ export default function App() {
   const [checks, setChecks] = useState<Check[]>([]);
   const [providers, setProviders] = useState<ProviderDescriptor[]>([]);
   const [providerId, setProviderId] = useState<ProviderId | null>(null);
-  const [target, setTarget] = useState("");
+  // Each mode keeps its own target, so switching to Domain doesn't carry a repo URL over.
+  const [targets, setTargets] = useState<Record<Mode, string>>({ repo: "", domain: "" });
+  const target = targets[mode];
+  const setTarget = (value: string) => setTargets((t) => ({ ...t, [mode]: value }));
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [attested, setAttested] = useState(false);
   const [failOn, setFailOn] = useState("high");

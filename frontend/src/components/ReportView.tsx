@@ -1,6 +1,7 @@
 import type { Report, Severity } from "../types";
 import { FindingCard } from "./FindingCard";
 import { ChecksTable } from "./ChecksTable";
+import { FixPanel } from "./FixPanel";
 import { SEVERITY_META, SEVERITY_ORDER, SeverityGlyph } from "./Severity";
 
 function severityOf(f: { severity: Severity; triage: { adjusted_severity: Severity } | null }): Severity {
@@ -232,6 +233,7 @@ export function ReportView({
         )}
       </section>
 
+      {report.fixes && <FixPanel plan={report.fixes} />}
       {report.checks.length > 0 && <ChecksTable checks={report.checks} />}
     </div>
   );
