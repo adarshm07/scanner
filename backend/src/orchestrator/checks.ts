@@ -35,8 +35,8 @@ export const CHECKS: CheckDef[] = [
     id: "deps",
     mode: "repo",
     name: "Dependencies",
-    tools: "npm audit / osv",
-    desc: "Lockfile dependencies checked against known advisories.",
+    tools: "npm audit + osv-scanner",
+    desc: "Dependencies checked against known advisories: npm via npm audit; Python, Java, Rust, Go, Ruby, PHP, .NET and yarn/pnpm via OSV-Scanner.",
     est: "~6s",
   },
   {

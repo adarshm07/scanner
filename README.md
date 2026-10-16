@@ -36,7 +36,8 @@ runPipeline  →  filterFindings  →  hydrate snippets  →  triage (batched LL
 | --- | --- | --- |
 | repo | gitleaks (secrets) | [`tools/gitleaks.ts`](backend/src/tools/gitleaks.ts) |
 | repo | semgrep (`p/security-audit`) | [`tools/semgrep.ts`](backend/src/tools/semgrep.ts) |
-| repo | npm audit (deps) | [`tools/npmAudit.ts`](backend/src/tools/npmAudit.ts) |
+| repo | npm audit (JavaScript deps) | [`tools/npmAudit.ts`](backend/src/tools/npmAudit.ts) |
+| repo | OSV-Scanner (Python, Java, Rust, Go, Ruby, PHP, .NET, yarn/pnpm deps) | [`tools/osvScanner.ts`](backend/src/tools/osvScanner.ts) |
 | domain | TLS / cert chain (+ SSL Labs) | [`tools/tlsCheck.ts`](backend/src/tools/tlsCheck.ts) |
 | domain | HTTP security headers | [`tools/headerCheck.ts`](backend/src/tools/headerCheck.ts) |
 | domain | DNS (SPF/DKIM/DMARC) | [`tools/dnsCheck.ts`](backend/src/tools/dnsCheck.ts) |
@@ -47,6 +48,13 @@ tool-specific parsing. A repo tool whose CLI isn't installed contributes no
 findings. If the clone fails or the repo has no scannable code, the report has
 zero findings, a warning, and a failed policy (`reason: "scan incomplete"`).
 
+- **Dependencies in other languages:** OSV-Scanner reads `requirements*.txt`,
+  `poetry.lock`, `uv.lock`, `Pipfile.lock`, `pom.xml`, `gradle.lockfile`, `Cargo.lock`,
+  `go.mod`, `Gemfile.lock`, `composer.lock`, `packages.lock.json`, `pubspec.lock`,
+  `yarn.lock` and `pnpm-lock.yaml`, and checks them against the OSV.dev database.
+  Aliased advisories (GHSA, CVE, PYSEC, RUSTSEC) are merged into one finding with
+  the fixed versions. A manifest it can't read without a lockfile (e.g. a Rust
+  library with only `Cargo.toml`) is listed as a note, not silently skipped.
 - **Dependencies without a lockfile:** when a `package.json` has no
   `package-lock.json`, the scanner resolves one in a temporary directory
   (`npm install --package-lock-only --ignore-scripts`, registry pinned; the repo is
@@ -266,16 +274,25 @@ second model.
 Install:
 
 ```bash
-git clone https://github.com/adarshm07/scanner ~/.scanner-x
-(cd ~/.scanner-x/backend && npm ci && npm run build)
-brew install gitleaks semgrep            # or your platform's equivalent
-
-# Claude Code: all projects (or copy into <project>/.claude/skills/ for one)
-mkdir -p ~/.claude/skills && cp -r ~/.scanner-x/skills/scanner-x ~/.claude/skills/
-
-# Codex
-mkdir -p ~/.codex/skills && cp -r ~/.scanner-x/skills/scanner-x ~/.codex/skills/
+git clone --depth 1 https://github.com/adarshm07/scanner ~/.scanner-x \
+  && (cd ~/.scanner-x/backend && npm ci && npm run build) \
+  && bash ~/.scanner-x/skills/scanner-x/scripts/setup.sh \
+  && mkdir -p ~/.claude/skills ~/.codex/skills \
+  && ln -sfn ~/.scanner-x/skills/scanner-x ~/.claude/skills/scanner-x \
+  && ln -sfn ~/.scanner-x/skills/scanner-x ~/.codex/skills/scanner-x
 ```
+
+`setup.sh` installs gitleaks, semgrep and osv-scanner if they're missing: with
+Homebrew when available, otherwise semgrep via pipx/pip and the other two as
+official release binaries (gitleaks checksum-verified) in `~/.scanner-x/bin`, which
+Scanner-X finds automatically. It never uses sudo; `setup.sh --check` only reports.
+On Windows, use WSL.
+
+Or install just the skill with the [skills](https://www.npmjs.com/package/skills)
+CLI: `npx skills add adarshm07/scanner -g -a claude-code -a codex`. On first use
+the skill offers to clone and build Scanner-X and to run `setup.sh`.
+
+Update later with `cd ~/.scanner-x && git pull && (cd backend && npm ci && npm run build)`.
 
 Then ask "run a security scan" or use `/scanner-x`. Set `SCANNER_X_HOME` if you
 cloned somewhere other than `~/.scanner-x`. If your Codex version doesn't load

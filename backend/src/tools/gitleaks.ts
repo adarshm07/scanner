@@ -23,13 +23,24 @@ interface GitleaksRaw {
   Tags?: string[];
 }
 
-export function gitleaksAdapter(raw: GitleaksRaw[]): Finding[] {
+export function gitleaksAdapter(raw: GitleaksRaw[], repoDirs: string[] = []): Finding[] {
   return raw.map((r) => {
-    const finding = toFinding(r);
+    // `detect --no-git` reports absolute paths; make them repo-relative so finding IDs (and
+    // SARIF fingerprints) stay stable across scans of temporary clones.
+    const finding = toFinding({ ...r, File: relativeTo(r.File, repoDirs) });
     // Kept only in memory (non-enumerable) so the report step can mask it everywhere.
     attachSecret(finding, r.Secret);
     return finding;
   });
+}
+
+function relativeTo(file: string | undefined, roots: string[]): string | undefined {
+  if (!file || !path.isAbsolute(file)) return file;
+  for (const root of roots) {
+    const rel = path.relative(root, file);
+    if (rel && !rel.startsWith("..") && !path.isAbsolute(rel)) return rel.split(path.sep).join("/");
+  }
+  return file;
 }
 
 function toFinding(r: GitleaksRaw): Finding {
@@ -92,7 +103,7 @@ export async function runGitleaks(
     await fs.rm(reportPath, { force: true });
     const parsed = JSON.parse(content) as GitleaksRaw[];
     if (!Array.isArray(parsed)) throw new Error("unexpected report format");
-    return { findings: gitleaksAdapter(parsed), ran: true };
+    return { findings: gitleaksAdapter(parsed, [repoDir, await fs.realpath(repoDir)]), ran: true };
   } catch {
     return { findings: [], ran: false, error: describeFailure(res, timeoutMs) };
   }

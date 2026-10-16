@@ -1,10 +1,19 @@
 import { spawn } from "child_process";
+import os from "os";
 import path from "path";
+import { existsSync } from "fs";
 import dotenv from "dotenv";
 import { Agent, fetch, Response } from "undici";
 import { allowPrivateTargets, assertIpLiteralAllowed, assertPublicHost, guardedLookup } from "./netGuard";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
+
+// Scanners installed by the skill's setup script live in ~/.scanner-x/bin (no sudo needed).
+// Appended, so tools the user installed system-wide still take precedence.
+const toolBin = path.join(process.env.SCANNER_X_HOME || path.join(os.homedir(), ".scanner-x"), "bin");
+if (existsSync(toolBin) && !(process.env.PATH ?? "").split(path.delimiter).includes(toolBin)) {
+  process.env.PATH = [process.env.PATH, toolBin].filter(Boolean).join(path.delimiter);
+}
 
 function envBool(value: string | undefined, fallback: boolean): boolean {
   if (value === undefined) return fallback;

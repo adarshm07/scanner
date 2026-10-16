@@ -1,7 +1,7 @@
 name: Scanner-X
 description: >
-  Security scan for pull requests: gitleaks (secrets), semgrep (SAST) and npm audit
-  (dependencies), with optional AI triage. Uploads SARIF to GitHub code scanning and
+  Security scan for pull requests: gitleaks (secrets), semgrep (SAST), and npm audit plus
+  OSV-Scanner (dependencies in JavaScript, Python, Java, Rust, Go, ...), with optional AI triage. Uploads SARIF to GitHub code scanning and
   fails the job when findings reach the chosen severity.
 author: adarshm07
 branding:
@@ -43,6 +43,9 @@ inputs:
   semgrep-version:
     description: semgrep version to install when semgrep isn't already on PATH (empty = latest).
     default: ""
+  osv-scanner-version:
+    description: osv-scanner release to install when it isn't already on PATH (dependencies for Python, Java, Rust, Go, ...).
+    default: "2.0.0"
 
 outputs:
   passed:
@@ -66,6 +69,7 @@ runs:
       env:
         GITLEAKS_VERSION: ${{ inputs.gitleaks-version }}
         SEMGREP_VERSION: ${{ inputs.semgrep-version }}
+        OSV_SCANNER_VERSION: ${{ inputs.osv-scanner-version }}
       run: |
         set -euo pipefail
         if ! command -v gitleaks >/dev/null; then
@@ -73,6 +77,13 @@ runs:
           curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
             | tar -xz -C "$RUNNER_TEMP" gitleaks
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+        fi
+        if ! command -v osv-scanner >/dev/null; then
+          [[ "$OSV_SCANNER_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::invalid osv-scanner-version"; exit 1; }
+          curl -sSfL -o "$RUNNER_TEMP/osv-scanner" \
+            "https://github.com/google/osv-scanner/releases/download/v${OSV_SCANNER_VERSION}/osv-scanner_linux_amd64"
+          chmod +x "$RUNNER_TEMP/osv-scanner"
+          grep -qx "$RUNNER_TEMP" <<< "$(cat "$GITHUB_PATH" 2>/dev/null)" || echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
         fi
         if ! command -v semgrep >/dev/null; then
           if [ -n "$SEMGREP_VERSION" ]; then
