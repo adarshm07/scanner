@@ -38,14 +38,24 @@ The CLI lives in the Scanner-X repository at `backend/dist/cli.js`.
   "Scan only this branch's changes, or the whole repo?" For branch changes, use the merge
   base as the base: `git merge-base HEAD origin/<default-branch>`.
 - Checks: `secrets`, `sast`, `deps` (default: all).
+- **A repository URL instead of the current folder**: clone it into a temporary
+  directory (`git clone <url> "$(mktemp -d)/repo"`; the user's own git credentials apply
+  to private repos) and scan that path. Delete the clone afterwards, and don't offer
+  to edit files there; offer fixes only for a repo the user has checked out.
+- **Changes between two refs** ("from main to feature/x"): fetch both, check out the head
+  (`git checkout <head>`) and pass the base as `--base`. If only a base is given, scan the
+  current HEAD against it.
+- **Severity threshold** ("fail on medium and above"): pass `--fail-on <severity>`
+  (default `high`).
+- **Full history** ("including git history"): pass `--full-history` (secrets only).
 
 ## 3. Run it
 
 ```bash
 OUT="${TMPDIR:-/tmp}/scanner-x-$(date +%s).json"
 node "$SCANNER_X_HOME/backend/dist/cli.js" \
-  --path "$(git rev-parse --show-toplevel)" \
-  [--base <ref>] [--checks secrets,sast,deps] [--full-history] \
+  --path "<repo root, or the temporary clone>" \
+  [--base <ref>] [--checks secrets,sast,deps] [--full-history] [--fail-on high] \
   --json "$OUT" --quiet
 ```
 

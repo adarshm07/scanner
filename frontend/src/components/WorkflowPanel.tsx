@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { CopyBlock } from "./CopyBlock";
+import { SKILL_INSTALL } from "./CommandPreview";
 
 const REPO = "adarshm07/scanner";
 
-const SKILL_INSTALL = `npx skills add ${REPO} -g -a claude-code -a codex`;
 const SKILL_UPDATE = `npx skills update scanner-x -g -y`;
 const SKILL_PROMPTS = [
   "Run a Scanner-X security scan on this repo",

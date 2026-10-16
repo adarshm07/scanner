@@ -5,10 +5,13 @@ export function CopyBlock({
   label,
   text,
   copyText,
+  wrap = false,
 }: {
   label: string;
   text: string;
   copyText?: string;
+  /** Wrap long lines (prose prompts) instead of scrolling sideways (commands). */
+  wrap?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -36,7 +39,11 @@ export function CopyBlock({
           {copied ? "Copied" : "Copy"}
         </button>
       </figcaption>
-      <pre className="m-0 overflow-x-auto p-3 font-mono text-[12px] leading-[1.7] text-text3">
+      <pre
+        className={`m-0 p-3 font-mono text-[12px] leading-[1.7] text-text3 ${
+          wrap ? "whitespace-pre-wrap wrap-break-word" : "overflow-x-auto"
+        }`}
+      >
         {text}
       </pre>
     </figure>

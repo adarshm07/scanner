@@ -47,7 +47,9 @@ export function JobPanel(props: JobPanelProps) {
 
       <div className="flex flex-col gap-2">
         <p className="text-[12.5px] text-muted">
-          {props.mode === "repo" ? "Same scan from your terminal" : "Same scan via the API"}
+          {props.mode === "repo"
+            ? "Run this scan in your coding agent — it installs the scanners and triages the findings itself, no API key needed"
+            : "Same scan via the API"}
         </p>
         <CommandPreview
           mode={props.mode}
