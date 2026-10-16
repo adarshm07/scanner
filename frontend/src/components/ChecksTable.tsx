@@ -98,7 +98,7 @@ export function ChecksTable({ checks }: { checks: CheckResult[] }) {
                 </span>
                 <span className="text-[13.5px] font-medium">{r.name}</span>
                 <span className="flex flex-col gap-0.5">
-                  <span className="break-words font-mono text-[12.5px] text-text3">{r.observed}</span>
+                  <span className="wrap-break-word font-mono text-[12.5px] text-text3">{r.observed}</span>
                   {r.remediation && (
                     <span className="text-[12.5px] text-muted">{r.remediation}</span>
                   )}

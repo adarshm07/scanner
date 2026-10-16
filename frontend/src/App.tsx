@@ -159,7 +159,7 @@ export default function App() {
         <span className="text-[13px] text-muted">
           Deterministic security tools + thin LLM triage
         </span>
-        <div className="flex-grow" />
+        <div className="grow" />
         <span className="hidden font-mono text-[12px] text-dim sm:block">
           {providerId ? `triage: ${providerId}` : "triage: deterministic"}
         </span>
@@ -202,7 +202,7 @@ export default function App() {
                   <label className="flex cursor-pointer items-start gap-2.5 text-[13px] text-text3">
                     <input
                       type="checkbox"
-                      className="mt-0.5 h-4 w-4 accent-[#E3E7EA]"
+                      className="mt-0.5 h-4 w-4 accent-ink3"
                       checked={fullHistory}
                       disabled={!selected.has("secrets")}
                       onChange={(e) => setFullHistory(e.target.checked)}
@@ -225,14 +225,14 @@ export default function App() {
                         value={baseRef}
                         onChange={(e) => setBaseRef(e.target.value)}
                         placeholder="base branch, e.g. main"
-                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-none focus:border-muted"
+                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
                       />
                       <input
                         value={headRef}
                         onChange={(e) => setHeadRef(e.target.value)}
                         disabled={!baseRef.trim()}
                         placeholder="head: branch, SHA or PR/MR ref"
-                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-none focus:border-muted disabled:opacity-50"
+                        className="h-[34px] flex-1 rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted disabled:opacity-50"
                       />
                     </div>
                     <span className="text-[12px] text-muted">
@@ -244,7 +244,7 @@ export default function App() {
                   <label className="flex cursor-pointer items-start gap-2.5 rounded border border-edge bg-panel/40 p-3 text-[13px] text-text3">
                     <input
                       type="checkbox"
-                      className="mt-0.5 h-4 w-4 accent-[#E3E7EA]"
+                      className="mt-0.5 h-4 w-4 accent-ink3"
                       checked={attested}
                       onChange={(e) => setAttested(e.target.checked)}
                     />
@@ -278,7 +278,7 @@ export default function App() {
                   <select
                     value={failOn}
                     onChange={(e) => setFailOn(e.target.value)}
-                    className="h-[34px] rounded border border-edge bg-ink2 px-2 text-[13px] text-ink3 outline-none focus:border-muted"
+                    className="h-[34px] rounded border border-edge bg-ink2 px-2 text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
                   >
                     <option value="critical">critical</option>
                     <option value="high">high</option>
@@ -290,7 +290,7 @@ export default function App() {
                 <label className="flex cursor-pointer items-start gap-2.5 text-[13px] text-text3">
                   <input
                     type="checkbox"
-                    className="mt-0.5 h-4 w-4 accent-[#E3E7EA]"
+                    className="mt-0.5 h-4 w-4 accent-ink3"
                     checked={triage}
                     onChange={(e) => setTriage(e.target.checked)}
                   />

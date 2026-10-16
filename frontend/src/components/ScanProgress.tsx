@@ -142,7 +142,7 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
           <h1 className="m-0 text-[24px] font-semibold tracking-[-0.01em]">
             {d.done ? "Scan finished" : "Scanning…"}
           </h1>
-          <p className="mt-1 max-w-[560px] text-[13.5px] leading-[1.5] text-muted">
+          <p className="mt-1 max-w-[560px] text-[13.5px] leading-normal text-muted">
             Scanners run in parallel. Hits are deduplicated when the last scanner exits,
             then the model explains each one. Nothing is reported as a finding before that.
           </p>

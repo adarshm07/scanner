@@ -74,7 +74,7 @@ export function FindingCard({ finding }: { finding: ReportFinding }) {
                 <h4 className="m-0 text-[13px] font-semibold text-ink3">Evidence</h4>
                 <ul className="m-0 flex list-none flex-col gap-1 p-0 font-mono text-[12.5px] text-text3">
                   {evidence.map((e) => (
-                    <li key={e} className="break-words">{e}</li>
+                    <li key={e} className="wrap-break-word">{e}</li>
                   ))}
                 </ul>
               </div>

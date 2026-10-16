@@ -15,7 +15,10 @@ export interface GitCredential {
   /** HTTPS basic-auth username the host expects alongside the token. */
   username: string;
   token: string;
-  /** First URL path segment (user, org, group or Azure org) the token may be used for. Empty = any. */
+  /**
+   * First URL path segment (user, org, group or Azure org) the token may be used for.
+   * Required: a token with no owners is ignored. Use ["*"] to allow any owner on purpose.
+   */
   owners: string[];
 }
 
@@ -80,12 +83,25 @@ function fromShortcuts(env: NodeJS.ProcessEnv): GitCredential[] {
   return out;
 }
 
-/** All configured credentials. GIT_CREDENTIALS entries win over shortcuts for the same host. */
+/**
+ * Configured tokens that are allowed to be used. GIT_CREDENTIALS entries win over shortcuts
+ * for the same host. A token without owners is ignored: variables like GITHUB_TOKEN are often
+ * exported in developers' shells for other tools, and silently using one would let anyone who
+ * can reach the API scan every repo it can read.
+ */
 export function loadGitCredentials(env: NodeJS.ProcessEnv = process.env): GitCredential[] {
   const merged = new Map<string, GitCredential>();
   for (const c of fromShortcuts(env)) merged.set(c.host, c);
   for (const c of fromJson(env.GIT_CREDENTIALS)) merged.set(c.host, c);
-  return [...merged.values()];
+  return [...merged.values()].filter((c) => c.owners.length > 0);
+}
+
+/** Hosts whose token is set but ignored because no owners are listed (for the startup log). */
+export function ignoredGitCredentials(env: NodeJS.ProcessEnv = process.env): string[] {
+  const merged = new Map<string, GitCredential>();
+  for (const c of fromShortcuts(env)) merged.set(c.host, c);
+  for (const c of fromJson(env.GIT_CREDENTIALS)) merged.set(c.host, c);
+  return [...merged.values()].filter((c) => c.owners.length === 0).map((c) => c.host);
 }
 
 // Read lazily: this module can load before dotenv runs.
@@ -116,7 +132,7 @@ export function credentialFor(repoUrl: string): GitCredential | undefined {
   const host = url.hostname.toLowerCase();
   const owner = ownerOf(url);
   return credentials().find(
-    (c) => c.host === host && (c.owners.length === 0 || c.owners.includes(owner))
+    (c) => c.host === host && (c.owners.includes("*") || c.owners.includes(owner))
   );
 }
 
@@ -153,6 +169,6 @@ export function redactSecrets(text: string): string {
 /** Startup summary without secrets, e.g. ["github.com (owners: adarshm07)"]. */
 export function describeGitCredentials(): string[] {
   return credentials().map(
-    (c) => `${c.host} (${c.owners.length ? `owners: ${c.owners.join(", ")}` : "any owner"})`
+    (c) => `${c.host} (${c.owners.includes("*") ? "any owner" : `owners: ${c.owners.join(", ")}`})`
   );
 }

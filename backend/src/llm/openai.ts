@@ -2,20 +2,35 @@ import OpenAI from "openai";
 import { LlmMessage, LlmProvider } from "./provider";
 
 /**
- * OpenAI-compatible provider (TrueFoundry gateway), non-streaming.
+ * OpenAI-compatible provider: an AI gateway (e.g. TrueFoundry, when OPENAI_BASE_URL is set)
+ * or the OpenAI API directly (when it isn't). Non-streaming.
+ *
+ * Requests are bounded: a hung gateway fails after OPENAI_TIMEOUT_MS (default 60s, one
+ * retry) and triage falls back for that batch, instead of stalling the scan for the SDK's
+ * default 10 minutes x 3 attempts.
  */
+const TIMEOUT_MS = Number(process.env.OPENAI_TIMEOUT_MS) || 60_000;
 export class OpenAiProvider implements LlmProvider {
   readonly id = "openai" as const;
   private client: OpenAI;
 
   constructor(apiKey: string, baseURL: string, private model: string) {
+    const gateway = baseURL.trim();
     this.client = new OpenAI({
       apiKey,
-      baseURL,
-      defaultHeaders: {
-        "X-TFY-METADATA": "{}",
-        "X-TFY-LOGGING-CONFIG": '{"enabled": true}',
-      },
+      timeout: TIMEOUT_MS,
+      maxRetries: 1,
+      ...(gateway
+        ? {
+            baseURL: gateway,
+            // Gateway request logging stays on: usage is tracked per key. Secrets are masked
+            // before triage (see tools/secrets.ts), so logged prompts never contain them.
+            defaultHeaders: {
+              "X-TFY-METADATA": "{}",
+              "X-TFY-LOGGING-CONFIG": '{"enabled": true}',
+            },
+          }
+        : {}),
     });
   }
 

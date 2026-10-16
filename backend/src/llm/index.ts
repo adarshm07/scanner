@@ -58,10 +58,8 @@ function entries(): ProviderEntry[] {
         label: "OpenAI",
         model: config.openai.model,
         enabled: config.openai.enabled,
-        available:
-          config.openai.enabled &&
-          config.openai.apiKey.trim().length > 0 &&
-          config.openai.baseURL.trim().length > 0,
+        // OPENAI_BASE_URL is optional: empty means the OpenAI API directly.
+        available: config.openai.enabled && config.openai.apiKey.trim().length > 0,
       },
       create: () =>
         new OpenAiProvider(
