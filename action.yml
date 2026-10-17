@@ -34,6 +34,11 @@ inputs:
   sarif-file:
     description: Where to write the SARIF report.
     default: scanner-x.sarif
+  html-file:
+    description: >
+      Also write a self-contained HTML report here (e.g. site/index.html, then publish it with
+      actions/upload-pages-artifact). Findings link to the scanned commit on GitHub.
+    default: ""
   upload-sarif:
     description: Upload the SARIF report to GitHub code scanning (needs security-events write).
     default: "true"
@@ -54,6 +59,9 @@ outputs:
   sarif-file:
     description: Path of the SARIF report.
     value: ${{ steps.scan.outputs.sarif-file }}
+  html-file:
+    description: Path of the HTML report (when html-file was set).
+    value: ${{ inputs.html-file }}
 
 runs:
   using: composite
@@ -113,6 +121,8 @@ runs:
         SX_FULL_HISTORY: ${{ inputs.full-history }}
         SX_TRIAGE: ${{ inputs.triage }}
         SX_SARIF: ${{ inputs.sarif-file }}
+        SX_HTML: ${{ inputs.html-file }}
+        SX_LINK_BASE: ${{ github.server_url }}/${{ github.repository }}/blob/${{ github.event.pull_request.head.sha || github.sha }}/
         SX_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         SX_TARGET: ${{ github.repository }}
         SX_CLI: ${{ github.action_path }}/backend/dist/cli.js
@@ -122,6 +132,7 @@ runs:
         if [ "$SX_DIFF_ONLY" = "true" ] && [ -n "$SX_BASE_SHA" ]; then args+=(--base "$SX_BASE_SHA"); fi
         if [ "$SX_FULL_HISTORY" = "true" ]; then args+=(--full-history); fi
         if [ -n "$SX_TRIAGE" ]; then args+=(--triage "$SX_TRIAGE"); fi
+        if [ -n "$SX_HTML" ]; then args+=(--html "$SX_HTML" --link-base "$SX_LINK_BASE"); fi
         node "$SX_CLI" "${args[@]}" | tee scanner-x-summary.txt
         code=${PIPESTATUS[0]}
         {

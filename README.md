@@ -211,6 +211,7 @@ Scan a local checkout without the web server (local dev, CI, coding agents):
 cd backend && npm ci && npm run build
 node dist/cli.js --path ../some-repo --fail-on high --sarif out.sarif --json out.json
 node dist/cli.js --path . --base origin/main      # only changes since origin/main
+node dist/cli.js --path . --html site/index.html  # self-contained HTML report
 node dist/cli.js --help
 ```
 
@@ -268,6 +269,23 @@ CLI, writes a job summary, uploads `scanner-x.sarif`, and then enforces the poli
 On `pull_request` it scans only the PR's changes (secrets in every PR commit); on
 other events it scans the whole repo. Inputs reach the scripts through environment
 variables, never inline, so they can't inject shell commands. Linux runners only.
+
+### Publish the report to GitHub Pages
+
+Set `html-file` and deploy the folder with the standard Pages actions. The page is
+self-contained, has secrets masked, and links each finding to the scanned commit. Live
+example: [scanner-x-demo](https://github.com/adarshm07/scanner-x-demo), with its
+[workflow](https://github.com/adarshm07/scanner-x-demo/blob/main/.github/workflows/scanner-x.yml).
+
+```yaml
+      - uses: adarshm07/scanner@main
+        with:
+          html-file: site/index.html
+      - uses: actions/upload-pages-artifact@v3
+        if: always()
+        with:
+          path: site
+```
 
 ## Agent skill (Claude Code, Codex)
 
