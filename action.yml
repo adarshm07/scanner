@@ -39,6 +39,14 @@ inputs:
       Also write a self-contained HTML report here (e.g. site/index.html, then publish it with
       actions/upload-pages-artifact). Findings link to the scanned commit on GitHub.
     default: ""
+  pr-comment:
+    description: >
+      On pull requests, post one summary comment (updated on every push) with the findings the
+      PR introduces. Needs "pull-requests: write"; skipped quietly when the token can't comment.
+    default: "true"
+  report-url:
+    description: Link to the full report (e.g. your GitHub Pages URL), shown in the PR comment.
+    default: ""
   upload-sarif:
     description: Upload the SARIF report to GitHub code scanning (needs security-events write).
     default: "true"
@@ -160,6 +168,19 @@ runs:
       with:
         sarif_file: ${{ inputs.sarif-file }}
         category: scanner-x
+
+    - name: Comment on the pull request
+      if: always() && inputs.pr-comment == 'true' && github.event_name == 'pull_request' && steps.scan.outputs.exit-code != '2'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        REPORT_JSON: scanner-x.json
+        REPORT_URL: ${{ inputs.report-url }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        SX_ACTION_PATH: ${{ github.action_path }}
+      run: '[ -f scanner-x.json ] && node "$SX_ACTION_PATH/action/pr-comment.js" || true'
 
     - name: Enforce policy
       if: steps.scan.outputs.exit-code != '0'

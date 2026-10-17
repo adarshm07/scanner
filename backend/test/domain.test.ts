@@ -202,3 +202,18 @@ test("dns: CAA, DNSSEC and MTA-STS", () => {
   assert.deepEqual(noMail.findings, []);
   assert.equal(noMail.checks.find((c) => c.name === "DNSSEC")?.result, "inconclusive");
 });
+
+// ---------------------------------------------------------------- semgrep paths
+
+import { semgrepAdapter } from "../src/tools/semgrep";
+
+test("semgrep: paths are repo-relative whether semgrep reports absolute or ./ paths", () => {
+  const hit = (p: string) => ({
+    results: [{ check_id: "a.b.rule", path: p, start: { line: 9 }, end: { line: 9 }, extra: { message: "m", severity: "ERROR", metadata: {} } }],
+  });
+  const abs = semgrepAdapter(hit("/home/runner/work/r/r/src/routes/export.js") as never, "/home/runner/work/r/r");
+  const dot = semgrepAdapter(hit("./src/routes/export.js") as never, "/home/runner/work/r/r");
+  assert.equal(abs[0].location.file, "src/routes/export.js");
+  assert.equal(dot[0].location.file, "src/routes/export.js");
+  assert.equal(abs[0].finding_id, dot[0].finding_id);
+});

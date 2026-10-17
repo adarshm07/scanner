@@ -1,3 +1,4 @@
+import path from "path";
 import { Finding, makeFindingId, Severity, Confidence } from "../schema/finding";
 import { checkTool, describeFailure, runCommand } from "./util";
 import { ToolRun } from "./types";
@@ -56,15 +57,23 @@ function first(value?: string | string[]): string | undefined {
   return value;
 }
 
-export function semgrepAdapter(raw: SemgrepRaw): Finding[] {
+/** Repo-relative path ("src/a.js"): finding IDs, diff filtering and links all depend on it. */
+function relativePath(file: string, repoDir?: string): string {
+  let rel = repoDir && path.isAbsolute(file) ? path.relative(repoDir, file) : file;
+  rel = rel.split(path.sep).join("/").replace(/^(\.\/)+/, "");
+  return rel;
+}
+
+export function semgrepAdapter(raw: SemgrepRaw, repoDir?: string): Finding[] {
   const results = raw.results ?? [];
   return results.map((r) => {
     const meta = r.extra?.metadata ?? {};
+    const file = relativePath(r.path, repoDir);
     return {
       skill: `semgrep-${r.check_id.split(".").pop() ?? "rule"}`,
       category: "backend",
       finding_id: makeFindingId({
-        file: r.path,
+        file,
         line_start: r.start.line,
         rule_id: r.check_id,
       }),
@@ -73,7 +82,7 @@ export function semgrepAdapter(raw: SemgrepRaw): Finding[] {
       confidence: mapConfidence(meta.confidence),
       title: r.extra?.message?.split("\n")[0] ?? r.check_id,
       location: {
-        file: r.path,
+        file,
         line_start: r.start.line,
         line_end: r.end.line,
       },
@@ -99,7 +108,8 @@ export async function runSemgrep(repoDir: string): Promise<ToolRun> {
   const rules = process.env.SEMGREP_CONFIG?.trim() || "p/security-audit";
   const res = await runCommand(
     "semgrep",
-    ["--config", rules, "--json", "--quiet", "--metrics=off", repoDir],
+    // Target "." (we run inside the repo) so semgrep reports repo-relative paths.
+    ["--config", rules, "--json", "--quiet", "--metrics=off", "."],
     { cwd: repoDir, timeoutMs: SEMGREP_TIMEOUT_MS, env: SEMGREP_ENV }
   );
   let parsed: SemgrepRaw;
@@ -113,5 +123,5 @@ export async function runSemgrep(repoDir: string): Promise<ToolRun> {
     const message = parsed.errors?.find((e) => e.message)?.message?.split("\n")[0];
     return { findings: [], ran: false, error: (message ?? describeFailure(res, SEMGREP_TIMEOUT_MS)).slice(0, 200) };
   }
-  return { findings: semgrepAdapter(parsed), ran: true };
+  return { findings: semgrepAdapter(parsed, repoDir), ran: true };
 }
