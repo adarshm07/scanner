@@ -134,7 +134,9 @@ export function toSarif(report: Report, repoRoots: string[]): Record<string, unk
             rules: [...rules.values()],
           },
         },
-        automationDetails: { id: `scanner-x/${report.diff ? "diff" : "full"}/` },
+        // Same category for PR (diff) and branch (full) scans, so GitHub compares a PR's alerts
+        // with the base branch instead of reporting a missing configuration.
+        automationDetails: { id: "scanner-x/" },
         invocations: [
           {
             executionSuccessful: !report.policy.reason,
