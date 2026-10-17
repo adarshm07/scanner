@@ -66,9 +66,9 @@ outputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v5
       with:
-        node-version: "20"
+        node-version: "22"
 
     # Inputs are passed through env, never interpolated into scripts, so a crafted
     # value can't inject shell commands.
@@ -141,11 +141,22 @@ runs:
           echo "sarif-file=$SX_SARIF"
         } >> "$GITHUB_OUTPUT"
         { echo '### Scanner-X'; echo '```'; cat scanner-x-summary.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+        # Surface what wasn't scanned (and other notes) as annotations on the run and the PR.
+        if [ -f scanner-x.json ]; then
+          node -e '
+            const r = JSON.parse(require("fs").readFileSync("scanner-x.json", "utf8"));
+            const esc = (v) => String(v).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+            if (r.warning) console.log(`::warning title=Scanner-X::${esc(r.warning)}`);
+            for (const n of r.notes || []) console.log(`::notice title=Scanner-X::${esc(n)}`);
+            const s = r.stats.bySeverity;
+            console.log(`::notice title=Scanner-X::${r.stats.totalAfterFilter} findings (critical ${s.critical}, high ${s.high}, medium ${s.medium}, low ${s.low})`);
+          ' || true
+        fi
         exit 0
 
     - name: Upload SARIF to code scanning
       if: always() && inputs.upload-sarif == 'true' && steps.scan.outputs.exit-code != '2'
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: ${{ inputs.sarif-file }}
         category: scanner-x
