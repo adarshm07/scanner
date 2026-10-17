@@ -11,6 +11,7 @@ import path from "path";
 import { runLocalRepoPipeline, Scope } from "./orchestrator/runPipeline";
 import { generateReport } from "./orchestrator/report";
 import { toSarif } from "./orchestrator/sarif";
+import { renderHtml } from "./orchestrator/html";
 import { CHECKS } from "./orchestrator/checks";
 import { resolveProvider, listProviders } from "./llm";
 import { Report, Severity, SEVERITY_RANK } from "./schema/finding";
@@ -30,6 +31,9 @@ Options:
   --full-history        Scan every commit for secrets, not just the current files
   --sarif <file>        Write SARIF 2.1.0 (for GitHub code scanning)
   --json <file>         Write the full report as JSON
+  --html <file>         Write a self-contained HTML report (e.g. for GitHub Pages)
+  --link-base <url>     Link findings in the HTML report to files, e.g.
+                        https://github.com/<owner>/<repo>/blob/<sha>/
   --triage <provider>   Explain findings with an LLM: gemini | claude | openai
                         (default: off; sends code snippets to the provider)
   --target <name>       Name to show in the report (default: the path)
@@ -53,6 +57,8 @@ interface Args {
   fullHistory: boolean;
   sarif?: string;
   json?: string;
+  html?: string;
+  linkBase?: string;
   triage?: string;
   target?: string;
   quiet: boolean;
@@ -94,6 +100,13 @@ function parseArgs(argv: string[]): Args | "help" {
       case "--full-history": args.fullHistory = true; break;
       case "--sarif": args.sarif = path.resolve(value()); break;
       case "--json": args.json = path.resolve(value()); break;
+      case "--html": args.html = path.resolve(value()); break;
+      case "--link-base": {
+        const v = value();
+        if (!/^https?:\/\//.test(v)) throw new UsageError("--link-base must be an http(s) URL");
+        args.linkBase = v;
+        break;
+      }
       case "--triage": args.triage = value(); break;
       case "--target": args.target = value(); break;
       case "--quiet": args.quiet = true; break;
@@ -257,6 +270,10 @@ async function main(): Promise<number> {
   if (args.json) {
     await fs.mkdir(path.dirname(args.json), { recursive: true });
     await fs.writeFile(args.json, JSON.stringify(report, null, 2));
+  }
+  if (args.html) {
+    await fs.mkdir(path.dirname(args.html), { recursive: true });
+    await fs.writeFile(args.html, renderHtml(report, { linkBase: args.linkBase }));
   }
   process.stdout.write(`${summary(report)}\n`);
   return report.policy.passed ? 0 : 1;
