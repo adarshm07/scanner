@@ -29,7 +29,17 @@ interface NpmAuditAdvisory {
 }
 
 /** `packages` section of a v2/v3 package-lock.json: install path -> flags. */
-export type LockPackages = Record<string, { dev?: boolean; devOptional?: boolean; optional?: boolean }>;
+export type LockPackages = Record<string, { dev?: boolean; devOptional?: boolean; optional?: boolean; inBundle?: boolean }>;
+
+/** A bundled package (inside another package's tarball) inherits its bundler's dev flag. */
+function lockEntryIsDev(lock: LockPackages, node: string): boolean {
+  const entry = lock[node];
+  if (!entry) return false;
+  if (entry.dev === true) return true;
+  if (!entry.inBundle) return false;
+  const parent = node.slice(0, node.lastIndexOf("/node_modules/"));
+  return parent.length > 0 && parent !== node && lockEntryIsDev(lock, parent);
+}
 
 /**
  * True when every installed copy of the package is a dev dependency (npm marks these
@@ -38,10 +48,7 @@ export type LockPackages = Record<string, { dev?: boolean; devOptional?: boolean
  */
 export function isDevOnly(nodes: string[] | undefined, lock: LockPackages | undefined): boolean {
   if (!lock || !nodes?.length) return false;
-  return nodes.every((n) => {
-    const entry = lock[n];
-    return !!entry && entry.dev === true;
-  });
+  return nodes.every((n) => lockEntryIsDev(lock, n));
 }
 
 interface NpmAuditRaw {
