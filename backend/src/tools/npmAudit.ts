@@ -23,7 +23,25 @@ interface NpmAuditAdvisory {
   severity: string; // info | low | moderate | high | critical
   via: (string | NpmAuditVia)[];
   range?: string;
+  nodes?: string[];
+  isDirect?: boolean;
   fixAvailable?: boolean | { name: string; version: string };
+}
+
+/** `packages` section of a v2/v3 package-lock.json: install path -> flags. */
+export type LockPackages = Record<string, { dev?: boolean; devOptional?: boolean; optional?: boolean }>;
+
+/**
+ * True when every installed copy of the package is a dev dependency (npm marks these
+ * `dev: true` in the lockfile). Such code runs on developer and CI machines, not in
+ * production, so an advisory against it is not exploitable through the shipped app.
+ */
+export function isDevOnly(nodes: string[] | undefined, lock: LockPackages | undefined): boolean {
+  if (!lock || !nodes?.length) return false;
+  return nodes.every((n) => {
+    const entry = lock[n];
+    return !!entry && entry.dev === true;
+  });
 }
 
 interface NpmAuditRaw {
@@ -44,38 +62,105 @@ function mapSeverity(npm: string): Severity {
   }
 }
 
+const NPM_RANK: Record<string, number> = { critical: 4, high: 3, moderate: 2, low: 1, info: 0 };
+const GHSA_IN_URL = /GHSA-[\w-]+/i;
+
+/**
+ * One finding per package that has its own advisories.
+ *
+ * npm audit also lists every package that is "vulnerable" only because something below it
+ * is (its `via` holds package names, not advisories). Those entries repeat the same issue
+ * up the tree, so they are folded into the advisory they lead to as "pulled in by", which
+ * is also what tells the reader which direct dependency to upgrade.
+ */
 export function npmAuditAdapter(
   raw: NpmAuditRaw,
   manifest = "package.json",
-  category: Category = "backend"
+  category: Category = "backend",
+  lock?: LockPackages
 ): Finding[] {
   const vulns = raw.vulnerabilities ?? {};
+  const advisoriesOf = (adv: NpmAuditAdvisory) => {
+    const seen = new Set<string>();
+    return adv.via
+      .filter((v): v is NpmAuditVia => typeof v === "object")
+      .filter((v) => {
+        const key = v.url ?? v.title ?? String(v.source);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .sort((a, b) => (NPM_RANK[b.severity ?? ""] ?? 0) - (NPM_RANK[a.severity ?? ""] ?? 0));
+  };
+
+  // parent -> children it is vulnerable through; inverted to walk up to direct dependencies.
+  const parentsOf = new Map<string, string[]>();
+  for (const [pkg, adv] of Object.entries(vulns)) {
+    for (const v of adv.via) {
+      if (typeof v !== "string") continue;
+      parentsOf.set(v, [...(parentsOf.get(v) ?? []), pkg]);
+    }
+  }
+  const directAncestors = (pkg: string): string[] => {
+    const out = new Set<string>();
+    const seen = new Set<string>([pkg]);
+    const queue = [...(parentsOf.get(pkg) ?? [])];
+    while (queue.length) {
+      const p = queue.shift()!;
+      if (seen.has(p)) continue;
+      seen.add(p);
+      if (vulns[p]?.isDirect) out.add(p);
+      queue.push(...(parentsOf.get(p) ?? []));
+    }
+    return [...out].sort();
+  };
+
   const findings: Finding[] = [];
   for (const [pkg, adv] of Object.entries(vulns)) {
-    const detail = adv.via.find(
-      (v): v is NpmAuditVia => typeof v === "object"
-    );
-    const ruleId = detail?.url ? detail.url : `npm-advisory-${pkg}`;
+    const advisories = advisoriesOf(adv);
+    // Propagation-only entry: reported through the advisory it leads to.
+    if (advisories.length === 0 && adv.via.length > 0) continue;
+    const top = advisories[0];
+    const ruleId = top?.url ? top.url : `npm-advisory-${pkg}`;
+    const devOnly = isDevOnly(adv.nodes, lock);
+    const toolSeverity = mapSeverity(adv.severity);
+    const pulledInBy = adv.isDirect ? [] : directAncestors(pkg);
+    const more = advisories.length > 1 ? ` (+${advisories.length - 1} more ${advisories.length === 2 ? "advisory" : "advisories"})` : "";
+    const list = advisories
+      .slice(0, 5)
+      .map((a) => `${a.title ?? "advisory"}${a.severity ? ` [${a.severity}]` : ""}`)
+      .join("; ");
     findings.push({
       skill: `npm-audit-${pkg}`,
       category,
       finding_id: makeFindingId({ file: manifest, rule_id: `${pkg}:${adv.range ?? ""}` }),
       rule_id: ruleId,
-      severity: mapSeverity(adv.severity),
+      // Dev-only packages never ship, so they are capped at low (still listed, never gate a PR).
+      severity: devOnly ? "low" : toolSeverity,
       confidence: "high",
-      title: detail?.title ?? `Vulnerable dependency: ${pkg}`,
+      title: `${devOnly ? "Dev dependency " : ""}${pkg}: ${top?.title ?? "known vulnerability"}${more}`,
       location: { file: manifest },
       raw_snippet: null,
       tool_message:
-        detail?.title ??
-        `Package ${pkg}${adv.range ? ` (${adv.range})` : ""} has a known vulnerability.`,
+        `${pkg}${adv.range ? ` ${adv.range}` : ""} is affected by: ${list || "a known vulnerability"}${advisories.length > 5 ? `; and ${advisories.length - 5} more` : ""}.` +
+        (pulledInBy.length ? ` Not a direct dependency: pulled in by ${pulledInBy.join(", ")}.` : "") +
+        (devOnly
+          ? ` ${pkg} is only installed as a dev dependency (build, test or lint tooling), so it does not ship with the app; npm rates it ${adv.severity}.`
+          : ""),
       metadata: {
-        cwe: detail?.cwe?.[0],
+        cwe: top?.cwe?.[0],
         owasp: "A06:2021-Vulnerable and Outdated Components",
         package: pkg,
         range: adv.range,
+        devOnly,
+        direct: !!adv.isDirect,
+        pulledInBy,
+        toolSeverity,
         fixAvailable: adv.fixAvailable,
-        advisoryUrl: detail?.url,
+        advisoryUrl: top?.url,
+        advisoryIds: advisories
+          .map((a) => a.url?.match(GHSA_IN_URL)?.[0])
+          .filter((id): id is string => !!id),
       },
     });
   }
@@ -143,7 +228,21 @@ function npmErrorLine(res: { stderr: string }): string | null {
   return line ? line.slice(0, 200) : null;
 }
 
-type AuditOutcome = { raw: NpmAuditRaw } | { error: string };
+type AuditOutcome = { raw: NpmAuditRaw; lock?: LockPackages } | { error: string };
+
+async function readLock(dir: string): Promise<LockPackages | undefined> {
+  for (const f of LOCKFILES) {
+    try {
+      const parsed = JSON.parse(await fs.readFile(path.join(dir, f), "utf8"));
+      // v1 lockfiles (npm 6) have no `packages` section; dev detection is skipped for them.
+      if (parsed && typeof parsed.packages === "object") return parsed.packages as LockPackages;
+      return undefined;
+    } catch {
+      /* try the next lockfile name */
+    }
+  }
+  return undefined;
+}
 
 async function audit(cwd: string): Promise<AuditOutcome> {
   // Pin the registry so a repo's own .npmrc can't point npm at another host.
@@ -152,7 +251,7 @@ async function audit(cwd: string): Promise<AuditOutcome> {
     if (res.spawnError || res.timedOut) throw new Error();
     const parsed = JSON.parse(res.stdout) as NpmAuditRaw;
     if (parsed.error) return { error: parsed.error.code ?? parsed.error.summary ?? "npm audit error" };
-    return { raw: parsed };
+    return { raw: parsed, lock: await readLock(cwd) };
   } catch {
     return { error: describeFailure(res, AUDIT_TIMEOUT_MS) };
   }
@@ -213,7 +312,7 @@ export async function runNpmAudit(repoDir: string): Promise<ToolRun> {
     }
     const category = await categoryForManifest(dir, rel);
     const manifest = path.posix.join(rel, "package.json");
-    for (const f of npmAuditAdapter(outcome.raw, manifest, category)) {
+    for (const f of npmAuditAdapter(outcome.raw, manifest, category, outcome.lock)) {
       if (!hasLockfile) {
         f.tool_message += ` Versions were resolved by the scanner from ${manifest} because the repo has no lockfile, so the versions you actually install may differ.`;
         f.metadata = { ...f.metadata, lockfileGenerated: true };

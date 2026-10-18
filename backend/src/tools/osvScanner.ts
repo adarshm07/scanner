@@ -113,11 +113,20 @@ interface OsvGroup {
 }
 interface OsvPackageResult {
   package: { name: string; version: string; ecosystem: string };
+  /** Lockfile groups the package belongs to, e.g. ["dev"] (poetry, pipenv, composer, Maven test scope). */
+  dependency_groups?: string[];
   vulnerabilities?: OsvVuln[];
   groups?: OsvGroup[];
 }
 export interface OsvRaw {
   results?: { source?: { path?: string; type?: string }; packages?: OsvPackageResult[] }[];
+}
+
+const NON_PRODUCTION_GROUP = /^(dev|develop|development|test|tests|testing|lint|docs?|build-only)$/i;
+
+/** Dev/test-only per the lockfile: every group it belongs to is a non-production one. */
+export function isNonProductionGroup(groups: string[] | undefined): boolean {
+  return !!groups?.length && groups.every((g) => NON_PRODUCTION_GROUP.test(g));
 }
 
 function severityFromScore(score: number): Severity {
@@ -183,20 +192,24 @@ export function osvAdapter(raw: OsvRaw, repoRoots: string[]): Finding[] {
         const fixes = fixedVersions(members, pkg.package.name);
         const aliases = [...new Set([...group.ids, ...(group.aliases ?? []), ...members.flatMap((v) => v.aliases ?? [])])].filter((a) => a !== id);
         const summary = headline.summary || headline.details?.split("\n")[0]?.slice(0, 160) || "known vulnerability";
+        const devOnly = isNonProductionGroup(pkg.dependency_groups);
+        const toolSeverity = groupSeverity(group, members);
         findings.push({
           skill: `osv-${pkg.package.ecosystem.toLowerCase().replace(/[^a-z0-9]+/g, "")}-${pkg.package.name}`,
           category: "backend",
           finding_id: makeFindingId({ file, rule_id: `${pkg.package.name}@${pkg.package.version}:${id}` }),
           rule_id: id,
-          severity: groupSeverity(group, members),
+          // Dev/test-only packages never ship, so they are capped at low (still listed).
+          severity: devOnly ? "low" : toolSeverity,
           confidence: "high",
-          title: `${pkg.package.name} ${pkg.package.version}: ${summary}`,
+          title: `${devOnly ? "Dev dependency " : ""}${pkg.package.name} ${pkg.package.version}: ${summary}`,
           location: { file },
           raw_snippet: null,
           tool_message:
             `${pkg.package.ecosystem} package ${pkg.package.name} ${pkg.package.version} (from ${file}) is affected by ${id}` +
             `${aliases.length ? ` (also ${aliases.slice(0, 4).join(", ")})` : ""}: ${summary}.` +
-            (fixes.length ? ` Fixed in ${fixes.join(", ")}.` : " No fixed version is published yet."),
+            (fixes.length ? ` Fixed in ${fixes.join(", ")}.` : " No fixed version is published yet.") +
+            (devOnly ? ` It is only in the lockfile's ${pkg.dependency_groups!.join("/")} group, so it does not ship with the app; rated ${toolSeverity} by the advisory.` : ""),
           metadata: {
             cwe: headline.database_specific?.cwe_ids?.[0],
             owasp: "A06:2021-Vulnerable and Outdated Components",
@@ -205,6 +218,8 @@ export function osvAdapter(raw: OsvRaw, repoRoots: string[]): Finding[] {
             version: pkg.package.version,
             aliases,
             fixedVersions: fixes,
+            devOnly,
+            toolSeverity,
             advisoryUrl: `https://osv.dev/vulnerability/${id}`,
           },
         });

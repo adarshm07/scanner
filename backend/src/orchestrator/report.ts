@@ -8,7 +8,7 @@ import {
 } from "../schema/finding";
 import { callLlm, LlmProvider } from "../llm";
 import { PipelineOutput } from "./runPipeline";
-import { filterFindings } from "./filterFindings";
+import { describeReductions, filterFindings } from "./filterFindings";
 import { hydrateSnippets } from "./hydrate";
 import { maskFinding, secretsOf } from "../tools/secrets";
 import { triageCategory } from "./triage";
@@ -94,7 +94,7 @@ export async function generateReport(
   const secrets = secretsOf(pipeline.findings);
   const dedupStart = Date.now();
   emit({ t: "stage", id: "dedup", name: "Merge hits", status: "running", at: dedupStart });
-  const { groups, totalRaw, totalAfterFilter } = filterFindings(
+  const { groups, totalRaw, totalAfterFilter, reductions } = filterFindings(
     pipeline.findings
   );
   emit({
@@ -201,7 +201,11 @@ export async function generateReport(
     createdAt: new Date().toISOString(),
     executiveSummary: summary,
     warning: pipeline.warning,
-    notes: pipeline.notes,
+    notes: (() => {
+      const filterNote = describeReductions(reductions);
+      const all = [...(pipeline.notes ?? []), ...(filterNote ? [filterNote] : [])];
+      return all.length ? all : undefined;
+    })(),
     ...(pipeline.fixes ? { fixes: pipeline.fixes } : {}),
     diff: pipeline.diff,
     categories,
