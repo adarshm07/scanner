@@ -64,6 +64,22 @@ test("npm: propagation-only entries fold into the advisory, which names the dire
   assert.match(minimist.title, /\(\+1 more advisory\)/);
 });
 
+test("npm: a package bundled inside a dev dependency is dev-only too", () => {
+  const audit = {
+    vulnerabilities: {
+      tar: {
+        name: "tar", severity: "high", range: "<6", isDirect: false,
+        nodes: ["node_modules/npm/node_modules/tar"],
+        via: [{ title: "tar issue", url: "https://github.com/advisories/GHSA-aaaa-bbbb-cccc", severity: "high" }],
+      },
+    },
+  };
+  const lock = { "node_modules/npm": { dev: true }, "node_modules/npm/node_modules/tar": { inBundle: true } };
+  assert.equal(npmAuditAdapter(audit, "package.json", "backend", lock)[0].severity, "low");
+  const prodLock = { "node_modules/npm": {}, "node_modules/npm/node_modules/tar": { inBundle: true } };
+  assert.equal(npmAuditAdapter(audit, "package.json", "backend", prodLock)[0].severity, "high");
+});
+
 test("npm: without a v2 lockfile nothing is treated as dev-only", () => {
   const out = npmAuditAdapter(AUDIT, "package.json", "backend", undefined);
   assert.equal(out.find((f) => f.metadata.package === "grunt")!.severity, "high");

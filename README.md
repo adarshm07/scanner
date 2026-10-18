@@ -6,6 +6,8 @@ tools** with a **thin LLM triage layer**. Two entry points share one backend:
 1. **PR / Agent Skill** (`/scanner-x`) — interactive, scope-driven scans for repos and PRs.
 2. **Domain Recon Web App** — security report for a domain you own: TLS, headers, cookies, CORS, DNS (email auth, CAA, DNSSEC), subdomain takeover and exposed files, with copy-paste fixes for your server.
 
+**On OWASP NodeGoat:** the same scanners run by hand give 169 findings, 111 of them blocking, and find 6 of the 10 known code bugs. Scanner-X with no AI key gives 99 findings, 37 blocking, and finds all 10; with agent triage, 22 are blocking. See [the benchmark](docs/benchmark-nodegoat.md).
+
 ## Core design principle
 
 Deterministic tools do **all** detection. The LLM (Gemini or Claude, selectable)
