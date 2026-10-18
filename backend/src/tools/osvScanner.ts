@@ -196,7 +196,7 @@ export function osvAdapter(raw: OsvRaw, repoRoots: string[]): Finding[] {
         const toolSeverity = groupSeverity(group, members);
         findings.push({
           skill: `osv-${pkg.package.ecosystem.toLowerCase().replace(/[^a-z0-9]+/g, "")}-${pkg.package.name}`,
-          category: "backend",
+          category: "dependencies",
           finding_id: makeFindingId({ file, rule_id: `${pkg.package.name}@${pkg.package.version}:${id}` }),
           rule_id: id,
           // Dev/test-only packages never ship, so they are capped at low (still listed).

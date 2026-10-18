@@ -90,24 +90,36 @@ Open the file at `location` and read enough surrounding code to judge it. Decide
 - **semgrep-\***: real when the flagged input is attacker-controlled at that call site
   (request params, body, headers, file contents from users). A value built only from
   constants or server config is not the same risk.
-- **npm-audit-\*** and **osv-\*** (dependencies, any language): the vulnerable package is real. If the advisory needs a feature the
-  project does not use, keep it but lower its priority and say why. If
-  `metadata.lockfileGenerated` is true, note that versions were resolved by the scanner,
-  so the installed versions may differ.
-  The scanner has already ranked these: `metadata.devOnly` (dev/test-only package, capped
-  at low), `metadata.kev` (in CISA's Known Exploited Vulnerabilities catalog, raised to
-  critical) and `metadata.epss` (probability of exploitation in 30 days; high/critical
-  advisories under 1% were lowered one level, see `metadata.loweredByEpss`). Keep those
-  severities unless you have a concrete reason, and fix KEV items first.
-  `metadata.pulledInBy` names the direct dependency to upgrade for a transitive package.
-  Check `metadata.fixedVersions` for the upgrade target and say which manifest to edit
-  (`metadata.ecosystem` tells you: PyPI, Maven, crates.io, Go, ...).
+- **npm-audit-\*** and **osv-\*** (the `dependencies` category, any language): the
+  vulnerable package is really installed, so never mark one `false_positive`. Your job is
+  **reachability**: can this app reach the vulnerable code? `metadata.usage` shows where
+  the app loads the package (or the direct dependency in `metadata.pulledInBy` that
+  pulls it in): `status` is `imported`, `referenced` (string or package.json script),
+  `not_found` or `unsupported`, and `sites` gives `file:line` with context. Open those
+  files and read the advisory, then set `reachability`:
+  - `reachable`: the app plausibly hits the vulnerable function or feature (e.g. it parses
+    request data with it, serves HTTP with that framework, renders with that template engine).
+  - `not_reachable`: you can name why not (the advisory needs an API, option or mode the
+    app never uses; it's only used by a CLI/build step; nothing loads it). Say which.
+  - `unknown`: the evidence doesn't settle it. Prefer this to guessing; transitive packages
+    of a framework are usually `unknown` unless the advisory names a path the app exercises.
+  Scanner-X enforces the effect: `not_reachable` drops to low (medium if KEV) and stops
+  failing the policy, `reachable` keeps at least the scanner's severity, `unknown` can go
+  at most one level lower. Nothing is removed.
+  Already applied by the scanner: `metadata.devOnly` (capped at low), `metadata.kev`
+  (CISA Known Exploited, raised to critical: fix first), `metadata.epss` /
+  `metadata.loweredByEpss`, and `metadata.loweredByUsage` (never loaded, lowered one level).
+  If `metadata.lockfileGenerated` is true, the installed versions may differ. For the fix,
+  use `metadata.fixedVersions`, upgrade `metadata.pulledInBy` for transitive packages, and
+  name the manifest (`metadata.ecosystem`: npm, PyPI, Maven, crates.io, Go, ...).
 
 ## 6. Report to the user
 
 1. One line: scope, number of findings by severity, and policy result (plus any
    `warning`).
-2. Findings grouped by severity, most severe first. For each: title, `file:line`, your
+2. Code and secret findings first, grouped by severity, most severe first. Then
+   dependencies grouped by reachability (reachable, unconfirmed, not reachable, not
+   loaded, dev only), so vulnerable packages never bury the code issues. For each: title, `file:line`, your
    verdict, why it matters here (one or two sentences), and the concrete fix.
 3. Skip findings you judged false positives in the main list; mention them briefly at
    the end with the reason.
@@ -132,6 +144,13 @@ cat > "${TMPDIR:-/tmp}/scanner-x-verdicts.json" <<'JSON'
     "adjusted_severity": "high",
     "explanation": "Why it matters here, naming the file and line.",
     "suggested_fix": "The concrete change or command."
+  },
+  {
+    "finding_id": "<id of a dependency finding>",
+    "verdict": "true_positive",
+    "reachability": "not_reachable",
+    "explanation": "marked's ReDoS is in the markdown parser; the app imports marked only in scripts/build-docs.js, never on a request path.",
+    "suggested_fix": "1. npm install marked@4.0.10\n2. Re-run the scan to confirm."
   }
 ]
 JSON
@@ -140,7 +159,8 @@ node "$SCANNER_X_HOME/backend/dist/cli.js" apply-triage \
 ```
 
 Fields: `verdict` is `true_positive`, `false_positive` or `needs_review`;
-`adjusted_severity` (optional) is `critical`, `high`, `medium` or `low`; `explanation` is
+`adjusted_severity` (optional) is `critical`, `high`, `medium` or `low`; `reachability`
+(dependency findings) is `reachable`, `not_reachable` or `unknown`; `explanation` is
 required; `suggested_fix` is optional. Add `--sarif scanner-x.sarif --path <repo root>`
 when the user wants a SARIF file. Use the exact `finding_id`
 values from the report. Never put a secret's value in a verdict. The command prints

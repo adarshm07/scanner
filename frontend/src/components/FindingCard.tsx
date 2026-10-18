@@ -8,6 +8,18 @@ const VERDICT: Record<string, { label: string; color: string }> = {
   needs_review: { label: "needs review", color: "#8D979F" },
 };
 
+/** For dependency advisories the useful label is reachability, not the triage verdict. */
+function reachabilityOf(finding: ReportFinding): { label: string; color: string } | null {
+  if (finding.category !== "dependencies") return null;
+  const usage = finding.metadata?.usage as { status?: string } | undefined;
+  if (finding.metadata?.devOnly) return { label: "dev only", color: "#8D979F" };
+  const r = finding.triage?.reachability;
+  if (r === "reachable") return { label: "reachable", color: "#F0506E" };
+  if (usage?.status === "not_found") return { label: "not loaded", color: "#56B982" };
+  if (r === "not_reachable") return { label: "not reachable", color: "#56B982" };
+  return { label: usage?.status === "imported" ? "imported" : "unconfirmed", color: "#D9B53C" };
+}
+
 function scannerOf(finding: ReportFinding): string {
   return finding.skill.split("-")[0];
 }
@@ -23,7 +35,7 @@ export function FindingCard({ finding }: { finding: ReportFinding }) {
   const [open, setOpen] = useState(false);
   const severity: Severity = finding.triage?.adjusted_severity ?? finding.severity;
   const meta = SEVERITY_META[severity];
-  const verdict = finding.triage ? VERDICT[finding.triage.verdict] : null;
+  const verdict = reachabilityOf(finding) ?? (finding.triage ? VERDICT[finding.triage.verdict] : null);
   const cwe = typeof finding.metadata?.cwe === "string" ? finding.metadata.cwe : null;
   const owasp = typeof finding.metadata?.owasp === "string" ? finding.metadata.owasp : null;
   const evidence = Array.isArray(finding.metadata?.evidence)

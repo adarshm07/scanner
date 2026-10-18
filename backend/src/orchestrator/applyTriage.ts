@@ -6,6 +6,14 @@ import {
   TriageResult,
   Verdict,
 } from "../schema/finding";
+import {
+  DEPENDENCY_NOTE_PREFIX,
+  dependencyNote,
+  enforceReachability,
+  isDependency,
+  REACHABILITY,
+  Reachability,
+} from "./reachability";
 
 /**
  * Merge triage verdicts produced outside Scanner-X (e.g. by the coding agent running the
@@ -39,13 +47,19 @@ function parseEntry(raw: unknown, current: ReportFinding): TriageResult | string
   if (!(sev in SEVERITY_RANK)) return "adjusted_severity must be critical, high, medium or low";
   const explanation = clean(r.explanation);
   if (!explanation) return "explanation is required";
-  return {
+  if (r.reachability !== undefined && !REACHABILITY.includes(r.reachability as Reachability)) {
+    return `reachability must be one of ${REACHABILITY.join(", ")}`;
+  }
+  const result: TriageResult = {
     finding_id: current.finding_id,
     verdict: r.verdict as Verdict,
     adjusted_severity: sev,
     explanation,
     suggested_fix: clean(r.suggested_fix),
+    ...(isDependency(current) && r.reachability ? { reachability: r.reachability as Reachability } : {}),
   };
+  // Same bounds as the built-in triage: an agent can lower an unreachable advisory, not erase it.
+  return isDependency(current) ? enforceReachability(current, result) : result;
 }
 
 export function applyTriage(
@@ -109,8 +123,12 @@ export function applyTriage(
     .filter((s) => SEVERITY_RANK[s] >= SEVERITY_RANK[failOn])
     .reduce((n, s) => n + bySeverity[s], 0);
 
+  const depNote = dependencyNote(categories.flatMap((c) => c.findings));
+  const notes = [...(report.notes ?? []).filter((n) => !n.startsWith(DEPENDENCY_NOTE_PREFIX)), ...(depNote ? [depNote] : [])];
+
   const updated: Report = {
     ...report,
+    notes: notes.length ? notes : undefined,
     categories,
     stats: { ...report.stats, totalAfterFilter: total, bySeverity },
     policy: {

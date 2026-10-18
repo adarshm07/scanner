@@ -12,6 +12,7 @@ import { describeReductions, filterFindings } from "./filterFindings";
 import { hydrateSnippets } from "./hydrate";
 import { maskFinding, secretsOf } from "../tools/secrets";
 import { triageCategory } from "./triage";
+import { dependencyNote } from "./reachability";
 import { EmitFn } from "./events";
 
 /**
@@ -148,6 +149,10 @@ export async function generateReport(
   }
 
   categories.sort((a, b) => {
+    // Code and secret findings first; dependency advisories in their own section after them.
+    const depA = a.category === "dependencies" ? 1 : 0;
+    const depB = b.category === "dependencies" ? 1 : 0;
+    if (depA !== depB) return depA - depB;
     const maxSev = (g: CategoryGroup) =>
       Math.max(
         0,
@@ -203,7 +208,8 @@ export async function generateReport(
     warning: pipeline.warning,
     notes: (() => {
       const filterNote = describeReductions(reductions);
-      const all = [...(pipeline.notes ?? []), ...(filterNote ? [filterNote] : [])];
+      const depNote = dependencyNote(categories.flatMap((c) => c.findings));
+      const all = [...(pipeline.notes ?? []), ...(filterNote ? [filterNote] : []), ...(depNote ? [depNote] : [])];
       return all.length ? all : undefined;
     })(),
     ...(pipeline.fixes ? { fixes: pipeline.fixes } : {}),
