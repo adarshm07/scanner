@@ -1,0 +1,148 @@
+# Scanner-X's own semgrep rules, always run alongside the registry rulesets.
+# They cover classic web-app bugs the stock JavaScript rules miss (measured on OWASP NodeGoat).
+# Tests: backend/test/rules.test.ts, fixtures in backend/rules/fixtures/.
+rules:
+  - id: scanner-x.nosql-where-injection
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      MongoDB `$where` built from a dynamic string. `$where` runs JavaScript on the database
+      server, so a value spliced into it (here: `$X`) lets a user run code in the query: read
+      other users' documents or hang the database with `while(true){}`. Replace `$where` with
+      normal query operators (e.g. `{ userId: id, stocks: { $gt: threshold } }`) on validated,
+      typed values.
+    metadata:
+      cwe: "CWE-943: Improper Neutralization of Special Elements in Data Query Logic"
+      owasp: "A03:2021 - Injection"
+      confidence: HIGH
+      category: security
+    pattern-either:
+      - pattern: |
+          {..., $where: `...${$X}...`, ...}
+      - pattern: |
+          {..., $where: $A + $X, ...}
+      - pattern: |
+          {..., "$where": `...${$X}...`, ...}
+      - pattern: |
+          {..., "$where": $A + $X, ...}
+
+  - id: scanner-x.template-autoescape-disabled
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: >-
+      HTML auto-escaping is turned off for the template engine. Every value rendered into a
+      template is then output raw, so any user-controlled field becomes stored or reflected
+      XSS. Keep autoescape on (the default) and mark only trusted, pre-sanitized HTML as safe
+      per template.
+    metadata:
+      cwe: "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')"
+      owasp: "A03:2021 - Injection"
+      confidence: HIGH
+      category: security
+    pattern-either:
+      - pattern: |
+          {..., autoescape: false, ...}
+      - pattern: |
+          {..., noEscape: true, ...}
+      - pattern: $ENV.autoescape = false
+
+  - id: scanner-x.express-session-without-csrf
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: >-
+      This Express app uses cookie-based sessions but no CSRF protection is loaded in this
+      file. Any site the user visits can submit forms to the app with the user's session
+      cookie (change their password, transfer funds). Add CSRF tokens (e.g. `csrf-csrf` or
+      `lusca.csrf()`) to state-changing routes, and set `sameSite` on the session cookie.
+    metadata:
+      cwe: "CWE-352: Cross-Site Request Forgery (CSRF)"
+      owasp: "A01:2021 - Broken Access Control"
+      confidence: MEDIUM
+      category: security
+    patterns:
+      - pattern-either:
+          - pattern-inside: |
+              $SESSION = require("express-session");
+              ...
+          - pattern-inside: |
+              $SESSION = require("cookie-session");
+              ...
+          - pattern-inside: |
+              import $SESSION from "express-session";
+              ...
+          - pattern-inside: |
+              import $SESSION from "cookie-session";
+              ...
+      - pattern: $APP.use($SESSION(...))
+      - pattern-not-inside: |
+          $C = require("csurf");
+          ...
+      - pattern-not-inside: |
+          $C = require("csrf-csrf");
+          ...
+      - pattern-not-inside: |
+          $C = require("csrf-sync");
+          ...
+      - pattern-not-inside: |
+          $C = require("lusca");
+          ...
+      - pattern-not-inside: |
+          $C = require("tiny-csrf");
+          ...
+      - pattern-not-inside: |
+          import $C from "csurf";
+          ...
+      - pattern-not-inside: |
+          import { $...C } from "csrf-csrf";
+          ...
+      - pattern-not-inside: |
+          import $C from "lusca";
+          ...
+
+  - id: scanner-x.ssrf-user-controlled-url
+    languages: [javascript, typescript]
+    severity: ERROR
+    mode: taint
+    message: >-
+      An outbound HTTP request uses a URL built from request input. An attacker can point the
+      server at internal services (cloud metadata at 169.254.169.254, admin panels, databases)
+      or other hosts: server-side request forgery. Don't take URLs or hostnames from users;
+      if you must, allow-list exact hosts and resolve/check the IP before connecting.
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021 - Server-Side Request Forgery (SSRF)"
+      confidence: MEDIUM
+      category: security
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: $REQ.query
+              - pattern: $REQ.body
+              - pattern: $REQ.params
+              - pattern: $REQ.headers
+              - pattern: $REQ.cookies
+          - metavariable-regex:
+              metavariable: $REQ
+              regex: ^(req|request|ctx|ctx\.request)$
+    pattern-sanitizers:
+      - pattern: encodeURIComponent(...)
+      - pattern: parseInt(...)
+      - pattern: Number(...)
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: needle.$M($URL, ...)
+              - pattern: needle($METHOD, $URL, ...)
+              - pattern: axios.$M($URL, ...)
+              - pattern: axios($URL, ...)
+              - pattern: fetch($URL, ...)
+              - pattern: got($URL, ...)
+              - pattern: got.$M($URL, ...)
+              - pattern: request($URL, ...)
+              - pattern: request.$M($URL, ...)
+              - pattern: superagent.$M($URL, ...)
+              - pattern: http.get($URL, ...)
+              - pattern: http.request($URL, ...)
+              - pattern: https.get($URL, ...)
+              - pattern: https.request($URL, ...)
+          - focus-metavariable: $URL
