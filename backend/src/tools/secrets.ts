@@ -39,10 +39,21 @@ export function maskValue(value: string): string {
   return value.length >= 12 ? `${value.slice(0, 4)}****` : "****";
 }
 
+/** PEM header/footer lines ("-----BEGIN RSA PRIVATE KEY-----") carry no secret material. */
+const PEM_ARMOR = /^-----(BEGIN|END) [A-Z0-9 ]+-----$/;
+
 export function maskText(text: string, secrets: string[]): string {
   let out = text;
   for (const s of secrets) {
     if (out.includes(s)) out = out.split(s).join(maskValue(s));
+    // A multi-line secret (e.g. a private key) never matches a snippet whole, because
+    // snippets carry "N: " line-number prefixes. Mask each of its lines on its own.
+    if (s.includes("\n")) {
+      for (const line of s.split(/\r?\n/).map((l) => l.trim())) {
+        if (line.length < MIN_SECRET_LENGTH || PEM_ARMOR.test(line)) continue;
+        if (out.includes(line)) out = out.split(line).join(maskValue(line));
+      }
+    }
   }
   return out;
 }
