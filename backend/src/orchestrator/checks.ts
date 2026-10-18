@@ -27,7 +27,7 @@ export const CHECKS: CheckDef[] = [
     id: "sast",
     mode: "repo",
     name: "Code (SAST)",
-    tools: "semgrep p/security-audit",
+    tools: "semgrep (registry rules + Scanner-X rules)",
     desc: "Static taint rules for injection, auth and crypto misuse.",
     est: "~30s",
   },

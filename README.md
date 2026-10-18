@@ -112,7 +112,10 @@ full-history scans use `gitleaks git`, which older versions lack), `semgrep`, `n
 | `REPO_HOST_ALLOWLIST` | `github.com,gitlab.com,bitbucket.org` | Hosts repo scans may clone from (https only, no credentials or ports) |
 | `ALLOW_PRIVATE_TARGETS` | `false` | Allow targets resolving to private, loopback or link-local IPs (local fixtures only) |
 | `REPORT_TTL_MS` / `REPORT_MAX` | 24h / 500 | In-memory report retention |
-| `SEMGREP_CONFIG` | `p/security-audit` | Semgrep rules; point at a local rules file for offline/air-gapped runners |
+| `SEMGREP_CONFIG` | `p/security-audit,p/owasp-top-ten` + language packs | Semgrep rulesets, comma-separated; point at a local rules file or folder for offline/air-gapped runners. Scanner-X's own rules (`backend/rules/scanner-x.yml`) always run too |
+| `SCANNER_X_CUSTOM_RULES` | `1` | Set to `0` to skip Scanner-X's own semgrep rules |
+| `SCANNER_X_EPSS_THRESHOLD` | `0.01` | High/critical dependency advisories with an EPSS exploit probability below this are lowered one level |
+| `SCANNER_X_OFFLINE` | unset | Set to `1` to skip the CISA KEV / EPSS lookups |
 
 Domain and repo targets are resolved before scanning and refused if any address
 is private, loopback, link-local or reserved. Domain-mode HTTP and TLS connections
