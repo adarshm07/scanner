@@ -133,16 +133,34 @@ export function describeFailure(res: CommandResult, timeoutMs?: number): string 
   return (lastLine || `exited with code ${res.code}`).slice(0, 200);
 }
 
-export type ToolCheck = { ok: true } | { ok: false; error: string };
+export type ToolCheck = { ok: true; output: string } | { ok: false; error: string };
 
-/** Distinguishes a missing CLI from one that hangs or fails, so warnings point at the right fix. */
-export async function checkTool(cmd: string, env?: Record<string, string>): Promise<ToolCheck> {
-  const res = await runCommand(cmd, ["--version"], { timeoutMs: 15000, env });
+/**
+ * How long a CLI gets to answer `--version`. Python tools like semgrep take 4-9s to start cold,
+ * and longer while other scanners run alongside them, so this is generous; override with
+ * SCANNER_X_TOOL_CHECK_TIMEOUT_MS.
+ */
+export function toolCheckTimeoutMs(env: NodeJS.ProcessEnv = process.env): number {
+  const n = Number(env.SCANNER_X_TOOL_CHECK_TIMEOUT_MS);
+  return Number.isFinite(n) && n > 0 ? n : 60000;
+}
+
+/**
+ * Distinguishes a missing CLI from one that fails, so warnings point at the right fix.
+ * A slow `--version` is not treated as missing: the tool exists, so the real run (which has
+ * its own, longer timeout) decides. Skipping it would silently drop a whole category.
+ */
+export async function checkTool(
+  cmd: string,
+  env?: Record<string, string>,
+  timeoutMs: number = toolCheckTimeoutMs()
+): Promise<ToolCheck> {
+  const res = await runCommand(cmd, ["--version"], { timeoutMs, env });
   if (res.spawnError) {
     return { ok: false, error: /ENOENT/.test(res.spawnError) ? `${cmd} not installed` : res.spawnError };
   }
-  if (res.timedOut) return { ok: false, error: `${cmd} --version timed out` };
-  if (res.code === 0) return { ok: true };
+  if (res.timedOut) return { ok: true, output: "" };
+  if (res.code === 0) return { ok: true, output: `${res.stdout}\n${res.stderr}` };
   const firstLine = res.stderr.trim().split("\n")[0]?.trim().slice(0, 160);
   return { ok: false, error: `${cmd} --version exited ${res.code}${firstLine ? `: ${firstLine}` : ""}` };
 }
