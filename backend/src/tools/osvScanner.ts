@@ -255,8 +255,7 @@ export async function runOsvScanner(repoDir: string): Promise<ToolRun> {
     const langs = [...new Set(scannable.map((f) => LOCKFILES.get(path.posix.basename(f)) ?? (isRequirementsFile(path.posix.basename(f)) ? "Python" : "JavaScript (yarn/pnpm)")))];
     return { findings: [], ran: false, error: `${check.error}; needed for ${langs.join(", ")}` };
   }
-  const version = await runCommand("osv-scanner", ["--version"], { timeoutMs: 15000 });
-  const v2 = /version:?\s*v?2\./i.test(version.stdout + version.stderr) || /\bv?2\.\d+\.\d+/.test(version.stdout);
+  const v2 = /version:?\s*v?2\./i.test(check.output) || /\bv?2\.\d+\.\d+/.test(check.output);
   // One explicit --lockfile per file: predictable, and skips vendored/ignored directories.
   const lockArgs = scannable.flatMap((f) => ["--lockfile", path.join(repoDir, f)]);
   const args = v2 ? ["scan", "source", "--format", "json", ...lockArgs] : ["--format", "json", ...lockArgs];
