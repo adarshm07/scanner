@@ -94,6 +94,12 @@ Open the file at `location` and read enough surrounding code to judge it. Decide
   project does not use, keep it but lower its priority and say why. If
   `metadata.lockfileGenerated` is true, note that versions were resolved by the scanner,
   so the installed versions may differ.
+  The scanner has already ranked these: `metadata.devOnly` (dev/test-only package, capped
+  at low), `metadata.kev` (in CISA's Known Exploited Vulnerabilities catalog, raised to
+  critical) and `metadata.epss` (probability of exploitation in 30 days; high/critical
+  advisories under 1% were lowered one level, see `metadata.loweredByEpss`). Keep those
+  severities unless you have a concrete reason, and fix KEV items first.
+  `metadata.pulledInBy` names the direct dependency to upgrade for a transitive package.
   Check `metadata.fixedVersions` for the upgrade target and say which manifest to edit
   (`metadata.ecosystem` tells you: PyPI, Maven, crates.io, Go, ...).
 

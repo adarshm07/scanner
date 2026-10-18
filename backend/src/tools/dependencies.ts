@@ -1,6 +1,7 @@
 import { runNpmAudit } from "./npmAudit";
 import { runOsvScanner } from "./osvScanner";
 import { ToolRun } from "./types";
+import { enrichWithExploitIntel } from "./exploitIntel";
 
 /**
  * The "Dependencies" check: npm audit for npm projects, OSV-Scanner for everything else
@@ -13,10 +14,13 @@ export async function runDependencyScan(repoDir: string): Promise<ToolRun> {
     npm.ran ? null : npm.error && `npm: ${npm.error}`,
     osv.ran ? null : osv.error && `osv-scanner: ${osv.error}`,
   ].filter((e): e is string => !!e);
+  const findings = [...npm.findings, ...osv.findings];
+  // Rank by real-world exploitation (CISA KEV, EPSS). Never fails the scan.
+  const intel = await enrichWithExploitIntel(findings);
   return {
-    findings: [...npm.findings, ...osv.findings],
+    findings,
     ran: npm.ran && osv.ran,
     error: errors.join("; ") || undefined,
-    notes: [...(npm.notes ?? []), ...(osv.notes ?? [])],
+    notes: [...(npm.notes ?? []), ...(osv.notes ?? []), ...intel.notes],
   };
 }
