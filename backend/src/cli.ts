@@ -44,9 +44,12 @@ Exit codes: 0 policy passed, 1 policy failed or scan incomplete, 2 usage error.
 
 Merge verdicts from your own reviewer (e.g. a coding agent) into a saved report:
   scanner-x apply-triage --report <scan.json> --triage <verdicts.json>
-                         [--json <out.json>] [--sarif <out.sarif>] [--path <repo>] [--fail-on <sev>]
+                         [--json <out.json>] [--sarif <out.sarif>] [--html <out.html>]
+                         [--path <repo>] [--fail-on <sev>]
   verdicts.json: [{ "finding_id", "verdict": "true_positive"|"false_positive"|"needs_review",
-                    "adjusted_severity"?, "explanation", "suggested_fix"? }, ...]
+                    "adjusted_severity"?, "reachability"?: "reachable"|"not_reachable"|"unknown",
+                    "explanation", "suggested_fix"? }, ...]
+  reachability applies to dependency findings: not_reachable lowers them to low (medium for KEV).
   --json defaults to overwriting --report. Same exit codes.`;
 
 interface Args {
@@ -163,7 +166,7 @@ async function applyTriageCommand(argv: string[]): Promise<number> {
       process.stdout.write(`${USAGE}\n`);
       return 0;
     }
-    if (!["--report", "--triage", "--json", "--sarif", "--path", "--fail-on"].includes(flag)) {
+    if (!["--report", "--triage", "--json", "--sarif", "--html", "--path", "--fail-on"].includes(flag)) {
       process.stderr.write(`scanner-x apply-triage: unknown option: ${flag}\n`);
       return 2;
     }
@@ -211,6 +214,11 @@ async function applyTriageCommand(argv: string[]): Promise<number> {
     const sarifPath = path.resolve(opts.sarif);
     await fs.mkdir(path.dirname(sarifPath), { recursive: true });
     await fs.writeFile(sarifPath, JSON.stringify(toSarif(result.report, [root, await fs.realpath(root)]), null, 2));
+  }
+  if (opts.html) {
+    const htmlPath = path.resolve(opts.html);
+    await fs.mkdir(path.dirname(htmlPath), { recursive: true });
+    await fs.writeFile(htmlPath, renderHtml(result.report));
   }
   process.stdout.write(`${summary(result.report)}\n`);
   return result.report.policy.passed ? 0 : 1;

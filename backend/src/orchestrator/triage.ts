@@ -7,6 +7,7 @@ import {
 } from "../schema/finding";
 import { callLlmJson, LlmProvider } from "../llm";
 import { triageStore } from "../store/reportStore";
+import { enforceReachability, REACHABILITY, Reachability } from "./reachability";
 
 /**
  * Step 4 of the pipeline (Spec Section 5.4): batched LLM triage.
@@ -59,6 +60,24 @@ exposed-sensitive-file: The detection logic already validates the response body 
 
 Respond ONLY with valid JSON matching the schema described in the user message. Do not invent new findings.`;
 
+const DEPENDENCY_SYSTEM_PROMPT = `You are a security triage assistant reviewing vulnerable-dependency findings from npm audit and OSV-Scanner. The vulnerable package versions are really installed; the tools already established that. Your job is to decide whether THIS app can actually reach the vulnerable code, so developers fix the advisories that matter first.
+
+Each finding has:
+- tool_message and metadata: the advisory titles, IDs (GHSA/CVE), affected range and fixed versions, metadata.pulledInBy (the direct dependency that brings in a transitive package), metadata.kev (in CISA's Known Exploited Vulnerabilities catalog), metadata.epss, metadata.devOnly.
+- metadata.usage: where the app loads the package, found by the scanner. status is "imported" (the package or the direct dependency pulling it in is imported), "referenced" (named in a string or a package.json script: loaded dynamically or run as a command), "not_found" (nothing in the app loads it) or "unsupported" (ecosystem not parsed). sites lists up to 4 locations with a few lines of context each.
+
+For EACH finding return:
+- reachability:
+  - "reachable": the app plausibly reaches the vulnerable function or feature. Examples: the advisory is about parsing untrusted input and the import sites feed it request data; the advisory concerns a framework the app serves HTTP with; the advisory concerns the template engine the app renders with.
+  - "not_reachable": you can name why the vulnerable code is not hit. Examples: the advisory needs an option, API or feature the import sites don't use (e.g. a specific function, a CLI flag, a server mode); the package is only used by a build or CLI tool at install time; usage.status is "not_found" and nothing in the snippets loads it dynamically.
+  - "unknown": the evidence doesn't settle it. Prefer this over guessing. Transitive packages pulled in by a framework are usually "unknown" unless the advisory clearly names the code path the framework exercises.
+- adjusted_severity: your rating given reachability and the advisory's real impact.
+- verdict: "true_positive" (the vulnerable version is installed; use this for reachable and not_reachable alike) or "needs_review". Never "false_positive": the package is really there.
+- explanation: 2-3 sentences. Name the package and the advisory, cite the specific import site (file:line) or the missing feature that supports your reachability call, and say what an attacker could do if reachable.
+- suggested_fix: numbered steps separated by "\n": the exact upgrade (to the fixed version, or of metadata.pulledInBy for a transitive package, e.g. "npm install express@4.21.2"), any interim mitigation, and a final step to verify (e.g. "npm ls <package>" or re-run the scan).
+
+Rules: judge only from the evidence given; do not invent import sites or features. Do not lower a CISA KEV entry for being unlikely; only reachability can lower it. Respond ONLY with valid JSON matching the schema in the user message. Do not invent new findings.`;
+
 interface TriageLlmResponse {
   results: {
     finding_id: string;
@@ -66,6 +85,7 @@ interface TriageLlmResponse {
     adjusted_severity: Severity;
     explanation: string;
     suggested_fix: string;
+    reachability?: Reachability;
   }[];
 }
 
@@ -155,14 +175,18 @@ async function triageBatch(
   repoName: string,
   batch: Finding[]
 ): Promise<TriageResult[]> {
+  const deps = category === "dependencies";
+  const shape = deps
+    ? `{ "results": [ { "finding_id", "reachability": "reachable"|"not_reachable"|"unknown", "verdict": "true_positive"|"needs_review", "adjusted_severity", "explanation", "suggested_fix" } ] }`
+    : `{ "results": [ { "finding_id", "verdict": "true_positive"|"false_positive"|"needs_review", "adjusted_severity", "explanation", "suggested_fix" } ] }`;
   const user = `Here are ${batch.length} findings from category "${category}" in repo "${repoName}":\n${JSON.stringify(
     batch.map(forLlm),
     null,
     2
-  )}\n\nReturn JSON: { "results": [ { "finding_id", "verdict": "true_positive"|"false_positive"|"needs_review", "adjusted_severity", "explanation", "suggested_fix" } ] }`;
+  )}\n\nReturn JSON: ${shape}`;
 
   const response = await callLlmJson<TriageLlmResponse>(provider, {
-    system: SYSTEM_PROMPT,
+    system: deps ? DEPENDENCY_SYSTEM_PROMPT : SYSTEM_PROMPT,
     user,
     maxTokens: 6000,
   });
@@ -181,13 +205,16 @@ async function triageBatch(
       rawFix && !nearDuplicate(rawFix, passthrough(f).suggested_fix) && !isGenericFix(rawFix)
         ? rawFix
         : fallbackFix(f);
-    return {
+    const result: TriageResult = {
       finding_id: f.finding_id,
       verdict: r.verdict,
       adjusted_severity: r.adjusted_severity ?? f.severity,
       explanation,
       suggested_fix: suggestedFix,
+      ...(deps && REACHABILITY.includes(r.reachability as Reachability) ? { reachability: r.reachability } : {}),
     };
+    // The model judges reachability; these rules bound what that judgement can do to severity.
+    return deps ? enforceReachability(f, result) : result;
   });
 }
 

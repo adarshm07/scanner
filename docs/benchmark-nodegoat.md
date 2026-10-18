@@ -25,6 +25,23 @@ Where the reduction comes from, without any AI. npm audit reports 149 vulnerable
 - That leaves 34 production advisories, 28 of them high or critical.
 - 8 semgrep hits on the same line and weakness are merged, and 1 duplicate is removed.
 
+## Dependency reachability
+
+Dependencies are their own report section. For each vulnerable package, Scanner-X finds where the app loads it, directly or through the direct dependency that pulls it in (from the lockfile's full dependency graph). The AI (built-in triage or the coding agent) then reads the advisory against those import sites and decides whether the vulnerable code is reachable. Unreachable advisories drop to low and stop failing the PR; nothing is removed.
+
+On NodeGoat's 34 production advisories:
+
+| | Before reachability | After agent reachability triage |
+|---|---|---|
+| Blocking dependency advisories | 27 | **8** |
+| Reachable (fix first) | not known | 4: qs, body-parser, express (open redirect), marked |
+| Unconfirmed, kept at full severity | 27 | 4: bson, fsevents, swig, kind-of |
+| Used, but vulnerable code not reachable | not known | 21 (e.g. underscore: the app never calls `_.template`; proxy-addr: `trust proxy` isn't set) |
+| Never loaded by the app | not known | 2 (nconf, i: only the unused forever CLI) |
+| Blocking findings overall (code + dependencies) | 36 | **17** |
+
+Without an AI, only the deterministic part applies: production packages nothing loads are lowered one level (2 here).
+
 ## Answer key: code-level bugs
 
 | Bug | File | Raw tools | Scanner-X |

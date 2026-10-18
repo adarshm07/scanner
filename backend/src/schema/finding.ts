@@ -14,7 +14,9 @@ export type Category =
   | "backend"
   | "cloud"
   | "architecture"
-  | "domain";
+  | "domain"
+  /** Vulnerable packages (npm audit, OSV-Scanner), kept apart from the app's own code findings. */
+  | "dependencies";
 
 export type Severity = "critical" | "high" | "medium" | "low";
 
@@ -62,6 +64,11 @@ export interface TriageResult {
   adjusted_severity: Severity;
   explanation: string;
   suggested_fix: string;
+  /**
+   * Dependency findings only: can the app reach the vulnerable code? Judged by the AI from the
+   * advisory and the import sites in metadata.usage; enforced by orchestrator/reachability.ts.
+   */
+  reachability?: "reachable" | "not_reachable" | "unknown";
 }
 
 /**

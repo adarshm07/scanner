@@ -2,6 +2,7 @@ import { runNpmAudit } from "./npmAudit";
 import { runOsvScanner } from "./osvScanner";
 import { ToolRun } from "./types";
 import { enrichWithExploitIntel } from "./exploitIntel";
+import { enrichWithUsage } from "./depUsage";
 
 /**
  * The "Dependencies" check: npm audit for npm projects, OSV-Scanner for everything else
@@ -17,10 +18,15 @@ export async function runDependencyScan(repoDir: string): Promise<ToolRun> {
   const findings = [...npm.findings, ...osv.findings];
   // Rank by real-world exploitation (CISA KEV, EPSS). Never fails the scan.
   const intel = await enrichWithExploitIntel(findings);
+  // Where the app loads each package: evidence for AI reachability, and a cap for never-loaded ones.
+  const usage = await enrichWithUsage(repoDir, findings);
+  const usageNote = usage.lowered
+    ? [`${usage.lowered} production ${usage.lowered === 1 ? "advisory is" : "advisories are"} for packages the app's code and scripts never load, so ${usage.lowered === 1 ? "it was" : "they were"} lowered one level.`]
+    : [];
   return {
     findings,
     ran: npm.ran && osv.ran,
     error: errors.join("; ") || undefined,
-    notes: [...(npm.notes ?? []), ...(osv.notes ?? []), ...intel.notes],
+    notes: [...(npm.notes ?? []), ...(osv.notes ?? []), ...intel.notes, ...usageNote],
   };
 }

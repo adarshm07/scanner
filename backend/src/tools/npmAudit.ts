@@ -320,6 +320,9 @@ export async function runNpmAudit(repoDir: string): Promise<ToolRun> {
     const category = await categoryForManifest(dir, rel);
     const manifest = path.posix.join(rel, "package.json");
     for (const f of npmAuditAdapter(outcome.raw, manifest, category, outcome.lock)) {
+      // Dependencies get their own report section; the manifest's side (frontend/backend) is kept as metadata.
+      f.category = "dependencies";
+      f.metadata = { ...f.metadata, surface: category };
       if (!hasLockfile) {
         f.tool_message += ` Versions were resolved by the scanner from ${manifest} because the repo has no lockfile, so the versions you actually install may differ.`;
         f.metadata = { ...f.metadata, lockfileGenerated: true };

@@ -5,7 +5,8 @@ export type Category =
   | "backend"
   | "cloud"
   | "architecture"
-  | "domain";
+  | "domain"
+  | "dependencies";
 
 export type Severity = "critical" | "high" | "medium" | "low";
 export type Verdict = "true_positive" | "false_positive" | "needs_review";
@@ -16,6 +17,8 @@ export interface TriageResult {
   adjusted_severity: Severity;
   explanation: string;
   suggested_fix: string;
+  /** Dependency findings: can the app reach the vulnerable code? */
+  reachability?: "reachable" | "not_reachable" | "unknown";
 }
 
 export interface ReportFinding {
