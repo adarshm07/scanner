@@ -94,30 +94,42 @@ function relativePath(file: string, repoDir?: string): string {
   return rel;
 }
 
+/**
+ * semgrep prefixes rules loaded from a local file with that file's path, so a Scanner-X rule
+ * comes back as "Users.alice.work.scanner.backend.rules.scanner-x.ssrf-user-controlled-url".
+ * That leaks the runner's home directory into reports and LLM prompts, and makes finding IDs
+ * differ between machines. Keep just the rule's own id.
+ */
+export function normalizeRuleId(checkId: string): string {
+  const own = /(?:^|\.)(scanner-x\.[A-Za-z0-9_-]+)$/.exec(checkId);
+  return own ? own[1] : checkId;
+}
+
 export function semgrepAdapter(raw: SemgrepRaw, repoDir?: string): Finding[] {
   const results = raw.results ?? [];
   return results.map((r) => {
     const meta = r.extra?.metadata ?? {};
     const file = relativePath(r.path, repoDir);
+    const ruleId = normalizeRuleId(r.check_id);
     return {
-      skill: `semgrep-${r.check_id.split(".").pop() ?? "rule"}`,
+      skill: `semgrep-${ruleId.split(".").pop() ?? "rule"}`,
       category: "backend",
       finding_id: makeFindingId({
         file,
         line_start: r.start.line,
-        rule_id: r.check_id,
+        rule_id: ruleId,
       }),
-      rule_id: r.check_id,
+      rule_id: ruleId,
       severity: mapSeverity(r.extra?.severity),
       confidence: mapConfidence(meta.confidence),
-      title: r.extra?.message?.split("\n")[0] ?? r.check_id,
+      title: r.extra?.message?.split("\n")[0] ?? ruleId,
       location: {
         file,
         line_start: r.start.line,
         line_end: r.end.line,
       },
       raw_snippet: null,
-      tool_message: r.extra?.message ?? r.check_id,
+      tool_message: r.extra?.message ?? ruleId,
       metadata: {
         cwe: first(meta.cwe),
         owasp: first(meta.owasp),

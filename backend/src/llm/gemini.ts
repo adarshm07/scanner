@@ -1,4 +1,4 @@
-import { LlmMessage, LlmProvider } from "./provider";
+import { GuardrailBlockedError, LlmMessage, LlmProvider } from "./provider";
 import { runCommand } from "../tools/util";
 
 /**
@@ -34,7 +34,8 @@ export class GeminiProvider implements LlmProvider {
       { timeoutMs: 60000 }
     );
     let data: {
-      candidates?: { content?: { parts?: { text?: string }[] } }[];
+      candidates?: { content?: { parts?: { text?: string }[] }; finishReason?: string }[];
+      promptFeedback?: { blockReason?: string };
       error?: { message?: string };
     };
     try {
@@ -47,6 +48,8 @@ export class GeminiProvider implements LlmProvider {
         `Gemini API: ${data.error?.message ?? (response.stderr || "request failed")}`
       );
     }
+    const blocked = data.promptFeedback?.blockReason ?? (data.candidates?.[0]?.finishReason === "SAFETY" ? "SAFETY" : undefined);
+    if (blocked) throw new GuardrailBlockedError(`Gemini blocked the request (${blocked})`);
     const text = data.candidates?.[0]?.content?.parts
       ?.map((part) => part.text ?? "")
       .join("");

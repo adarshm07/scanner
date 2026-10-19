@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { LlmMessage, LlmProvider } from "./provider";
+import { GuardrailBlockedError, LlmMessage, LlmProvider } from "./provider";
 
 /**
  * Claude (Anthropic) provider.
@@ -19,6 +19,9 @@ export class ClaudeProvider implements LlmProvider {
       system: msg.system,
       messages: [{ role: "user", content: msg.user }],
     });
+    if ((res.stop_reason as string) === "refusal") {
+      throw new GuardrailBlockedError("response blocked (refusal)");
+    }
     return res.content
       .filter((b): b is Anthropic.TextBlock => b.type === "text")
       .map((b) => b.text)

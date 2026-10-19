@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { LlmMessage, LlmProvider } from "./provider";
+import { GuardrailBlockedError, LlmMessage, LlmProvider } from "./provider";
 
 /**
  * OpenAI-compatible provider: an AI gateway (e.g. TrueFoundry, when OPENAI_BASE_URL is set)
@@ -44,6 +44,10 @@ export class OpenAiProvider implements LlmProvider {
       ],
       stream: false,
     });
-    return res.choices[0]?.message?.content ?? "";
+    const choice = res.choices[0];
+    if (choice?.finish_reason === "content_filter" || (choice?.message as { refusal?: string } | undefined)?.refusal) {
+      throw new GuardrailBlockedError(`response blocked (${choice?.finish_reason ?? "refusal"})`);
+    }
+    return choice?.message?.content ?? "";
   }
 }
