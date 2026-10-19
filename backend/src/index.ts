@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import { router } from "./api/routes";
+import { accessLensRouter } from "./accesslens/routes";
 import { config } from "./tools/util";
 import { allowPrivateTargets } from "./tools/netGuard";
 import { describeGitCredentials, ignoredGitCredentials, loadGitCredentials } from "./tools/gitAuth";
@@ -35,12 +36,24 @@ app.use(
       res.status(429).json({ error: "Too many scan requests. Try again later." }),
   })
 );
+app.use(
+  "/api/accesslens/users/:id/review",
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler: (_req, res) =>
+      res.status(429).json({ error: "Too many review requests. Try again later." }),
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/health", (_req, res) =>
   res.json({ status: "ok", providers: listProviders() })
 );
 
+app.use("/api/accesslens", accessLensRouter);
 app.use("/api", router);
 
 app.listen(config.port, () => {

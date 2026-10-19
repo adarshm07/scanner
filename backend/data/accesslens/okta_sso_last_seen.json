@@ -1,0 +1,4468 @@
+[
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-16T06:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-14T02:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-11T14:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-23T19:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-26T05:00:00.000Z",
+  "ssoCount90d": 31,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-16T20:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-06T10:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-001",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-07T06:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-29T16:00:00.000Z",
+  "ssoCount90d": 57,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-08T04:00:00.000Z",
+  "ssoCount90d": 31,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-11T17:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-16T18:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-08T23:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-16T14:00:00.000Z",
+  "ssoCount90d": 44,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-03T00:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-002",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-25T10:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-16T02:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-30T02:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-17T01:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-04T12:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-27T12:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-09-29T20:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-04-27T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-003",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-16T15:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-23T22:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-03T04:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T05:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-16T10:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-06-23T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-02T18:00:00.000Z",
+  "ssoCount90d": 33,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-09-24T05:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-004",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-30T10:00:00.000Z",
+  "ssoCount90d": 16,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-03T14:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-05T03:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-09T04:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-17T23:00:00.000Z",
+  "ssoCount90d": 49,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-04T14:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-07T19:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-09-24T20:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-005",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-23T10:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-09T03:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-09T22:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-30T02:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-28T02:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-28T18:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-16T21:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-09-23T20:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-006",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-26T14:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-05T14:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-10T01:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T15:00:00.000Z",
+  "ssoCount90d": 16,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-15T02:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-24T03:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-09-25T14:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-09-24T11:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-007",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-15T01:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-24T11:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-25T16:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-27T23:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-24T16:00:00.000Z",
+  "ssoCount90d": 18,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-09T15:00:00.000Z",
+  "ssoCount90d": 57,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-09-27T12:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-09T18:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-008",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-14T00:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-11T05:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-07T13:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-03T03:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-13T22:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-14T17:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-11T16:00:00.000Z",
+  "ssoCount90d": 60,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-18T17:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-009",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-07T23:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-07T23:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-15T10:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-15T05:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-04T02:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-04T11:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-18T22:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-01T11:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-010",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-24T21:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-17T23:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-29T16:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-03T11:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-02T12:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-09T17:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-11T12:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-09-28T04:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-011",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-06-29T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-03-09T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-03-09T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-04-08T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-07-05T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-04-12T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-07-12T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-06-29T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-012",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-06-20T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-013",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-25T20:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-013",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T20:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-013",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T16:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-013",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-14T02:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-013",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-05T05:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-013",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-09-24T00:00:00.000Z",
+  "ssoCount90d": 60,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-013",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-09T14:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-014",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-18T06:00:00.000Z",
+  "ssoCount90d": 2,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-014",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-19T06:00:00.000Z",
+  "ssoCount90d": 3,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-014",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 1,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-015",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-06T20:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-015",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-03T19:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-015",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T04:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-015",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-05T11:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-015",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-09T20:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-015",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-27T21:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-015",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-26T17:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-016",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-07T16:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-016",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-07T11:00:00.000Z",
+  "ssoCount90d": 31,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-016",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T05:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-016",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-06T19:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-016",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-28T01:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-016",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-29T16:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-016",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-11T10:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-017",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-01T05:00:00.000Z",
+  "ssoCount90d": 42,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-017",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-04T19:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-017",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T12:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-017",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-06T20:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-017",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-16T06:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-017",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-02T18:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-017",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-24T22:00:00.000Z",
+  "ssoCount90d": 49,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-018",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-29T21:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-018",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-04T00:00:00.000Z",
+  "ssoCount90d": 11,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-018",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T16:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-018",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-05T04:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-018",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-08T19:00:00.000Z",
+  "ssoCount90d": 49,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-018",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-01T21:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-018",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-26T10:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-019",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-02T23:00:00.000Z",
+  "ssoCount90d": 11,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-019",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-24T02:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-019",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T19:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-019",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-04T13:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-019",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-17T04:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-019",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-26T15:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-019",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-05T12:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-020",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-08T10:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-020",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-27T14:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-020",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T13:00:00.000Z",
+  "ssoCount90d": 44,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-020",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-25T02:00:00.000Z",
+  "ssoCount90d": 31,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-020",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-18T03:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-020",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-14T01:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-020",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-11T19:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-021",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-16T22:00:00.000Z",
+  "ssoCount90d": 16,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-021",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T22:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-021",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-29T13:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-021",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-13T12:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-021",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-27T11:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-021",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-08T12:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-021",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-19T04:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-022",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-24T12:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-022",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-24T12:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-022",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T15:00:00.000Z",
+  "ssoCount90d": 60,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-022",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-09T10:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-022",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-23T18:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-022",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-27T05:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-022",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-03T16:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-14T20:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-25T19:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-07T14:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-11T16:00:00.000Z",
+  "ssoCount90d": 11,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-AWS-PROD",
+  "lastSsoAt": "2026-10-12T02:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-06T11:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-13T20:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-023",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-13T01:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-04T15:00:00.000Z",
+  "ssoCount90d": 60,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-19T04:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-12T00:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-17T21:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-AWS-PROD",
+  "lastSsoAt": "2026-09-28T15:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-15T17:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-09-25T19:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-024",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-17T18:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-12T19:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-06T14:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-10T11:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-15T03:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-AWS-PROD",
+  "lastSsoAt": "2026-10-08T13:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-12T11:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-18T05:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-025",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-08T15:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-29T14:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-29T20:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-29T21:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-02T13:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-AWS-PROD",
+  "lastSsoAt": "2026-10-09T15:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-09T03:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-09-23T10:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-026",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-10T10:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-30T12:00:00.000Z",
+  "ssoCount90d": 18,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-30T15:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-25T11:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-14T23:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-AWS-PROD",
+  "lastSsoAt": "2026-09-27T03:00:00.000Z",
+  "ssoCount90d": 16,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-10-08T17:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-12T17:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-027",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-04T05:00:00.000Z",
+  "ssoCount90d": 49,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-12T13:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-03T14:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-13T16:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-07T10:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-AWS-PROD",
+  "lastSsoAt": "2026-09-29T15:00:00.000Z",
+  "ssoCount90d": 16,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-DATADOG",
+  "lastSsoAt": "2026-05-06T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-11T21:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-028",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-12T15:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-029",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-01T22:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-029",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-27T13:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-029",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-06T19:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-029",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": "2026-10-10T05:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-029",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-06-26T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-029",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-04T10:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-029",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-13T00:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-030",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-01T22:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-030",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-25T12:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-030",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-27T14:00:00.000Z",
+  "ssoCount90d": 18,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-030",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": "2026-10-18T03:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-030",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-04T03:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-030",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-18T13:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-030",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-03T15:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-031",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-09T20:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-031",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-25T04:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-031",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-02T05:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-031",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-031",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-04T01:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-031",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-05-03T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-031",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-18T21:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-032",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-08T21:00:00.000Z",
+  "ssoCount90d": 33,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-032",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T14:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-032",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-14T14:00:00.000Z",
+  "ssoCount90d": 33,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-032",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": "2026-09-24T03:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-032",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-04T10:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-032",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-18T20:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-032",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-28T00:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-033",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-28T18:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-033",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-09T04:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-033",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-14T02:00:00.000Z",
+  "ssoCount90d": 34,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-033",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": "2026-10-12T06:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-033",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-04T22:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-033",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-25T12:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-033",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-07T23:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-034",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-04T21:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-034",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-02T21:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-034",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-09T19:00:00.000Z",
+  "ssoCount90d": 43,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-034",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": "2026-10-14T15:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-034",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-09-29T19:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-034",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-03T13:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-034",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-12T23:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-035",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-24T04:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-035",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-26T19:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-035",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T05:00:00.000Z",
+  "ssoCount90d": 57,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-035",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": "2026-10-03T00:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-035",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-13T20:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-035",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-16T00:00:00.000Z",
+  "ssoCount90d": 49,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-035",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-16T14:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-036",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-05T02:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-036",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T05:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-036",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-23T21:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-036",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-11T06:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-036",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-17T05:00:00.000Z",
+  "ssoCount90d": 31,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-036",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-16T13:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-037",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-16T15:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-037",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-14T02:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-037",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-25T10:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-037",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-06T16:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-037",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-06T18:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-037",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-09-27T13:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-038",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-08T03:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-038",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-06T14:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-038",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-12T06:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-038",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-09T16:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-038",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-05T13:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-038",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-11T16:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-039",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-13T03:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-039",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-05T11:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-039",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T23:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-039",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-06-16T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-039",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-09-27T05:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-039",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-06T16:00:00.000Z",
+  "ssoCount90d": 18,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-040",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-25T05:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-040",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-09T23:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-040",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-30T20:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-040",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-09-27T20:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-040",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-14T14:00:00.000Z",
+  "ssoCount90d": 18,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-040",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-11T05:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-041",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-26T01:00:00.000Z",
+  "ssoCount90d": 44,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-041",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T15:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-041",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-02-02T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-041",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-09-23T14:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-041",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-06T02:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-041",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-09-24T13:00:00.000Z",
+  "ssoCount90d": 34,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-042",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-11T21:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-042",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-23T16:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-042",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-05T13:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-042",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-11T22:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-042",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-16T16:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-042",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-02T00:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-043",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-27T11:00:00.000Z",
+  "ssoCount90d": 42,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-043",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-17T00:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-043",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-25T13:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-043",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-08T21:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-043",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-13T03:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-043",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-043",
+  "appId": "0oa-SYNTH-SNOWFLAKE",
+  "lastSsoAt": "2026-10-11T11:00:00.000Z",
+  "ssoCount90d": 49,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-044",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-11T13:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-044",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-06T16:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-044",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-09T22:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-044",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-03T16:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-044",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-09-25T15:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-044",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-12T19:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-045",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-30T23:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-045",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-10T13:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-045",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-05T21:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-045",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-11T18:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-045",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-03T13:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-045",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-08T22:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-046",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-25T10:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-046",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-13T19:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-046",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-01T15:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-046",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-01T10:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-046",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-17T05:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-046",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-14T10:00:00.000Z",
+  "ssoCount90d": 18,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-047",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-15T06:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-047",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-08T05:00:00.000Z",
+  "ssoCount90d": 43,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-047",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-29T15:00:00.000Z",
+  "ssoCount90d": 46,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-047",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-10-18T13:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-047",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-18T14:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-047",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-10T06:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-048",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-03-28T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-048",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-06-01T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-048",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-06-22T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-048",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-05-16T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-048",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-03-04T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-048",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-04-17T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-049",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-07T04:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-049",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-04T12:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-049",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-049",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-09-28T04:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-049",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-049",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-18T04:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-050",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-01T15:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-050",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-27T01:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-050",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-05T10:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-050",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-15T14:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-050",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-26T12:00:00.000Z",
+  "ssoCount90d": 34,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-050",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-16T22:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-051",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-18T01:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-051",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-12T12:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-051",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-26T18:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-051",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-09-30T23:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-051",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-06T13:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-051",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-09-26T02:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-052",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-26T04:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-052",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-08T05:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-052",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T20:00:00.000Z",
+  "ssoCount90d": 42,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-052",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-09-29T18:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-052",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-052",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-053",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-07T13:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-053",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-27T12:00:00.000Z",
+  "ssoCount90d": 46,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-053",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T11:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-053",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-09-27T04:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-053",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-06T10:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-053",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-08T19:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-054",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-09T16:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-054",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-16T02:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-054",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-04T13:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-054",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-16T06:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-054",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-16T11:00:00.000Z",
+  "ssoCount90d": 42,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-054",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-07T06:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-055",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-25T04:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-055",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-11T12:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-055",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-07T01:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-055",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-10T15:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-055",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-05T22:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-055",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-09-24T04:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-055",
+  "appId": "0oa-SYNTH-AWS-PROD",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-056",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-12T16:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-056",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-18T18:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-056",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-06T20:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-056",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-09-28T11:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-056",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-30T00:00:00.000Z",
+  "ssoCount90d": 34,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-056",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-06T20:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-057",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-28T15:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-057",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-08T18:00:00.000Z",
+  "ssoCount90d": 21,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-057",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-06T19:00:00.000Z",
+  "ssoCount90d": 11,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-057",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-12T12:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-057",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-24T13:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-057",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-05T00:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-058",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-27T04:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-058",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-23T17:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-058",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-28T21:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-058",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-14T17:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-058",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-04T11:00:00.000Z",
+  "ssoCount90d": 34,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-058",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-01T14:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-059",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-07-07T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-059",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-04-15T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-059",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-06-25T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-059",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-05-14T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-059",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-04-17T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-059",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-07-05T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-060",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-28T10:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-060",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-08T17:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-060",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-10T23:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-060",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-01T12:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-060",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-04T19:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-060",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-09-27T12:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-061",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-08T06:00:00.000Z",
+  "ssoCount90d": 34,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-061",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-06T04:00:00.000Z",
+  "ssoCount90d": 11,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-061",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-26T02:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-061",
+  "appId": "0oa-SYNTH-HUBSPOT",
+  "lastSsoAt": "2026-10-05T00:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-061",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-04T03:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-061",
+  "appId": "0oa-SYNTH-TABLEAU",
+  "lastSsoAt": "2026-10-04T20:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-062",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-24T03:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-062",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-29T03:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-062",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-25T23:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-062",
+  "appId": "0oa-SYNTH-COUPA",
+  "lastSsoAt": "2026-10-13T20:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-062",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-04T23:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-063",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-14T01:00:00.000Z",
+  "ssoCount90d": 44,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-063",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-07T06:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-063",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-12T16:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-063",
+  "appId": "0oa-SYNTH-NETSUITE",
+  "lastSsoAt": "2026-10-19T00:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-063",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-09-27T04:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-063",
+  "appId": "0oa-SYNTH-COUPA",
+  "lastSsoAt": "2026-10-18T06:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-064",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-10T15:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-064",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-08T11:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-064",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-01T03:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-064",
+  "appId": "0oa-SYNTH-COUPA",
+  "lastSsoAt": "2026-10-04T11:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-064",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-09-26T21:00:00.000Z",
+  "ssoCount90d": 43,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-065",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-28T02:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-065",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-10T03:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-065",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-14T14:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-065",
+  "appId": "0oa-SYNTH-NETSUITE",
+  "lastSsoAt": "2026-10-14T12:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-065",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-03T10:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-066",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-29T01:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-066",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-10T02:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-066",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-04T11:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-066",
+  "appId": "0oa-SYNTH-COUPA",
+  "lastSsoAt": "2026-10-18T15:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-066",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-06T13:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-067",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-05T15:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-067",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-04T15:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-067",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T23:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-067",
+  "appId": "0oa-SYNTH-NETSUITE",
+  "lastSsoAt": "2026-10-11T13:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-067",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-04T12:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-068",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-03T13:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-068",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-15T22:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-068",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-07T13:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-068",
+  "appId": "0oa-SYNTH-COUPA",
+  "lastSsoAt": "2026-09-24T16:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-068",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-06T03:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-069",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-24T23:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-069",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-17T16:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-069",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T16:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-069",
+  "appId": "0oa-SYNTH-NETSUITE",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-069",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-12T00:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-070",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-26T19:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-070",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-28T17:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-070",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T00:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-070",
+  "appId": "0oa-SYNTH-WORKDAY",
+  "lastSsoAt": "2026-10-17T12:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-070",
+  "appId": "0oa-SYNTH-LATTICE",
+  "lastSsoAt": "2026-09-29T13:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-070",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-09-26T21:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-071",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-03T03:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-071",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-23T17:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-071",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-071",
+  "appId": "0oa-SYNTH-WORKDAY",
+  "lastSsoAt": "2026-10-15T02:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-071",
+  "appId": "0oa-SYNTH-LATTICE",
+  "lastSsoAt": "2026-10-08T23:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-071",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-06T15:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-072",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-10T10:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-072",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-16T10:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-072",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T18:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-072",
+  "appId": "0oa-SYNTH-WORKDAY",
+  "lastSsoAt": "2026-09-26T19:00:00.000Z",
+  "ssoCount90d": 33,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-072",
+  "appId": "0oa-SYNTH-LATTICE",
+  "lastSsoAt": "2026-10-08T12:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-072",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-09-26T04:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-073",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-28T19:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-073",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T18:00:00.000Z",
+  "ssoCount90d": 17,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-073",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-05-23T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-073",
+  "appId": "0oa-SYNTH-WORKDAY",
+  "lastSsoAt": "2026-05-22T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-073",
+  "appId": "0oa-SYNTH-LATTICE",
+  "lastSsoAt": "2026-10-14T12:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-073",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-09T05:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-074",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-23T16:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-074",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-13T16:00:00.000Z",
+  "ssoCount90d": 33,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-074",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-06T00:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-074",
+  "appId": "0oa-SYNTH-WORKDAY",
+  "lastSsoAt": "2026-09-28T21:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-074",
+  "appId": "0oa-SYNTH-LATTICE",
+  "lastSsoAt": "2026-10-11T04:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-074",
+  "appId": "0oa-SYNTH-DOCUSIGN",
+  "lastSsoAt": "2026-10-16T19:00:00.000Z",
+  "ssoCount90d": 46,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-14T05:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-25T23:00:00.000Z",
+  "ssoCount90d": 31,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-27T03:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-OKTA-ADMIN",
+  "lastSsoAt": "2026-10-17T02:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-1PASSWORD",
+  "lastSsoAt": "2026-09-27T16:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-09T03:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-14T15:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-075",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-17T03:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-10T02:00:00.000Z",
+  "ssoCount90d": 28,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-25T02:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-OKTA-ADMIN",
+  "lastSsoAt": "2026-10-02T12:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-1PASSWORD",
+  "lastSsoAt": "2026-10-13T16:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-09-29T02:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-05T00:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-15T03:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-07T17:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-11T22:00:00.000Z",
+  "ssoCount90d": 45,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-01T11:00:00.000Z",
+  "ssoCount90d": 42,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-OKTA-ADMIN",
+  "lastSsoAt": "2026-10-10T06:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-1PASSWORD",
+  "lastSsoAt": "2026-10-10T00:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-12T18:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-09-23T23:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-11T15:00:00.000Z",
+  "ssoCount90d": 44,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-03T06:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-14T18:00:00.000Z",
+  "ssoCount90d": 59,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-05T19:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-OKTA-ADMIN",
+  "lastSsoAt": "2026-09-24T15:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-1PASSWORD",
+  "lastSsoAt": "2026-10-01T04:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-18T05:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-09T10:00:00.000Z",
+  "ssoCount90d": 49,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-078",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-05T17:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-28T13:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-11T04:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-13T02:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-OKTA-ADMIN",
+  "lastSsoAt": "2026-09-30T10:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-1PASSWORD",
+  "lastSsoAt": "2026-09-27T10:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-PAGERDUTY",
+  "lastSsoAt": "2026-10-05T23:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-AWS-DEV",
+  "lastSsoAt": "2026-10-06T03:00:00.000Z",
+  "ssoCount90d": 33,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-079",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-17T21:00:00.000Z",
+  "ssoCount90d": 46,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-080",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-26T01:00:00.000Z",
+  "ssoCount90d": 11,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-080",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-15T06:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-080",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-07T14:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-080",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-09-25T22:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-080",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-25T22:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-081",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-25T06:00:00.000Z",
+  "ssoCount90d": 25,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-081",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-10T14:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-081",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-30T10:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-081",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-10-02T19:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-081",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-01T01:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-082",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-25T03:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-082",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-15T23:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-082",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T06:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-082",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-10-07T18:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-082",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-17T13:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-083",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-09-25T10:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-083",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-11T17:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-083",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T12:00:00.000Z",
+  "ssoCount90d": 27,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-083",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-09-28T05:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-083",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-03T05:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-084",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-04T21:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-084",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-09T04:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-084",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-08T00:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-084",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-10-09T11:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-084",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-30T15:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-084",
+  "appId": "0oa-SYNTH-SALESFORCE",
+  "lastSsoAt": "2026-09-25T13:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-085",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-15T06:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-085",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T19:00:00.000Z",
+  "ssoCount90d": 44,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-085",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T20:00:00.000Z",
+  "ssoCount90d": 4,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-085",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-10-06T21:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-085",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-11T17:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-086",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-14T22:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-086",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-11T14:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-086",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-07T16:00:00.000Z",
+  "ssoCount90d": 51,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-086",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-06-01T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-086",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-07T04:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-087",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-06T02:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-087",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-08T18:00:00.000Z",
+  "ssoCount90d": 48,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-087",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-08T20:00:00.000Z",
+  "ssoCount90d": 32,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-087",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-10-17T00:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-087",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-01T03:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-088",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-04T16:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-088",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T19:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-088",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-09T16:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-088",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-10-17T01:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-088",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-26T11:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-089",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-09T02:00:00.000Z",
+  "ssoCount90d": 9,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-089",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-07T18:00:00.000Z",
+  "ssoCount90d": 36,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-089",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-09T22:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-089",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-089",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-06T16:00:00.000Z",
+  "ssoCount90d": 39,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-090",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-05-14T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-090",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-06-20T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-090",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-06-11T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-090",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-07-01T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-090",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-05-21T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-091",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-06T19:00:00.000Z",
+  "ssoCount90d": 47,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-091",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-29T04:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-091",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-091",
+  "appId": "0oa-SYNTH-ZENDESK",
+  "lastSsoAt": "2026-09-28T16:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-091",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-23T20:00:00.000Z",
+  "ssoCount90d": 11,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-092",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-05T05:00:00.000Z",
+  "ssoCount90d": 14,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-092",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-05T18:00:00.000Z",
+  "ssoCount90d": 35,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-092",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-27T17:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-092",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-13T22:00:00.000Z",
+  "ssoCount90d": 21,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-092",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-15T05:00:00.000Z",
+  "ssoCount90d": 43,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-092",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-11T10:00:00.000Z",
+  "ssoCount90d": 22,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-093",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-01T15:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-093",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-07T02:00:00.000Z",
+  "ssoCount90d": 30,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-093",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-23T14:00:00.000Z",
+  "ssoCount90d": 19,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-093",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-23T13:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-093",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-06T19:00:00.000Z",
+  "ssoCount90d": 34,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-093",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-03T19:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-094",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-06T22:00:00.000Z",
+  "ssoCount90d": 15,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-094",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-29T23:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-094",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-24T22:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-094",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-03T14:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-094",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-12T01:00:00.000Z",
+  "ssoCount90d": 10,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-094",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-11T22:00:00.000Z",
+  "ssoCount90d": 38,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-094",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-26T05:00:00.000Z",
+  "ssoCount90d": 52,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-095",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-11T12:00:00.000Z",
+  "ssoCount90d": 58,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-095",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-06T19:00:00.000Z",
+  "ssoCount90d": 57,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-095",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": null,
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-095",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-11T12:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-095",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-09-26T19:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-095",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-09-26T19:00:00.000Z",
+  "ssoCount90d": 40,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-096",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-01T00:00:00.000Z",
+  "ssoCount90d": 57,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-096",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-03T13:00:00.000Z",
+  "ssoCount90d": 23,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-096",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-18T04:00:00.000Z",
+  "ssoCount90d": 7,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-096",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-12T06:00:00.000Z",
+  "ssoCount90d": 37,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-096",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-08T11:00:00.000Z",
+  "ssoCount90d": 16,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-096",
+  "appId": "0oa-SYNTH-FIGMA",
+  "lastSsoAt": "2026-10-09T01:00:00.000Z",
+  "ssoCount90d": 55,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-097",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-09T05:00:00.000Z",
+  "ssoCount90d": 5,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-097",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-09-27T02:00:00.000Z",
+  "ssoCount90d": 53,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-097",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-02T19:00:00.000Z",
+  "ssoCount90d": 8,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-097",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-09-27T18:00:00.000Z",
+  "ssoCount90d": 41,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-097",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-09T20:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-097",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-03-27T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-098",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-03T10:00:00.000Z",
+  "ssoCount90d": 24,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-098",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-01T11:00:00.000Z",
+  "ssoCount90d": 54,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-098",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-09-27T12:00:00.000Z",
+  "ssoCount90d": 56,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-098",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-10-09T21:00:00.000Z",
+  "ssoCount90d": 12,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-098",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-18T12:00:00.000Z",
+  "ssoCount90d": 29,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-098",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-09-24T12:00:00.000Z",
+  "ssoCount90d": 6,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-099",
+  "appId": "0oa-SYNTH-SLACK",
+  "lastSsoAt": "2026-10-08T11:00:00.000Z",
+  "ssoCount90d": 18,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-099",
+  "appId": "0oa-SYNTH-GWORKSPACE",
+  "lastSsoAt": "2026-10-15T15:00:00.000Z",
+  "ssoCount90d": 13,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-099",
+  "appId": "0oa-SYNTH-ZOOM",
+  "lastSsoAt": "2026-10-16T23:00:00.000Z",
+  "ssoCount90d": 26,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-099",
+  "appId": "0oa-SYNTH-JIRA",
+  "lastSsoAt": "2026-06-04T06:00:00.000Z",
+  "ssoCount90d": 0,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-099",
+  "appId": "0oa-SYNTH-CONFLUENCE",
+  "lastSsoAt": "2026-10-16T10:00:00.000Z",
+  "ssoCount90d": 50,
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-099",
+  "appId": "0oa-SYNTH-GITHUB",
+  "lastSsoAt": "2026-10-05T06:00:00.000Z",
+  "ssoCount90d": 20,
+  "tenant_id": 1
+ }
+]

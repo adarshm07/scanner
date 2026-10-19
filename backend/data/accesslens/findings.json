@@ -1,0 +1,950 @@
+[
+ {
+  "user_id": 55,
+  "app_id": 8,
+  "rule": "NEVER_USED",
+  "risk_score": 22.4,
+  "evidence": {
+   "assigned_days": 565
+  },
+  "explanation": "Assigned 565 days ago to aws-prod; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 1,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 69,
+  "app_id": 18,
+  "rule": "NEVER_USED",
+  "risk_score": 22.4,
+  "evidence": {
+   "assigned_days": 950
+  },
+  "explanation": "Assigned 950 days ago to netsuite; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 2,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 97,
+  "app_id": 6,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 21.0,
+  "evidence": {
+   "last_sso": "2026-03-27T06:00:00.000Z",
+   "days_inactive": 206
+  },
+  "explanation": "No sign-in to github for 206 days.",
+  "status": "open",
+  "_id": 3,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 73,
+  "app_id": 16,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 18.0,
+  "evidence": {
+   "last_sso": "2026-05-22T06:00:00.000Z",
+   "days_inactive": 150
+  },
+  "explanation": "No sign-in to workday for 150 days.",
+  "status": "open",
+  "_id": 4,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 31,
+  "app_id": 11,
+  "rule": "NEVER_USED",
+  "risk_score": 16.8,
+  "evidence": {
+   "assigned_days": 531
+  },
+  "explanation": "Assigned 531 days ago to snowflake; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 5,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 39,
+  "app_id": 13,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 15.5,
+  "evidence": {
+   "last_sso": "2026-06-16T06:00:00.000Z",
+   "days_inactive": 125
+  },
+  "explanation": "No sign-in to salesforce for 125 days.",
+  "status": "open",
+  "_id": 6,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 11,
+  "app_id": 6,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 14.2,
+  "evidence": {
+   "last_sso": "2026-06-29T06:00:00.000Z",
+   "days_inactive": 112
+  },
+  "explanation": "No sign-in to github for 112 days.",
+  "status": "open",
+  "_id": 7,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 3,
+  "app_id": 9,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 13.7,
+  "evidence": {
+   "last_sso": "2026-04-27T06:00:00.000Z",
+   "days_inactive": 175
+  },
+  "explanation": "No sign-in to datadog for 175 days.",
+  "status": "open",
+  "_id": 8,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 31,
+  "app_id": 4,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 13.3,
+  "evidence": {
+   "last_sso": "2026-05-03T06:00:00.000Z",
+   "days_inactive": 169
+  },
+  "explanation": "No sign-in to jira for 169 days.",
+  "status": "open",
+  "_id": 9,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 28,
+  "app_id": 9,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 13.1,
+  "evidence": {
+   "last_sso": "2026-05-06T06:00:00.000Z",
+   "days_inactive": 166
+  },
+  "explanation": "No sign-in to datadog for 166 days.",
+  "status": "open",
+  "_id": 10,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 86,
+  "app_id": 21,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 11.3,
+  "evidence": {
+   "last_sso": "2026-06-01T06:00:00.000Z",
+   "days_inactive": 140
+  },
+  "explanation": "No sign-in to zendesk for 140 days.",
+  "status": "open",
+  "_id": 11,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 43,
+  "app_id": 14,
+  "rule": "NEVER_USED",
+  "risk_score": 11.2,
+  "evidence": {
+   "assigned_days": 1087
+  },
+  "explanation": "Assigned 1087 days ago to hubspot; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 12,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 49,
+  "app_id": 20,
+  "rule": "NEVER_USED",
+  "risk_score": 11.2,
+  "evidence": {
+   "assigned_days": 1160
+  },
+  "explanation": "Assigned 1160 days ago to docusign; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 13,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 52,
+  "app_id": 12,
+  "rule": "NEVER_USED",
+  "risk_score": 11.2,
+  "evidence": {
+   "assigned_days": 333
+  },
+  "explanation": "Assigned 333 days ago to tableau; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 14,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 99,
+  "app_id": 4,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 11.1,
+  "evidence": {
+   "last_sso": "2026-06-04T06:00:00.000Z",
+   "days_inactive": 137
+  },
+  "explanation": "No sign-in to jira for 137 days.",
+  "status": "open",
+  "_id": 15,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 4,
+  "app_id": 5,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 9.9,
+  "evidence": {
+   "last_sso": "2026-06-23T06:00:00.000Z",
+   "days_inactive": 118
+  },
+  "explanation": "No sign-in to confluence for 118 days.",
+  "status": "open",
+  "_id": 16,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 29,
+  "app_id": 12,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 9.7,
+  "evidence": {
+   "last_sso": "2026-06-26T06:00:00.000Z",
+   "days_inactive": 115
+  },
+  "explanation": "No sign-in to tableau for 115 days.",
+  "status": "open",
+  "_id": 17,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 69,
+  "app_id": 22,
+  "rule": "PRIVILEGED_ROLE",
+  "risk_score": 8.0,
+  "evidence": {
+   "role": "APP_ADMIN",
+   "cohort": "finance"
+  },
+  "explanation": "Liam Young holds Okta APP_ADMIN outside IT/Security.",
+  "status": "open",
+  "_id": 18,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 53,
+  "app_id": 22,
+  "rule": "PRIVILEGED_ROLE",
+  "risk_score": 8.0,
+  "evidence": {
+   "role": "SUPER_ADMIN",
+   "cohort": "marketing"
+  },
+  "explanation": "Mia Garcia holds Okta SUPER_ADMIN outside IT/Security.",
+  "status": "open",
+  "_id": 19,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 71,
+  "app_id": 22,
+  "rule": "PRIVILEGED_ROLE",
+  "risk_score": 8.0,
+  "evidence": {
+   "role": "USER_ADMIN",
+   "cohort": "hr"
+  },
+  "explanation": "Sneha Singh holds Okta USER_ADMIN outside IT/Security.",
+  "status": "open",
+  "_id": 20,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 63,
+  "app_id": null,
+  "rule": "TOXIC_COMBINATION",
+  "risk_score": 7.5,
+  "evidence": {
+   "apps": [
+    "coupa",
+    "netsuite"
+   ]
+  },
+  "explanation": "Can create vendors and approve payments",
+  "status": "open",
+  "_id": 21,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 41,
+  "app_id": 3,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 7.0,
+  "evidence": {
+   "last_sso": "2026-02-02T06:00:00.000Z",
+   "days_inactive": 259
+  },
+  "explanation": "No sign-in to zoom for 259 days.",
+  "status": "open",
+  "_id": 22,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 89,
+  "app_id": 21,
+  "rule": "NEVER_USED",
+  "risk_score": 6.8,
+  "evidence": {
+   "assigned_days": 98
+  },
+  "explanation": "Assigned 98 days ago to zendesk; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 23,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 7,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 6.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to aws-dev.",
+  "status": "open",
+  "_id": 24,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 6,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 6.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to github.",
+  "status": "open",
+  "_id": 25,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 48,
+  "app_id": 13,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 6.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Vikram Kapoor is suspended in Okta but still assigned to salesforce.",
+  "status": "open",
+  "_id": 26,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 73,
+  "app_id": 3,
+  "rule": "UNUSED_ACCESS",
+  "risk_score": 6.0,
+  "evidence": {
+   "last_sso": "2026-05-23T06:00:00.000Z",
+   "days_inactive": 149
+  },
+  "explanation": "No sign-in to zoom for 149 days.",
+  "status": "open",
+  "_id": 27,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 49,
+  "app_id": 3,
+  "rule": "NEVER_USED",
+  "risk_score": 5.6,
+  "evidence": {
+   "assigned_days": 1161
+  },
+  "explanation": "Assigned 1161 days ago to zoom; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 28,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 52,
+  "app_id": 15,
+  "rule": "NEVER_USED",
+  "risk_score": 5.6,
+  "evidence": {
+   "assigned_days": 332
+  },
+  "explanation": "Assigned 332 days ago to figma; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 29,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 71,
+  "app_id": 3,
+  "rule": "NEVER_USED",
+  "risk_score": 5.6,
+  "evidence": {
+   "assigned_days": 674
+  },
+  "explanation": "Assigned 674 days ago to zoom; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 30,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 76,
+  "app_id": 3,
+  "rule": "NEVER_USED",
+  "risk_score": 5.6,
+  "evidence": {
+   "assigned_days": 231
+  },
+  "explanation": "Assigned 231 days ago to zoom; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 31,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 95,
+  "app_id": 3,
+  "rule": "NEVER_USED",
+  "risk_score": 5.6,
+  "evidence": {
+   "assigned_days": 729
+  },
+  "explanation": "Assigned 729 days ago to zoom; no Okta sign-in ever seen.",
+  "status": "open",
+  "_id": 32,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 55,
+  "app_id": 8,
+  "rule": "OUTLIER_ACCESS",
+  "risk_score": 4.8,
+  "evidence": {
+   "cohort": "Marketing",
+   "cohort_share": 0.091,
+   "low_confidence": false
+  },
+  "explanation": "Only 9% of Marketing hold aws-prod.",
+  "status": "open",
+  "_id": 33,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 4,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to jira.",
+  "status": "open",
+  "_id": 34,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 5,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to confluence.",
+  "status": "open",
+  "_id": 35,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 9,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to datadog.",
+  "status": "open",
+  "_id": 36,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 48,
+  "app_id": 20,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Vikram Kapoor is suspended in Okta but still assigned to docusign.",
+  "status": "open",
+  "_id": 37,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 48,
+  "app_id": 14,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Vikram Kapoor is suspended in Okta but still assigned to hubspot.",
+  "status": "open",
+  "_id": 38,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 59,
+  "app_id": 14,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Isha Joshi is deprovisioned in Okta but still assigned to hubspot.",
+  "status": "open",
+  "_id": 39,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 59,
+  "app_id": 12,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Isha Joshi is deprovisioned in Okta but still assigned to tableau.",
+  "status": "open",
+  "_id": 40,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 90,
+  "app_id": 21,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Zoe King is suspended in Okta but still assigned to zendesk.",
+  "status": "open",
+  "_id": 41,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 90,
+  "app_id": 4,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 4.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Zoe King is suspended in Okta but still assigned to jira.",
+  "status": "open",
+  "_id": 42,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 43,
+  "app_id": 11,
+  "rule": "OUTLIER_ACCESS",
+  "risk_score": 3.6,
+  "evidence": {
+   "cohort": "Sales",
+   "cohort_share": 0.077,
+   "low_confidence": false
+  },
+  "explanation": "Only 8% of Sales hold snowflake.",
+  "status": "open",
+  "_id": 43,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 84,
+  "app_id": 13,
+  "rule": "OUTLIER_ACCESS",
+  "risk_score": 3.6,
+  "evidence": {
+   "cohort": "Customer support",
+   "cohort_share": 0.091,
+   "low_confidence": false
+  },
+  "explanation": "Only 9% of Customer support hold salesforce.",
+  "status": "open",
+  "_id": 44,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 1,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to slack.",
+  "status": "open",
+  "_id": 45,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 2,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to gworkspace.",
+  "status": "open",
+  "_id": 46,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "app_id": 3,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Noah Verma is deprovisioned in Okta but still assigned to zoom.",
+  "status": "open",
+  "_id": 47,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 48,
+  "app_id": 1,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Vikram Kapoor is suspended in Okta but still assigned to slack.",
+  "status": "open",
+  "_id": 48,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 48,
+  "app_id": 2,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Vikram Kapoor is suspended in Okta but still assigned to gworkspace.",
+  "status": "open",
+  "_id": 49,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 48,
+  "app_id": 3,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Vikram Kapoor is suspended in Okta but still assigned to zoom.",
+  "status": "open",
+  "_id": 50,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 59,
+  "app_id": 1,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Isha Joshi is deprovisioned in Okta but still assigned to slack.",
+  "status": "open",
+  "_id": 51,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 59,
+  "app_id": 2,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Isha Joshi is deprovisioned in Okta but still assigned to gworkspace.",
+  "status": "open",
+  "_id": 52,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 59,
+  "app_id": 3,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Isha Joshi is deprovisioned in Okta but still assigned to zoom.",
+  "status": "open",
+  "_id": 53,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 59,
+  "app_id": 15,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "DEPROVISIONED"
+  },
+  "explanation": "Isha Joshi is deprovisioned in Okta but still assigned to figma.",
+  "status": "open",
+  "_id": 54,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 90,
+  "app_id": 1,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Zoe King is suspended in Okta but still assigned to slack.",
+  "status": "open",
+  "_id": 55,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 90,
+  "app_id": 2,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Zoe King is suspended in Okta but still assigned to gworkspace.",
+  "status": "open",
+  "_id": 56,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 90,
+  "app_id": 3,
+  "rule": "STALE_ACCOUNT",
+  "risk_score": 2.0,
+  "evidence": {
+   "okta_status": "SUSPENDED"
+  },
+  "explanation": "Zoe King is suspended in Okta but still assigned to zoom.",
+  "status": "open",
+  "_id": 57,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 13,
+  "app_id": 6,
+  "rule": "MISSING_ACCESS",
+  "risk_score": 1.8,
+  "evidence": {
+   "cohort_share": 0.846
+  },
+  "explanation": "85% of the cohort has github; Rahul does not.",
+  "status": "open",
+  "_id": 58,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 14,
+  "app_id": 7,
+  "rule": "MISSING_ACCESS",
+  "risk_score": 1.8,
+  "evidence": {
+   "cohort_share": 0.923
+  },
+  "explanation": "92% of the cohort has aws-dev; Emma does not.",
+  "status": "open",
+  "_id": 59,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 14,
+  "app_id": 6,
+  "rule": "MISSING_ACCESS",
+  "risk_score": 1.8,
+  "evidence": {
+   "cohort_share": 0.846
+  },
+  "explanation": "85% of the cohort has github; Emma does not.",
+  "status": "open",
+  "_id": 60,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 55,
+  "app_id": 8,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 1.2,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "aws-prod assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 61,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 14,
+  "app_id": 9,
+  "rule": "MISSING_ACCESS",
+  "risk_score": 1.2,
+  "evidence": {
+   "cohort_share": 0.923
+  },
+  "explanation": "92% of the cohort has datadog; Emma does not.",
+  "status": "open",
+  "_id": 62,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 14,
+  "app_id": 4,
+  "rule": "MISSING_ACCESS",
+  "risk_score": 1.2,
+  "evidence": {
+   "cohort_share": 0.923
+  },
+  "explanation": "92% of the cohort has jira; Emma does not.",
+  "status": "open",
+  "_id": 63,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 14,
+  "app_id": 5,
+  "rule": "MISSING_ACCESS",
+  "risk_score": 1.2,
+  "evidence": {
+   "cohort_share": 0.923
+  },
+  "explanation": "92% of the cohort has confluence; Emma does not.",
+  "status": "open",
+  "_id": 64,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 13,
+  "app_id": 7,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 0.9,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "aws-dev assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 65,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 43,
+  "app_id": 11,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 0.9,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "snowflake assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 66,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 63,
+  "app_id": 19,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 0.9,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "coupa assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 67,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 84,
+  "app_id": 13,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 0.9,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "salesforce assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 68,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 13,
+  "app_id": 4,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 0.6,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "jira assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 69,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 13,
+  "app_id": 5,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 0.6,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "confluence assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 70,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 13,
+  "app_id": 9,
+  "rule": "DIRECT_ASSIGNMENT",
+  "risk_score": 0.6,
+  "evidence": {
+   "source": "DIRECT"
+  },
+  "explanation": "datadog assigned directly, bypassing group policy.",
+  "status": "open",
+  "_id": 71,
+  "tenant_id": 1
+ }
+]

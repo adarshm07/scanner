@@ -1,0 +1,98 @@
+[
+ {
+  "key": "backend",
+  "label": "Backend engineering",
+  "confidence": 0.91,
+  "label_source": "seed",
+  "_id": 1,
+  "tenant_id": 1
+ },
+ {
+  "key": "frontend",
+  "label": "Frontend engineering",
+  "confidence": 0.83,
+  "label_source": "seed",
+  "_id": 2,
+  "tenant_id": 1
+ },
+ {
+  "key": "devops",
+  "label": "Platform / DevOps",
+  "confidence": 0.88,
+  "label_source": "seed",
+  "_id": 3,
+  "tenant_id": 1
+ },
+ {
+  "key": "data",
+  "label": "Data engineering & analytics",
+  "confidence": 0.87,
+  "label_source": "seed",
+  "_id": 4,
+  "tenant_id": 1
+ },
+ {
+  "key": "sales",
+  "label": "Sales",
+  "confidence": 0.84,
+  "label_source": "seed",
+  "_id": 5,
+  "tenant_id": 1
+ },
+ {
+  "key": "marketing",
+  "label": "Marketing",
+  "confidence": 0.87,
+  "label_source": "seed",
+  "_id": 6,
+  "tenant_id": 1
+ },
+ {
+  "key": "finance",
+  "label": "Finance",
+  "confidence": 0.93,
+  "label_source": "seed",
+  "_id": 7,
+  "tenant_id": 1
+ },
+ {
+  "key": "hr",
+  "label": "People / HR",
+  "confidence": 0.87,
+  "label_source": "seed",
+  "_id": 8,
+  "tenant_id": 1
+ },
+ {
+  "key": "itsec",
+  "label": "IT & Security",
+  "confidence": 0.87,
+  "label_source": "seed",
+  "_id": 9,
+  "tenant_id": 1
+ },
+ {
+  "key": "support",
+  "label": "Customer support",
+  "confidence": 0.93,
+  "label_source": "seed",
+  "_id": 10,
+  "tenant_id": 1
+ },
+ {
+  "key": "product",
+  "label": "Product",
+  "confidence": 0.92,
+  "label_source": "seed",
+  "_id": 11,
+  "tenant_id": 1
+ },
+ {
+  "key": "contractors",
+  "label": "Contract engineering",
+  "confidence": 0.55,
+  "label_source": "seed",
+  "_id": 12,
+  "tenant_id": 1
+ }
+]

@@ -1,0 +1,50 @@
+[
+ {
+  "user": "Henry Rao",
+  "login": "gh-henry-rao4",
+  "repo": "infra-terraform",
+  "finding": "EXCESSIVE_ACCESS",
+  "detail": "Direct admin grant outside Platform team",
+  "tenant_id": 1
+ },
+ {
+  "user": "Rohan Reddy",
+  "login": "gh-rohan-reddy24",
+  "repo": null,
+  "finding": "EXCESSIVE_PRIVILEGE",
+  "detail": "GitHub org owner; rules allow repo admin only",
+  "tenant_id": 1
+ },
+ {
+  "user": "Grace Brown",
+  "login": "gh-grace-brown33",
+  "repo": "data-warehouse",
+  "finding": "MISSING_ACCESS",
+  "detail": "Required read access not granted",
+  "tenant_id": 1
+ },
+ {
+  "user": "Priya Smith",
+  "login": "gh-priya-smith94",
+  "repo": "payments-api",
+  "finding": "EXCESSIVE_ACCESS",
+  "detail": "Product Manager has write, max allowed is read",
+  "tenant_id": 1
+ },
+ {
+  "user": "Priya Iyer",
+  "login": "gh-priya-iyer98",
+  "repo": "payments-api",
+  "finding": "EXCESSIVE_ACCESS",
+  "detail": "Contractor with direct admin, max allowed is write",
+  "tenant_id": 1
+ },
+ {
+  "user": "Noah Verma",
+  "login": "gh-noah-verma12",
+  "repo": "*",
+  "finding": "ORPHANED_ACCOUNT",
+  "detail": "DEPROVISIONED in Okta but active in GitHub",
+  "tenant_id": 1
+ }
+]

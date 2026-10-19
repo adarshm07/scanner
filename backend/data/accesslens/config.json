@@ -1,0 +1,36 @@
+[
+ {
+  "thresholds": {
+   "unused_days": 90,
+   "never_used_days": 30,
+   "outlier_share": 0.1,
+   "missing_share": 0.8,
+   "min_cohort_size": 5
+  },
+  "rule_weights": {
+   "UNUSED_ACCESS": 1.0,
+   "NEVER_USED": 0.8,
+   "OUTLIER_ACCESS": 1.2,
+   "MISSING_ACCESS": 0.6,
+   "STALE_ACCOUNT": 2.0,
+   "DIRECT_ASSIGNMENT": 0.3,
+   "PRIVILEGED_ROLE": 2.0,
+   "TOXIC_COMBINATION": 2.5
+  },
+  "sensitivity_scale": {
+   "low": 1,
+   "medium": 2,
+   "high": 3,
+   "critical": 4
+  },
+  "toxic_pairs": [
+   {
+    "app_a": "coupa",
+    "app_b": "netsuite",
+    "reason": "Can create vendors and approve payments"
+   }
+  ],
+  "_id": 1,
+  "tenant_id": 1
+ }
+]

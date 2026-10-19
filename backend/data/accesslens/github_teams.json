@@ -1,0 +1,194 @@
+[
+ {
+  "members": [
+   {
+    "login": "gh-sneha-sharma1",
+    "role": "maintainer"
+   },
+   {
+    "login": "gh-henry-smith2",
+    "role": "member"
+   },
+   {
+    "login": "gh-mason-lewis3",
+    "role": "member"
+   },
+   {
+    "login": "gh-henry-rao4",
+    "role": "member"
+   },
+   {
+    "login": "gh-aarav-king5",
+    "role": "member"
+   },
+   {
+    "login": "gh-ananya-johnson6",
+    "role": "member"
+   },
+   {
+    "login": "gh-daniel-garcia7",
+    "role": "member"
+   },
+   {
+    "login": "gh-rahul-smith8",
+    "role": "member"
+   },
+   {
+    "login": "gh-chloe-walker9",
+    "role": "member"
+   },
+   {
+    "login": "gh-olivia-menon10",
+    "role": "member"
+   },
+   {
+    "login": "gh-chloe-khan11",
+    "role": "member"
+   },
+   {
+    "login": "gh-noah-verma12",
+    "role": "member"
+   },
+   {
+    "login": "gh-jack-iyer97",
+    "role": "member"
+   },
+   {
+    "login": "gh-priya-iyer98",
+    "role": "member"
+   },
+   {
+    "login": "gh-leo-joshi99",
+    "role": "member"
+   }
+  ],
+  "repos": [
+   {
+    "repo": "payments-api",
+    "permission": "push"
+   }
+  ],
+  "_id": "payments-devs",
+  "tenant_id": 1
+ },
+ {
+  "members": [
+   {
+    "login": "gh-siddharth-scott15",
+    "role": "maintainer"
+   },
+   {
+    "login": "gh-nisha-reddy16",
+    "role": "member"
+   },
+   {
+    "login": "gh-kavya-rao17",
+    "role": "member"
+   },
+   {
+    "login": "gh-lucas-lewis18",
+    "role": "member"
+   },
+   {
+    "login": "gh-mia-hall19",
+    "role": "member"
+   },
+   {
+    "login": "gh-daniel-clark20",
+    "role": "member"
+   },
+   {
+    "login": "gh-sneha-joshi21",
+    "role": "member"
+   },
+   {
+    "login": "gh-logan-rao22",
+    "role": "member"
+   }
+  ],
+  "repos": [
+   {
+    "repo": "web-app",
+    "permission": "push"
+   }
+  ],
+  "_id": "web-devs",
+  "tenant_id": 1
+ },
+ {
+  "members": [
+   {
+    "login": "gh-ava-lewis23",
+    "role": "maintainer"
+   },
+   {
+    "login": "gh-rohan-reddy24",
+    "role": "member"
+   },
+   {
+    "login": "gh-daniel-wilson25",
+    "role": "member"
+   },
+   {
+    "login": "gh-zoe-iyer26",
+    "role": "member"
+   },
+   {
+    "login": "gh-grace-wright27",
+    "role": "member"
+   },
+   {
+    "login": "gh-ethan-garcia28",
+    "role": "member"
+   }
+  ],
+  "repos": [
+   {
+    "repo": "infra-terraform",
+    "permission": "push"
+   }
+  ],
+  "_id": "platform",
+  "tenant_id": 1
+ },
+ {
+  "members": [
+   {
+    "login": "gh-rohan-young29",
+    "role": "maintainer"
+   },
+   {
+    "login": "gh-pooja-clark30",
+    "role": "member"
+   },
+   {
+    "login": "gh-kavya-das31",
+    "role": "member"
+   },
+   {
+    "login": "gh-noah-scott32",
+    "role": "member"
+   },
+   {
+    "login": "gh-grace-brown33",
+    "role": "member"
+   },
+   {
+    "login": "gh-sophia-bose34",
+    "role": "member"
+   },
+   {
+    "login": "gh-ella-gupta35",
+    "role": "member"
+   }
+  ],
+  "repos": [
+   {
+    "repo": "data-pipelines",
+    "permission": "push"
+   }
+  ],
+  "_id": "data",
+  "tenant_id": 1
+ }
+]

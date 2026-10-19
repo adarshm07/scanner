@@ -1,0 +1,695 @@
+[
+ {
+  "user_id": 1,
+  "cohort_id": 1,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 2,
+  "cohort_id": 1,
+  "similarity": 0.91,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 3,
+  "cohort_id": 1,
+  "similarity": 0.78,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 4,
+  "cohort_id": 1,
+  "similarity": 0.83,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 5,
+  "cohort_id": 1,
+  "similarity": 0.92,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 6,
+  "cohort_id": 1,
+  "similarity": 0.73,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 7,
+  "cohort_id": 1,
+  "similarity": 0.73,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 8,
+  "cohort_id": 1,
+  "similarity": 0.79,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 9,
+  "cohort_id": 1,
+  "similarity": 0.75,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 10,
+  "cohort_id": 1,
+  "similarity": 0.81,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 11,
+  "cohort_id": 1,
+  "similarity": 0.94,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 12,
+  "cohort_id": 1,
+  "similarity": 0.76,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 13,
+  "cohort_id": 1,
+  "similarity": 0.74,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 14,
+  "cohort_id": 1,
+  "similarity": 0.96,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 15,
+  "cohort_id": 2,
+  "similarity": 0.96,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 16,
+  "cohort_id": 2,
+  "similarity": 0.8,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 17,
+  "cohort_id": 2,
+  "similarity": 0.97,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 18,
+  "cohort_id": 2,
+  "similarity": 0.94,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 19,
+  "cohort_id": 2,
+  "similarity": 0.9,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 20,
+  "cohort_id": 2,
+  "similarity": 0.83,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 21,
+  "cohort_id": 2,
+  "similarity": 0.88,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 22,
+  "cohort_id": 2,
+  "similarity": 0.87,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 23,
+  "cohort_id": 3,
+  "similarity": 0.83,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 24,
+  "cohort_id": 3,
+  "similarity": 0.73,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 25,
+  "cohort_id": 3,
+  "similarity": 0.8,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 26,
+  "cohort_id": 3,
+  "similarity": 0.96,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 27,
+  "cohort_id": 3,
+  "similarity": 0.82,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 28,
+  "cohort_id": 3,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 29,
+  "cohort_id": 4,
+  "similarity": 0.95,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 30,
+  "cohort_id": 4,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 31,
+  "cohort_id": 4,
+  "similarity": 0.89,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 32,
+  "cohort_id": 4,
+  "similarity": 0.79,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 33,
+  "cohort_id": 4,
+  "similarity": 0.74,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 34,
+  "cohort_id": 4,
+  "similarity": 0.82,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 35,
+  "cohort_id": 4,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 36,
+  "cohort_id": 5,
+  "similarity": 0.84,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 37,
+  "cohort_id": 5,
+  "similarity": 0.73,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 38,
+  "cohort_id": 5,
+  "similarity": 0.72,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 39,
+  "cohort_id": 5,
+  "similarity": 0.74,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 40,
+  "cohort_id": 5,
+  "similarity": 0.93,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 41,
+  "cohort_id": 5,
+  "similarity": 0.88,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 42,
+  "cohort_id": 5,
+  "similarity": 0.84,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 43,
+  "cohort_id": 5,
+  "similarity": 0.74,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 44,
+  "cohort_id": 5,
+  "similarity": 0.77,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 45,
+  "cohort_id": 5,
+  "similarity": 0.88,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 46,
+  "cohort_id": 5,
+  "similarity": 0.96,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 47,
+  "cohort_id": 5,
+  "similarity": 0.84,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 48,
+  "cohort_id": 5,
+  "similarity": 0.75,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 49,
+  "cohort_id": 5,
+  "similarity": 0.92,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 50,
+  "cohort_id": 6,
+  "similarity": 0.84,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 51,
+  "cohort_id": 6,
+  "similarity": 0.94,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 52,
+  "cohort_id": 6,
+  "similarity": 0.79,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 53,
+  "cohort_id": 6,
+  "similarity": 0.88,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 54,
+  "cohort_id": 6,
+  "similarity": 0.82,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 55,
+  "cohort_id": 6,
+  "similarity": 0.81,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 56,
+  "cohort_id": 6,
+  "similarity": 0.82,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 57,
+  "cohort_id": 6,
+  "similarity": 0.77,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 58,
+  "cohort_id": 6,
+  "similarity": 0.73,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 59,
+  "cohort_id": 6,
+  "similarity": 0.83,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 60,
+  "cohort_id": 6,
+  "similarity": 0.79,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 61,
+  "cohort_id": 6,
+  "similarity": 0.93,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 62,
+  "cohort_id": 7,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 63,
+  "cohort_id": 7,
+  "similarity": 0.76,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 64,
+  "cohort_id": 7,
+  "similarity": 0.89,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 65,
+  "cohort_id": 7,
+  "similarity": 0.74,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 66,
+  "cohort_id": 7,
+  "similarity": 0.89,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 67,
+  "cohort_id": 7,
+  "similarity": 0.92,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 68,
+  "cohort_id": 7,
+  "similarity": 0.82,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 69,
+  "cohort_id": 7,
+  "similarity": 0.91,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 70,
+  "cohort_id": 8,
+  "similarity": 0.78,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 71,
+  "cohort_id": 8,
+  "similarity": 0.74,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 72,
+  "cohort_id": 8,
+  "similarity": 0.82,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 73,
+  "cohort_id": 8,
+  "similarity": 0.85,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 74,
+  "cohort_id": 8,
+  "similarity": 0.96,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 75,
+  "cohort_id": 9,
+  "similarity": 0.89,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 76,
+  "cohort_id": 9,
+  "similarity": 0.95,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 77,
+  "cohort_id": 9,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 78,
+  "cohort_id": 9,
+  "similarity": 0.78,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 79,
+  "cohort_id": 9,
+  "similarity": 0.79,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 80,
+  "cohort_id": 10,
+  "similarity": 0.82,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 81,
+  "cohort_id": 10,
+  "similarity": 0.93,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 82,
+  "cohort_id": 10,
+  "similarity": 0.73,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 83,
+  "cohort_id": 10,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 84,
+  "cohort_id": 10,
+  "similarity": 0.85,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 85,
+  "cohort_id": 10,
+  "similarity": 0.86,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 86,
+  "cohort_id": 10,
+  "similarity": 0.97,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 87,
+  "cohort_id": 10,
+  "similarity": 0.76,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 88,
+  "cohort_id": 10,
+  "similarity": 0.96,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 89,
+  "cohort_id": 10,
+  "similarity": 0.83,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 90,
+  "cohort_id": 10,
+  "similarity": 0.96,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 91,
+  "cohort_id": 10,
+  "similarity": 0.76,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 92,
+  "cohort_id": 11,
+  "similarity": 0.77,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 93,
+  "cohort_id": 11,
+  "similarity": 0.77,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 94,
+  "cohort_id": 11,
+  "similarity": 0.73,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 95,
+  "cohort_id": 11,
+  "similarity": 0.74,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 96,
+  "cohort_id": 11,
+  "similarity": 0.89,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 97,
+  "cohort_id": 12,
+  "similarity": 0.77,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 98,
+  "cohort_id": 12,
+  "similarity": 0.93,
+  "is_override": false,
+  "tenant_id": 1
+ },
+ {
+  "user_id": 99,
+  "cohort_id": 12,
+  "similarity": 0.76,
+  "is_override": false,
+  "tenant_id": 1
+ }
+]

@@ -1,0 +1,186 @@
+[
+ {
+  "id": "0oa-SYNTH-SLACK",
+  "label": "Slack",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "low",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-GWORKSPACE",
+  "label": "Google Workspace",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "low",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-ZOOM",
+  "label": "Zoom",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "low",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-JIRA",
+  "label": "Jira",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-CONFLUENCE",
+  "label": "Confluence",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-GITHUB",
+  "label": "GitHub Enterprise",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "high",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-AWS-DEV",
+  "label": "AWS Console (Dev)",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "high",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-AWS-PROD",
+  "label": "AWS Console (Prod)",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "critical",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-DATADOG",
+  "label": "Datadog",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-PAGERDUTY",
+  "label": "PagerDuty",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-SNOWFLAKE",
+  "label": "Snowflake",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "high",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-TABLEAU",
+  "label": "Tableau",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-SALESFORCE",
+  "label": "Salesforce",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "high",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-HUBSPOT",
+  "label": "HubSpot",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-FIGMA",
+  "label": "Figma",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "low",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-WORKDAY",
+  "label": "Workday",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "high",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-LATTICE",
+  "label": "Lattice",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "low",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-NETSUITE",
+  "label": "NetSuite",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "critical",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-COUPA",
+  "label": "Coupa",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "high",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-DOCUSIGN",
+  "label": "DocuSign",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-ZENDESK",
+  "label": "Zendesk",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-OKTA-ADMIN",
+  "label": "Okta Admin Console",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "critical",
+  "tenant_id": 1
+ },
+ {
+  "id": "0oa-SYNTH-1PASSWORD",
+  "label": "1Password",
+  "signOnMode": "SAML_2_0",
+  "status": "ACTIVE",
+  "sensitivity": "medium",
+  "tenant_id": 1
+ }
+]

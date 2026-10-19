@@ -1,0 +1,2081 @@
+[
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-001",
+  "email": "sneha.sharma1@acme-demo.com",
+  "first_name": "Sneha",
+  "last_name": "Sharma",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-02-03T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T02:00:00.000Z"
+  },
+  "title": "Engineering Manager",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 1
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-002",
+  "email": "henry.smith2@acme-demo.com",
+  "first_name": "Henry",
+  "last_name": "Smith",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-04-29T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-19T06:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 2
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-003",
+  "email": "mason.lewis3@acme-demo.com",
+  "first_name": "Mason",
+  "last_name": "Lewis",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-04-06T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T00:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 3
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-004",
+  "email": "henry.rao4@acme-demo.com",
+  "first_name": "Henry",
+  "last_name": "Rao",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-05-26T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T22:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 4
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-005",
+  "email": "aarav.king5@acme-demo.com",
+  "first_name": "Aarav",
+  "last_name": "King",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-09-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-16T22:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 5
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-006",
+  "email": "ananya.johnson6@acme-demo.com",
+  "first_name": "Ananya",
+  "last_name": "Johnson",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-02-12T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T19:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 6
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-007",
+  "email": "daniel.garcia7@acme-demo.com",
+  "first_name": "Daniel",
+  "last_name": "Garcia",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-05-24T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T03:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 7
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-008",
+  "email": "rahul.smith8@acme-demo.com",
+  "first_name": "Rahul",
+  "last_name": "Smith",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-07-17T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T10:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 8
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-009",
+  "email": "chloe.walker9@acme-demo.com",
+  "first_name": "Chloe",
+  "last_name": "Walker",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-07-23T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T23:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 9
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-010",
+  "email": "olivia.menon10@acme-demo.com",
+  "first_name": "Olivia",
+  "last_name": "Menon",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-05-01T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T22:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 10
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-011",
+  "email": "chloe.khan11@acme-demo.com",
+  "first_name": "Chloe",
+  "last_name": "Khan",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-07-23T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T22:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 11
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-012",
+  "email": "noah.verma12@acme-demo.com",
+  "first_name": "Noah",
+  "last_name": "Verma",
+  "status": "DEPROVISIONED",
+  "created": {
+   "$date": "2023-01-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-04-25T06:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 12
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-013",
+  "email": "rahul.garcia13@acme-demo.com",
+  "first_name": "Rahul",
+  "last_name": "Garcia",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-01-18T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T20:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 13
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-014",
+  "email": "emma.iyer14@acme-demo.com",
+  "first_name": "Emma",
+  "last_name": "Iyer",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-10-14T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-19T03:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Payments",
+  "manager_id": 1,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 14
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-015",
+  "email": "siddharth.scott15@acme-demo.com",
+  "first_name": "Siddharth",
+  "last_name": "Scott",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-11-14T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T15:00:00.000Z"
+  },
+  "title": "Engineering Manager",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 15
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-016",
+  "email": "nisha.reddy16@acme-demo.com",
+  "first_name": "Nisha",
+  "last_name": "Reddy",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-02-24T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T13:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": 15,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 16
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-017",
+  "email": "kavya.rao17@acme-demo.com",
+  "first_name": "Kavya",
+  "last_name": "Rao",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-05-13T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-16T23:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": 15,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 17
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-018",
+  "email": "lucas.lewis18@acme-demo.com",
+  "first_name": "Lucas",
+  "last_name": "Lewis",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-11-14T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T05:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": 15,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 18
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-019",
+  "email": "mia.hall19@acme-demo.com",
+  "first_name": "Mia",
+  "last_name": "Hall",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-09-27T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T04:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": 15,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 19
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-020",
+  "email": "daniel.clark20@acme-demo.com",
+  "first_name": "Daniel",
+  "last_name": "Clark",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-09-02T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T06:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": 15,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 20
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-021",
+  "email": "sneha.joshi21@acme-demo.com",
+  "first_name": "Sneha",
+  "last_name": "Joshi",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-08-17T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T10:00:00.000Z"
+  },
+  "title": "Developer",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": 15,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 21
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-022",
+  "email": "logan.rao22@acme-demo.com",
+  "first_name": "Logan",
+  "last_name": "Rao",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-10-01T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T22:00:00.000Z"
+  },
+  "title": "Senior Developer",
+  "department": "Engineering",
+  "team": "Web",
+  "manager_id": 15,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 22
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-023",
+  "email": "ava.lewis23@acme-demo.com",
+  "first_name": "Ava",
+  "last_name": "Lewis",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-01-15T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T10:00:00.000Z"
+  },
+  "title": "Platform Lead",
+  "department": "Engineering",
+  "team": "Platform",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 23
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-024",
+  "email": "rohan.reddy24@acme-demo.com",
+  "first_name": "Rohan",
+  "last_name": "Reddy",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-07-16T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T14:00:00.000Z"
+  },
+  "title": "DevOps Engineer",
+  "department": "Engineering",
+  "team": "Platform",
+  "manager_id": 23,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 24
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-025",
+  "email": "daniel.wilson25@acme-demo.com",
+  "first_name": "Daniel",
+  "last_name": "Wilson",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-11-24T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T19:00:00.000Z"
+  },
+  "title": "DevOps Engineer",
+  "department": "Engineering",
+  "team": "Platform",
+  "manager_id": 23,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 25
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-026",
+  "email": "zoe.iyer26@acme-demo.com",
+  "first_name": "Zoe",
+  "last_name": "Iyer",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-04-24T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T04:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 23,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 26
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-027",
+  "email": "grace.wright27@acme-demo.com",
+  "first_name": "Grace",
+  "last_name": "Wright",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-04-01T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T15:00:00.000Z"
+  },
+  "title": "DevOps Engineer",
+  "department": "Engineering",
+  "team": "Platform",
+  "manager_id": 23,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 27
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-028",
+  "email": "ethan.garcia28@acme-demo.com",
+  "first_name": "Ethan",
+  "last_name": "Garcia",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-09-05T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T13:00:00.000Z"
+  },
+  "title": "DevOps Engineer",
+  "department": "Engineering",
+  "team": "Platform",
+  "manager_id": 23,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 28
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-029",
+  "email": "rohan.young29@acme-demo.com",
+  "first_name": "Rohan",
+  "last_name": "Young",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-11-20T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T10:00:00.000Z"
+  },
+  "title": "Data Lead",
+  "department": "Engineering",
+  "team": "Data",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 29
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-030",
+  "email": "pooja.clark30@acme-demo.com",
+  "first_name": "Pooja",
+  "last_name": "Clark",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-12-16T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T04:00:00.000Z"
+  },
+  "title": "Analyst",
+  "department": "Engineering",
+  "team": "Data",
+  "manager_id": 29,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 30
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-031",
+  "email": "kavya.das31@acme-demo.com",
+  "first_name": "Kavya",
+  "last_name": "Das",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-05-06T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-19T04:00:00.000Z"
+  },
+  "title": "Data Engineer",
+  "department": "Engineering",
+  "team": "Data",
+  "manager_id": 29,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 31
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-032",
+  "email": "noah.scott32@acme-demo.com",
+  "first_name": "Noah",
+  "last_name": "Scott",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-06-17T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T14:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 29,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 32
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-033",
+  "email": "grace.brown33@acme-demo.com",
+  "first_name": "Grace",
+  "last_name": "Brown",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-08-12T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T12:00:00.000Z"
+  },
+  "title": "Data Engineer",
+  "department": "Engineering",
+  "team": "Data",
+  "manager_id": 29,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 33
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-034",
+  "email": "sophia.bose34@acme-demo.com",
+  "first_name": "Sophia",
+  "last_name": "Bose",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-12-26T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T03:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 29,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 34
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-035",
+  "email": "ella.gupta35@acme-demo.com",
+  "first_name": "Ella",
+  "last_name": "Gupta",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-04-05T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-16T05:00:00.000Z"
+  },
+  "title": "Data Engineer",
+  "department": "Engineering",
+  "team": "Data",
+  "manager_id": 29,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 35
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-036",
+  "email": "arjun.patel36@acme-demo.com",
+  "first_name": "Arjun",
+  "last_name": "Patel",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-05-18T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T03:00:00.000Z"
+  },
+  "title": "Sales Manager",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 36
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-037",
+  "email": "rohan.das37@acme-demo.com",
+  "first_name": "Rohan",
+  "last_name": "Das",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-02-14T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-16T01:00:00.000Z"
+  },
+  "title": "SDR",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 37
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-038",
+  "email": "sophia.menon38@acme-demo.com",
+  "first_name": "Sophia",
+  "last_name": "Menon",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-03-19T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T13:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 38
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-039",
+  "email": "henry.wright39@acme-demo.com",
+  "first_name": "Henry",
+  "last_name": "Wright",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-07-21T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T23:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 39
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-040",
+  "email": "grace.mehta40@acme-demo.com",
+  "first_name": "Grace",
+  "last_name": "Mehta",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-06-09T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-19T01:00:00.000Z"
+  },
+  "title": "Account Executive",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 40
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-041",
+  "email": "nisha.nair41@acme-demo.com",
+  "first_name": "Nisha",
+  "last_name": "Nair",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-04-06T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T00:00:00.000Z"
+  },
+  "title": "SDR",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 41
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-042",
+  "email": "emma.walker42@acme-demo.com",
+  "first_name": "Emma",
+  "last_name": "Walker",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-08-06T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T20:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 42
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-043",
+  "email": "kavya.mehta43@acme-demo.com",
+  "first_name": "Kavya",
+  "last_name": "Mehta",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-10-26T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T14:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 43
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-044",
+  "email": "ava.smith44@acme-demo.com",
+  "first_name": "Ava",
+  "last_name": "Smith",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-04-20T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T23:00:00.000Z"
+  },
+  "title": "Account Executive",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 44
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-045",
+  "email": "siddharth.iyer45@acme-demo.com",
+  "first_name": "Siddharth",
+  "last_name": "Iyer",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-05-23T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T04:00:00.000Z"
+  },
+  "title": "SDR",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 45
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-046",
+  "email": "kavya.walker46@acme-demo.com",
+  "first_name": "Kavya",
+  "last_name": "Walker",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-09-15T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T00:00:00.000Z"
+  },
+  "title": "Account Executive",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 46
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-047",
+  "email": "vikram.iyer47@acme-demo.com",
+  "first_name": "Vikram",
+  "last_name": "Iyer",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-02-23T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T10:00:00.000Z"
+  },
+  "title": "SDR",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 47
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-048",
+  "email": "vikram.kapoor48@acme-demo.com",
+  "first_name": "Vikram",
+  "last_name": "Kapoor",
+  "status": "SUSPENDED",
+  "created": {
+   "$date": "2026-03-25T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-06-20T06:00:00.000Z"
+  },
+  "title": "Account Executive",
+  "department": "Sales",
+  "team": "Sales",
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 48
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-049",
+  "email": "arjun.smith49@acme-demo.com",
+  "first_name": "Arjun",
+  "last_name": "Smith",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-08-15T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T22:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 36,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 49
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-050",
+  "email": "jack.scott50@acme-demo.com",
+  "first_name": "Jack",
+  "last_name": "Scott",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-04-02T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-16T21:00:00.000Z"
+  },
+  "title": "Marketing Director",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 50
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-051",
+  "email": "henry.young51@acme-demo.com",
+  "first_name": "Henry",
+  "last_name": "Young",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-12-09T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T13:00:00.000Z"
+  },
+  "title": "Content Specialist",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 51
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-052",
+  "email": "arjun.scott52@acme-demo.com",
+  "first_name": "Arjun",
+  "last_name": "Scott",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-11-18T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-19T03:00:00.000Z"
+  },
+  "title": "Marketing Manager",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 52
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-053",
+  "email": "mia.garcia53@acme-demo.com",
+  "first_name": "Mia",
+  "last_name": "Garcia",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-01-20T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T20:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 53
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-054",
+  "email": "kabir.lewis54@acme-demo.com",
+  "first_name": "Kabir",
+  "last_name": "Lewis",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-11-24T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T05:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 54
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-055",
+  "email": "ella.wright55@acme-demo.com",
+  "first_name": "Ella",
+  "last_name": "Wright",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-01-31T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T20:00:00.000Z"
+  },
+  "title": "Content Specialist",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 55
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-056",
+  "email": "kabir.khan56@acme-demo.com",
+  "first_name": "Kabir",
+  "last_name": "Khan",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-02-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T06:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 56
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-057",
+  "email": "mia.das57@acme-demo.com",
+  "first_name": "Mia",
+  "last_name": "Das",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-06-08T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T13:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 57
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-058",
+  "email": "lucas.patel58@acme-demo.com",
+  "first_name": "Lucas",
+  "last_name": "Patel",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-11-27T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T05:00:00.000Z"
+  },
+  "title": "Marketing Manager",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 58
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-059",
+  "email": "isha.joshi59@acme-demo.com",
+  "first_name": "Isha",
+  "last_name": "Joshi",
+  "status": "DEPROVISIONED",
+  "created": {
+   "$date": "2025-03-27T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-04-07T06:00:00.000Z"
+  },
+  "title": "Content Specialist",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 59
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-060",
+  "email": "owen.verma60@acme-demo.com",
+  "first_name": "Owen",
+  "last_name": "Verma",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-10-08T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T01:00:00.000Z"
+  },
+  "title": "Marketing Manager",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 60
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-061",
+  "email": "ava.scott61@acme-demo.com",
+  "first_name": "Ava",
+  "last_name": "Scott",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-04-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T20:00:00.000Z"
+  },
+  "title": "Content Specialist",
+  "department": "Marketing",
+  "team": "Marketing",
+  "manager_id": 50,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 61
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-062",
+  "email": "owen.bose62@acme-demo.com",
+  "first_name": "Owen",
+  "last_name": "Bose",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2022-11-18T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T01:00:00.000Z"
+  },
+  "title": "Finance Controller",
+  "department": "Finance",
+  "team": "Finance",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 62
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-063",
+  "email": "arjun.taylor63@acme-demo.com",
+  "first_name": "Arjun",
+  "last_name": "Taylor",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-06-02T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T00:00:00.000Z"
+  },
+  "title": "Accountant",
+  "department": "Finance",
+  "team": "Finance",
+  "manager_id": 62,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 63
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-064",
+  "email": "nisha.gupta64@acme-demo.com",
+  "first_name": "Nisha",
+  "last_name": "Gupta",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-12-03T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T06:00:00.000Z"
+  },
+  "title": "Accountant",
+  "department": "Finance",
+  "team": "Finance",
+  "manager_id": 62,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 64
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-065",
+  "email": "meera.wilson65@acme-demo.com",
+  "first_name": "Meera",
+  "last_name": "Wilson",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-01-27T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T22:00:00.000Z"
+  },
+  "title": "AP Specialist",
+  "department": "Finance",
+  "team": "Finance",
+  "manager_id": 62,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 65
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-066",
+  "email": "aditya.taylor66@acme-demo.com",
+  "first_name": "Aditya",
+  "last_name": "Taylor",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2022-10-29T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-19T03:00:00.000Z"
+  },
+  "title": "Accountant",
+  "department": "Finance",
+  "team": "Finance",
+  "manager_id": 62,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 66
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-067",
+  "email": "kavya.garcia67@acme-demo.com",
+  "first_name": "Kavya",
+  "last_name": "Garcia",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-06-03T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T17:00:00.000Z"
+  },
+  "title": "AP Specialist",
+  "department": "Finance",
+  "team": "Finance",
+  "manager_id": 62,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 67
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-068",
+  "email": "vikram.rao68@acme-demo.com",
+  "first_name": "Vikram",
+  "last_name": "Rao",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-03-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T12:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 62,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 68
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-069",
+  "email": "liam.young69@acme-demo.com",
+  "first_name": "Liam",
+  "last_name": "Young",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-03-10T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T13:00:00.000Z"
+  },
+  "title": "Finance Intern",
+  "department": "Finance",
+  "team": "Finance",
+  "manager_id": 62,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 69
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-070",
+  "email": "rohan.gupta70@acme-demo.com",
+  "first_name": "Rohan",
+  "last_name": "Gupta",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-03-20T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T20:00:00.000Z"
+  },
+  "title": "HR Manager",
+  "department": "HR",
+  "team": "People",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 70
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-071",
+  "email": "sneha.singh71@acme-demo.com",
+  "first_name": "Sneha",
+  "last_name": "Singh",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-12-13T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T17:00:00.000Z"
+  },
+  "title": "Recruiter",
+  "department": "HR",
+  "team": "People",
+  "manager_id": 70,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 71
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-072",
+  "email": "logan.das72@acme-demo.com",
+  "first_name": "Logan",
+  "last_name": "Das",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-12-03T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T18:00:00.000Z"
+  },
+  "title": "HR Partner",
+  "department": "HR",
+  "team": "People",
+  "manager_id": 70,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 72
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-073",
+  "email": "ava.verma73@acme-demo.com",
+  "first_name": "Ava",
+  "last_name": "Verma",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-06-12T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T13:00:00.000Z"
+  },
+  "title": "Recruiter",
+  "department": "HR",
+  "team": "People",
+  "manager_id": 70,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 73
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-074",
+  "email": "zoe.nair74@acme-demo.com",
+  "first_name": "Zoe",
+  "last_name": "Nair",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-06-16T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T12:00:00.000Z"
+  },
+  "title": "HR Partner",
+  "department": "HR",
+  "team": "People",
+  "manager_id": 70,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 74
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-075",
+  "email": "vikram.clark75@acme-demo.com",
+  "first_name": "Vikram",
+  "last_name": "Clark",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-02-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T00:00:00.000Z"
+  },
+  "title": "Head of IT & Security",
+  "department": "IT",
+  "team": "IT",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 75
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-076",
+  "email": "ethan.joshi76@acme-demo.com",
+  "first_name": "Ethan",
+  "last_name": "Joshi",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-02-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T10:00:00.000Z"
+  },
+  "title": "Security Engineer",
+  "department": "IT",
+  "team": "IT",
+  "manager_id": 75,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 76
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-077",
+  "email": "olivia.wright77@acme-demo.com",
+  "first_name": "Olivia",
+  "last_name": "Wright",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-04-26T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T00:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 75,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 77
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-078",
+  "email": "liam.iyer78@acme-demo.com",
+  "first_name": "Liam",
+  "last_name": "Iyer",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-12-21T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T17:00:00.000Z"
+  },
+  "title": "Security Engineer",
+  "department": "IT",
+  "team": "IT",
+  "manager_id": 75,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 78
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-079",
+  "email": "siddharth.brown79@acme-demo.com",
+  "first_name": "Siddharth",
+  "last_name": "Brown",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2022-09-24T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T18:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 75,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 79
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-080",
+  "email": "aarav.scott80@acme-demo.com",
+  "first_name": "Aarav",
+  "last_name": "Scott",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-01-14T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T01:00:00.000Z"
+  },
+  "title": "Support Manager",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 80
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-081",
+  "email": "emma.das81@acme-demo.com",
+  "first_name": "Emma",
+  "last_name": "Das",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-03-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-16T02:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 81
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-082",
+  "email": "pooja.das82@acme-demo.com",
+  "first_name": "Pooja",
+  "last_name": "Das",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-04-19T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T16:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 82
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-083",
+  "email": "aditya.rao83@acme-demo.com",
+  "first_name": "Aditya",
+  "last_name": "Rao",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-07-25T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T15:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 83
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-084",
+  "email": "sophia.wright84@acme-demo.com",
+  "first_name": "Sophia",
+  "last_name": "Wright",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-01-23T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T14:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 84
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-085",
+  "email": "sophia.garcia85@acme-demo.com",
+  "first_name": "Sophia",
+  "last_name": "Garcia",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-03-03T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-13T21:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 85
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-086",
+  "email": "ananya.wilson86@acme-demo.com",
+  "first_name": "Ananya",
+  "last_name": "Wilson",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-08-10T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T02:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 86
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-087",
+  "email": "mia.young87@acme-demo.com",
+  "first_name": "Mia",
+  "last_name": "Young",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-06-08T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T17:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 87
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-088",
+  "email": "nisha.rao88@acme-demo.com",
+  "first_name": "Nisha",
+  "last_name": "Rao",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-04-15T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T17:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 88
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-089",
+  "email": "kavya.young89@acme-demo.com",
+  "first_name": "Kavya",
+  "last_name": "Young",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-07-11T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-16T06:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 89
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-090",
+  "email": "zoe.king90@acme-demo.com",
+  "first_name": "Zoe",
+  "last_name": "King",
+  "status": "SUSPENDED",
+  "created": {
+   "$date": "2024-06-13T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-04-25T06:00:00.000Z"
+  },
+  "title": "Support Agent",
+  "department": "Support",
+  "team": "Support",
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 90
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-091",
+  "email": "mason.mehta91@acme-demo.com",
+  "first_name": "Mason",
+  "last_name": "Mehta",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-05-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T15:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 80,
+  "employee_type": "Employee",
+  "country_code": "US",
+  "_id": 91
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-092",
+  "email": "ananya.joshi92@acme-demo.com",
+  "first_name": "Ananya",
+  "last_name": "Joshi",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2022-10-30T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-14T01:00:00.000Z"
+  },
+  "title": "Head of Product",
+  "department": "Product",
+  "team": "Payments",
+  "manager_id": null,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 92
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-093",
+  "email": "lucas.verma93@acme-demo.com",
+  "first_name": "Lucas",
+  "last_name": "Verma",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-08-23T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T12:00:00.000Z"
+  },
+  "title": "Product Manager",
+  "department": "Product",
+  "team": "Payments",
+  "manager_id": 92,
+  "employee_type": "Employee",
+  "country_code": "GB",
+  "_id": 93
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-094",
+  "email": "priya.smith94@acme-demo.com",
+  "first_name": "Priya",
+  "last_name": "Smith",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2023-01-12T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-17T16:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 92,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 94
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-095",
+  "email": "kabir.taylor95@acme-demo.com",
+  "first_name": "Kabir",
+  "last_name": "Taylor",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2024-10-19T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T20:00:00.000Z"
+  },
+  "title": "Product Manager",
+  "department": "Product",
+  "team": "Payments",
+  "manager_id": 92,
+  "employee_type": "Employee",
+  "country_code": "IN",
+  "_id": 95
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-096",
+  "email": "owen.garcia96@acme-demo.com",
+  "first_name": "Owen",
+  "last_name": "Garcia",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2026-03-06T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-18T13:00:00.000Z"
+  },
+  "title": null,
+  "department": null,
+  "team": null,
+  "manager_id": 92,
+  "employee_type": "Employee",
+  "country_code": "DE",
+  "_id": 96
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-097",
+  "email": "jack.iyer97@acme-demo.com",
+  "first_name": "Jack",
+  "last_name": "Iyer",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2022-12-28T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-12T10:00:00.000Z"
+  },
+  "title": "Contract Developer",
+  "department": "Contractor",
+  "team": "Payments",
+  "manager_id": null,
+  "employee_type": "Contractor",
+  "country_code": "GB",
+  "_id": 97
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-098",
+  "email": "priya.iyer98@acme-demo.com",
+  "first_name": "Priya",
+  "last_name": "Iyer",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-07-08T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T02:00:00.000Z"
+  },
+  "title": "Contract Developer",
+  "department": "Contractor",
+  "team": "Payments",
+  "manager_id": 97,
+  "employee_type": "Contractor",
+  "country_code": "GB",
+  "_id": 98
+ },
+ {
+  "tenant_id": 1,
+  "okta_id": "00u-SYNTH-099",
+  "email": "leo.joshi99@acme-demo.com",
+  "first_name": "Leo",
+  "last_name": "Joshi",
+  "status": "ACTIVE",
+  "created": {
+   "$date": "2025-12-29T06:00:00.000Z"
+  },
+  "last_login": {
+   "$date": "2026-10-15T22:00:00.000Z"
+  },
+  "title": "Contract Developer",
+  "department": "Contractor",
+  "team": "Payments",
+  "manager_id": 97,
+  "employee_type": "Contractor",
+  "country_code": "IN",
+  "_id": 99
+ }
+]
