@@ -42,6 +42,16 @@ export function maskValue(value: string): string {
 /** PEM header/footer lines ("-----BEGIN RSA PRIVATE KEY-----") carry no secret material. */
 const PEM_ARMOR = /^-----(BEGIN|END) [A-Z0-9 ]+-----$/;
 
+/**
+ * Shortest run of a secret that is masked when it shows up on its own. Code often repeats
+ * part of a secret (a test asserting `!out.includes("MIICXgIBAAKB…")`, a log prefix, a
+ * truncated copy), and whole-value matching misses those. 10 random characters are long
+ * enough not to collide with ordinary identifiers.
+ */
+const MIN_FRAGMENT_LENGTH = 10;
+/** Runs of characters that secrets are made of (base64, base64url, hex, key prefixes). */
+const TOKEN_RUN = /[A-Za-z0-9+/=_-]{10,}/g;
+
 export function maskText(text: string, secrets: string[]): string {
   let out = text;
   for (const s of secrets) {
@@ -55,7 +65,44 @@ export function maskText(text: string, secrets: string[]): string {
       }
     }
   }
-  return out;
+  return maskFragments(out, secrets);
+}
+
+/** Mask any run of text that is a piece (>= MIN_FRAGMENT_LENGTH chars) of a known secret. */
+function maskFragments(text: string, secrets: string[]): string {
+  const bodies = secrets
+    .map((s) => s.split(/\r?\n/).filter((l) => !PEM_ARMOR.test(l.trim())).join("").replace(/\s+/g, ""))
+    .filter((b) => b.length >= MIN_FRAGMENT_LENGTH);
+  if (bodies.length === 0) return text;
+  return text.replace(TOKEN_RUN, (run) => {
+    // Already-masked values ("MIIC****") contain no secret material beyond 4 chars.
+    if (run.endsWith("****")) return run;
+    return bodies.some((b) => b.includes(run) || containsFragment(run, b)) ? maskValue(run) : run;
+  });
+}
+
+/** True when `run` contains a MIN_FRAGMENT_LENGTH-long piece of `body`. */
+function containsFragment(run: string, body: string): boolean {
+  for (let i = 0; i + MIN_FRAGMENT_LENGTH <= run.length; i++) {
+    if (body.includes(run.slice(i, i + MIN_FRAGMENT_LENGTH))) return true;
+  }
+  return false;
+}
+
+/** Private-key material that no detector reported (PEM blocks, DER/base64 key bodies). */
+const PEM_ARMOR_ANY = /-----(BEGIN|END) [A-Z0-9 ]*PRIVATE KEY-----/g;
+const KEY_BODY = /\bMII[A-Za-z0-9+/]{17,}={0,2}/g;
+
+/**
+ * Last line of defense before text leaves for the LLM gateway: redact anything that looks
+ * like private-key material, whether or not a scanner reported it. Line structure is kept
+ * so line-numbered snippets still line up. PEM armor is replaced too, since gateway secret
+ * detectors match on the header alone.
+ */
+export function scrubKeyMaterial(text: string): string {
+  return text
+    .replace(PEM_ARMOR_ANY, (_m, edge: string) => `[private key ${edge === "BEGIN" ? "start" : "end"}]`)
+    .replace(KEY_BODY, "MII****");
 }
 
 function maskDeep(value: unknown, secrets: string[]): unknown {

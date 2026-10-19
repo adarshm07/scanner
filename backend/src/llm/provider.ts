@@ -17,6 +17,14 @@ export interface LlmProvider {
 }
 
 /**
+ * The gateway or the model's own safety system refused to produce a response (an output
+ * guardrail). Triage retries such batches in smaller pieces; see orchestrator/triage.ts.
+ */
+export class GuardrailBlockedError extends Error {
+  readonly name = "GuardrailBlockedError";
+}
+
+/**
  * Parse a JSON object out of an LLM response. Tolerates ```json fences and
  * surrounding prose by extracting the outermost {...} block as a fallback.
  */
