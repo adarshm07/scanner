@@ -1,0 +1,122 @@
+[
+ {
+  "okta_id": "00g-SYNTH-01",
+  "name": "All-Employees",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: slack, gworkspace, zoom",
+  "tenant_id": 1,
+  "_id": 1
+ },
+ {
+  "okta_id": "00g-SYNTH-02",
+  "name": "MD-Okta-Github",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: github",
+  "tenant_id": 1,
+  "_id": 2
+ },
+ {
+  "okta_id": "00g-SYNTH-03",
+  "name": "Eng-Backend",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: jira, confluence, aws-dev, datadog",
+  "tenant_id": 1,
+  "_id": 3
+ },
+ {
+  "okta_id": "00g-SYNTH-04",
+  "name": "Eng-Frontend",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: jira, confluence, figma",
+  "tenant_id": 1,
+  "_id": 4
+ },
+ {
+  "okta_id": "00g-SYNTH-05",
+  "name": "DevOps",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: aws-dev, aws-prod, datadog, pagerduty",
+  "tenant_id": 1,
+  "_id": 5
+ },
+ {
+  "okta_id": "00g-SYNTH-06",
+  "name": "Data-Team",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: snowflake, tableau, jira",
+  "tenant_id": 1,
+  "_id": 6
+ },
+ {
+  "okta_id": "00g-SYNTH-07",
+  "name": "Sales",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: salesforce, docusign, hubspot",
+  "tenant_id": 1,
+  "_id": 7
+ },
+ {
+  "okta_id": "00g-SYNTH-08",
+  "name": "Marketing",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: hubspot, figma, tableau",
+  "tenant_id": 1,
+  "_id": 8
+ },
+ {
+  "okta_id": "00g-SYNTH-09",
+  "name": "Finance-AP",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: coupa, docusign",
+  "tenant_id": 1,
+  "_id": 9
+ },
+ {
+  "okta_id": "00g-SYNTH-10",
+  "name": "Finance-Controllers",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: netsuite, docusign",
+  "tenant_id": 1,
+  "_id": 10
+ },
+ {
+  "okta_id": "00g-SYNTH-11",
+  "name": "HR",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: workday, lattice, docusign",
+  "tenant_id": 1,
+  "_id": 11
+ },
+ {
+  "okta_id": "00g-SYNTH-12",
+  "name": "IT-Security",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: okta-admin, 1password, pagerduty, aws-dev, jira",
+  "tenant_id": 1,
+  "_id": 12
+ },
+ {
+  "okta_id": "00g-SYNTH-13",
+  "name": "Support",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: zendesk, jira",
+  "tenant_id": 1,
+  "_id": 13
+ },
+ {
+  "okta_id": "00g-SYNTH-14",
+  "name": "Product",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: jira, confluence, figma",
+  "tenant_id": 1,
+  "_id": 14
+ },
+ {
+  "okta_id": "00g-SYNTH-15",
+  "name": "Contractors-Eng",
+  "type": "OKTA_GROUP",
+  "description": "Grants access to: jira, confluence",
+  "tenant_id": 1,
+  "_id": 15
+ }
+]

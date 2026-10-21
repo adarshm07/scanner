@@ -1,0 +1,257 @@
+[
+ {
+  "visibility": "private",
+  "collaborators": [
+   {
+    "login": "gh-sneha-sharma1",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-henry-smith2",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-mason-lewis3",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-henry-rao4",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-aarav-king5",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-ananya-johnson6",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-daniel-garcia7",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-rahul-smith8",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-chloe-walker9",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-olivia-menon10",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-chloe-khan11",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-noah-verma12",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-jack-iyer97",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-priya-iyer98",
+    "role_name": "admin",
+    "source": "direct"
+   },
+   {
+    "login": "gh-leo-joshi99",
+    "role_name": "write",
+    "source": "team:payments-devs"
+   },
+   {
+    "login": "gh-priya-smith94",
+    "role_name": "write",
+    "source": "direct"
+   }
+  ],
+  "_id": "payments-api",
+  "tenant_id": 1
+ },
+ {
+  "visibility": "private",
+  "collaborators": [
+   {
+    "login": "gh-siddharth-scott15",
+    "role_name": "write",
+    "source": "team:web-devs"
+   },
+   {
+    "login": "gh-nisha-reddy16",
+    "role_name": "write",
+    "source": "team:web-devs"
+   },
+   {
+    "login": "gh-kavya-rao17",
+    "role_name": "write",
+    "source": "team:web-devs"
+   },
+   {
+    "login": "gh-lucas-lewis18",
+    "role_name": "write",
+    "source": "team:web-devs"
+   },
+   {
+    "login": "gh-mia-hall19",
+    "role_name": "write",
+    "source": "team:web-devs"
+   },
+   {
+    "login": "gh-daniel-clark20",
+    "role_name": "write",
+    "source": "team:web-devs"
+   },
+   {
+    "login": "gh-sneha-joshi21",
+    "role_name": "write",
+    "source": "team:web-devs"
+   },
+   {
+    "login": "gh-logan-rao22",
+    "role_name": "write",
+    "source": "team:web-devs"
+   }
+  ],
+  "_id": "web-app",
+  "tenant_id": 1
+ },
+ {
+  "visibility": "private",
+  "collaborators": [
+   {
+    "login": "gh-ava-lewis23",
+    "role_name": "admin",
+    "source": "direct"
+   },
+   {
+    "login": "gh-rohan-reddy24",
+    "role_name": "admin",
+    "source": "org_owner"
+   },
+   {
+    "login": "gh-daniel-wilson25",
+    "role_name": "admin",
+    "source": "direct"
+   },
+   {
+    "login": "gh-zoe-iyer26",
+    "role_name": "admin",
+    "source": "direct"
+   },
+   {
+    "login": "gh-grace-wright27",
+    "role_name": "admin",
+    "source": "direct"
+   },
+   {
+    "login": "gh-ethan-garcia28",
+    "role_name": "admin",
+    "source": "direct"
+   },
+   {
+    "login": "gh-henry-rao4",
+    "role_name": "admin",
+    "source": "direct"
+   }
+  ],
+  "_id": "infra-terraform",
+  "tenant_id": 1
+ },
+ {
+  "visibility": "private",
+  "collaborators": [
+   {
+    "login": "gh-rohan-young29",
+    "role_name": "write",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-pooja-clark30",
+    "role_name": "write",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-kavya-das31",
+    "role_name": "write",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-noah-scott32",
+    "role_name": "write",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-grace-brown33",
+    "role_name": "write",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-sophia-bose34",
+    "role_name": "write",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-ella-gupta35",
+    "role_name": "write",
+    "source": "team:data"
+   }
+  ],
+  "_id": "data-pipelines",
+  "tenant_id": 1
+ },
+ {
+  "visibility": "private",
+  "collaborators": [
+   {
+    "login": "gh-rohan-young29",
+    "role_name": "read",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-pooja-clark30",
+    "role_name": "read",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-kavya-das31",
+    "role_name": "read",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-noah-scott32",
+    "role_name": "read",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-sophia-bose34",
+    "role_name": "read",
+    "source": "team:data"
+   },
+   {
+    "login": "gh-ella-gupta35",
+    "role_name": "read",
+    "source": "team:data"
+   }
+  ],
+  "_id": "data-warehouse",
+  "tenant_id": 1
+ }
+]

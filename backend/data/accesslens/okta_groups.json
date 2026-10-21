@@ -1,0 +1,400 @@
+[
+ {
+  "id": "00g-SYNTH-01",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "All-Employees",
+   "description": "Grants access to: slack, gworkspace, zoom"
+  },
+  "members": [
+   "00u-SYNTH-001",
+   "00u-SYNTH-002",
+   "00u-SYNTH-003",
+   "00u-SYNTH-004",
+   "00u-SYNTH-005",
+   "00u-SYNTH-006",
+   "00u-SYNTH-007",
+   "00u-SYNTH-008",
+   "00u-SYNTH-009",
+   "00u-SYNTH-010",
+   "00u-SYNTH-011",
+   "00u-SYNTH-012",
+   "00u-SYNTH-013",
+   "00u-SYNTH-014",
+   "00u-SYNTH-015",
+   "00u-SYNTH-016",
+   "00u-SYNTH-017",
+   "00u-SYNTH-018",
+   "00u-SYNTH-019",
+   "00u-SYNTH-020",
+   "00u-SYNTH-021",
+   "00u-SYNTH-022",
+   "00u-SYNTH-023",
+   "00u-SYNTH-024",
+   "00u-SYNTH-025",
+   "00u-SYNTH-026",
+   "00u-SYNTH-027",
+   "00u-SYNTH-028",
+   "00u-SYNTH-029",
+   "00u-SYNTH-030",
+   "00u-SYNTH-031",
+   "00u-SYNTH-032",
+   "00u-SYNTH-033",
+   "00u-SYNTH-034",
+   "00u-SYNTH-035",
+   "00u-SYNTH-036",
+   "00u-SYNTH-037",
+   "00u-SYNTH-038",
+   "00u-SYNTH-039",
+   "00u-SYNTH-040",
+   "00u-SYNTH-041",
+   "00u-SYNTH-042",
+   "00u-SYNTH-043",
+   "00u-SYNTH-044",
+   "00u-SYNTH-045",
+   "00u-SYNTH-046",
+   "00u-SYNTH-047",
+   "00u-SYNTH-048",
+   "00u-SYNTH-049",
+   "00u-SYNTH-050",
+   "00u-SYNTH-051",
+   "00u-SYNTH-052",
+   "00u-SYNTH-053",
+   "00u-SYNTH-054",
+   "00u-SYNTH-055",
+   "00u-SYNTH-056",
+   "00u-SYNTH-057",
+   "00u-SYNTH-058",
+   "00u-SYNTH-059",
+   "00u-SYNTH-060",
+   "00u-SYNTH-061",
+   "00u-SYNTH-062",
+   "00u-SYNTH-063",
+   "00u-SYNTH-064",
+   "00u-SYNTH-065",
+   "00u-SYNTH-066",
+   "00u-SYNTH-067",
+   "00u-SYNTH-068",
+   "00u-SYNTH-069",
+   "00u-SYNTH-070",
+   "00u-SYNTH-071",
+   "00u-SYNTH-072",
+   "00u-SYNTH-073",
+   "00u-SYNTH-074",
+   "00u-SYNTH-075",
+   "00u-SYNTH-076",
+   "00u-SYNTH-077",
+   "00u-SYNTH-078",
+   "00u-SYNTH-079",
+   "00u-SYNTH-080",
+   "00u-SYNTH-081",
+   "00u-SYNTH-082",
+   "00u-SYNTH-083",
+   "00u-SYNTH-084",
+   "00u-SYNTH-085",
+   "00u-SYNTH-086",
+   "00u-SYNTH-087",
+   "00u-SYNTH-088",
+   "00u-SYNTH-089",
+   "00u-SYNTH-090",
+   "00u-SYNTH-091",
+   "00u-SYNTH-092",
+   "00u-SYNTH-093",
+   "00u-SYNTH-094",
+   "00u-SYNTH-095",
+   "00u-SYNTH-096",
+   "00u-SYNTH-097",
+   "00u-SYNTH-098",
+   "00u-SYNTH-099"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-02",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "MD-Okta-Github",
+   "description": "Grants access to: github"
+  },
+  "members": [
+   "00u-SYNTH-001",
+   "00u-SYNTH-002",
+   "00u-SYNTH-003",
+   "00u-SYNTH-004",
+   "00u-SYNTH-005",
+   "00u-SYNTH-006",
+   "00u-SYNTH-007",
+   "00u-SYNTH-008",
+   "00u-SYNTH-009",
+   "00u-SYNTH-010",
+   "00u-SYNTH-011",
+   "00u-SYNTH-012",
+   "00u-SYNTH-015",
+   "00u-SYNTH-016",
+   "00u-SYNTH-017",
+   "00u-SYNTH-018",
+   "00u-SYNTH-019",
+   "00u-SYNTH-020",
+   "00u-SYNTH-021",
+   "00u-SYNTH-022",
+   "00u-SYNTH-023",
+   "00u-SYNTH-024",
+   "00u-SYNTH-025",
+   "00u-SYNTH-026",
+   "00u-SYNTH-027",
+   "00u-SYNTH-028",
+   "00u-SYNTH-029",
+   "00u-SYNTH-030",
+   "00u-SYNTH-031",
+   "00u-SYNTH-032",
+   "00u-SYNTH-033",
+   "00u-SYNTH-034",
+   "00u-SYNTH-035",
+   "00u-SYNTH-094",
+   "00u-SYNTH-097",
+   "00u-SYNTH-098",
+   "00u-SYNTH-099"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-03",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Eng-Backend",
+   "description": "Grants access to: jira, confluence, aws-dev, datadog"
+  },
+  "members": [
+   "00u-SYNTH-001",
+   "00u-SYNTH-002",
+   "00u-SYNTH-003",
+   "00u-SYNTH-004",
+   "00u-SYNTH-005",
+   "00u-SYNTH-006",
+   "00u-SYNTH-007",
+   "00u-SYNTH-008",
+   "00u-SYNTH-009",
+   "00u-SYNTH-010",
+   "00u-SYNTH-011",
+   "00u-SYNTH-012"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-04",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Eng-Frontend",
+   "description": "Grants access to: jira, confluence, figma"
+  },
+  "members": [
+   "00u-SYNTH-015",
+   "00u-SYNTH-016",
+   "00u-SYNTH-017",
+   "00u-SYNTH-018",
+   "00u-SYNTH-019",
+   "00u-SYNTH-020",
+   "00u-SYNTH-021",
+   "00u-SYNTH-022"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-05",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "DevOps",
+   "description": "Grants access to: aws-dev, aws-prod, datadog, pagerduty"
+  },
+  "members": [
+   "00u-SYNTH-023",
+   "00u-SYNTH-024",
+   "00u-SYNTH-025",
+   "00u-SYNTH-026",
+   "00u-SYNTH-027",
+   "00u-SYNTH-028"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-06",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Data-Team",
+   "description": "Grants access to: snowflake, tableau, jira"
+  },
+  "members": [
+   "00u-SYNTH-029",
+   "00u-SYNTH-030",
+   "00u-SYNTH-031",
+   "00u-SYNTH-032",
+   "00u-SYNTH-033",
+   "00u-SYNTH-034",
+   "00u-SYNTH-035"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-07",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Sales",
+   "description": "Grants access to: salesforce, docusign, hubspot"
+  },
+  "members": [
+   "00u-SYNTH-036",
+   "00u-SYNTH-037",
+   "00u-SYNTH-038",
+   "00u-SYNTH-039",
+   "00u-SYNTH-040",
+   "00u-SYNTH-041",
+   "00u-SYNTH-042",
+   "00u-SYNTH-043",
+   "00u-SYNTH-044",
+   "00u-SYNTH-045",
+   "00u-SYNTH-046",
+   "00u-SYNTH-047",
+   "00u-SYNTH-048",
+   "00u-SYNTH-049"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-08",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Marketing",
+   "description": "Grants access to: hubspot, figma, tableau"
+  },
+  "members": [
+   "00u-SYNTH-050",
+   "00u-SYNTH-051",
+   "00u-SYNTH-052",
+   "00u-SYNTH-053",
+   "00u-SYNTH-054",
+   "00u-SYNTH-055",
+   "00u-SYNTH-056",
+   "00u-SYNTH-057",
+   "00u-SYNTH-058",
+   "00u-SYNTH-059",
+   "00u-SYNTH-060",
+   "00u-SYNTH-061"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-09",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Finance-AP",
+   "description": "Grants access to: coupa, docusign"
+  },
+  "members": [
+   "00u-SYNTH-062",
+   "00u-SYNTH-064",
+   "00u-SYNTH-066",
+   "00u-SYNTH-068"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-10",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Finance-Controllers",
+   "description": "Grants access to: netsuite, docusign"
+  },
+  "members": [
+   "00u-SYNTH-063",
+   "00u-SYNTH-065",
+   "00u-SYNTH-067",
+   "00u-SYNTH-069"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-11",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "HR",
+   "description": "Grants access to: workday, lattice, docusign"
+  },
+  "members": [
+   "00u-SYNTH-070",
+   "00u-SYNTH-071",
+   "00u-SYNTH-072",
+   "00u-SYNTH-073",
+   "00u-SYNTH-074"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-12",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "IT-Security",
+   "description": "Grants access to: okta-admin, 1password, pagerduty, aws-dev, jira"
+  },
+  "members": [
+   "00u-SYNTH-075",
+   "00u-SYNTH-076",
+   "00u-SYNTH-077",
+   "00u-SYNTH-078",
+   "00u-SYNTH-079"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-13",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Support",
+   "description": "Grants access to: zendesk, jira"
+  },
+  "members": [
+   "00u-SYNTH-080",
+   "00u-SYNTH-081",
+   "00u-SYNTH-082",
+   "00u-SYNTH-083",
+   "00u-SYNTH-084",
+   "00u-SYNTH-085",
+   "00u-SYNTH-086",
+   "00u-SYNTH-087",
+   "00u-SYNTH-088",
+   "00u-SYNTH-089",
+   "00u-SYNTH-090",
+   "00u-SYNTH-091"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-14",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Product",
+   "description": "Grants access to: jira, confluence, figma"
+  },
+  "members": [
+   "00u-SYNTH-092",
+   "00u-SYNTH-093",
+   "00u-SYNTH-094",
+   "00u-SYNTH-095",
+   "00u-SYNTH-096"
+  ],
+  "tenant_id": 1
+ },
+ {
+  "id": "00g-SYNTH-15",
+  "type": "OKTA_GROUP",
+  "profile": {
+   "name": "Contractors-Eng",
+   "description": "Grants access to: jira, confluence"
+  },
+  "members": [
+   "00u-SYNTH-097",
+   "00u-SYNTH-098",
+   "00u-SYNTH-099"
+  ],
+  "tenant_id": 1
+ }
+]

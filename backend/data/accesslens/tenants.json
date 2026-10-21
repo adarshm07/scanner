@@ -1,0 +1,11 @@
+[
+ {
+  "okta_domain": "acme-demo.okta.com",
+  "client_id": "0oa-SYNTH-CLIENT",
+  "key_ref": "secretsmanager://synthetic/okta-key",
+  "last_sync_at": {
+   "$date": "2026-10-19T06:00:00.000Z"
+  },
+  "_id": 1
+ }
+]

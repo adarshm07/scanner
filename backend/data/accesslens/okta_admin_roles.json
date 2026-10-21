@@ -1,0 +1,32 @@
+[
+ {
+  "userId": "00u-SYNTH-075",
+  "type": "SUPER_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-076",
+  "type": "APP_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-077",
+  "type": "HELP_DESK_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-069",
+  "type": "APP_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-053",
+  "type": "SUPER_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "userId": "00u-SYNTH-071",
+  "type": "USER_ADMIN",
+  "tenant_id": 1
+ }
+]

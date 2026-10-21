@@ -8,10 +8,24 @@ import { ScanProgress } from "./components/ScanProgress";
 import { ReportView } from "./components/ReportView";
 import { WorkflowPanel } from "./components/WorkflowPanel";
 import { streamScan } from "./lib/scanStream";
+import { AccessLensView } from "./accesslens/AccessLensView";
 
 type Mode = "repo" | "domain";
 
 export default function App() {
+  const [view, setView] = useState<"scan" | "access">(() =>
+    window.location.hash === "#access" ? "access" : "scan"
+  );
+  useEffect(() => {
+    const onHash = () => setView(window.location.hash === "#access" ? "access" : "scan");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  if (view === "access") return <AccessLensView onBack={() => (window.location.hash = "")} />;
+  return <ScannerApp />;
+}
+
+function ScannerApp() {
   const [mode, setMode] = useState<Mode>("repo");
   const [checks, setChecks] = useState<Check[]>([]);
   const [providers, setProviders] = useState<ProviderDescriptor[]>([]);
@@ -187,8 +201,14 @@ export default function App() {
   return (
     <div className="min-h-screen bg-ink text-ink3">
       <header className="flex h-[52px] items-center gap-3 border-b border-line px-6">
-        <span className="text-[15px] font-semibold tracking-[-0.01em]">Scanner-X</span>
-        <span className="text-[13px] text-muted">
+        <span className="whitespace-nowrap text-[15px] font-semibold tracking-[-0.01em]">Scanner-X</span>
+        <nav className="ml-2 flex shrink-0 gap-1 whitespace-nowrap">
+          <span className="rounded-[3px] bg-ink3 px-2.5 py-1 text-[13px] font-medium text-ink">Code &amp; domain scan</span>
+          <a href="#access" className="rounded-[3px] px-2.5 py-1 text-[13px] text-text3 no-underline hover:bg-hover">
+            Access review
+          </a>
+        </nav>
+        <span className="hidden text-[13px] text-muted lg:inline">
           Deterministic security tools + thin LLM triage
         </span>
         <div className="grow" />

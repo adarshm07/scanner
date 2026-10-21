@@ -1,0 +1,232 @@
+[
+ {
+  "okta_id": "0oa-SYNTH-SLACK",
+  "key": "slack",
+  "label": "Slack",
+  "sensitivity": "low",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 1
+ },
+ {
+  "okta_id": "0oa-SYNTH-GWORKSPACE",
+  "key": "gworkspace",
+  "label": "Google Workspace",
+  "sensitivity": "low",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 2
+ },
+ {
+  "okta_id": "0oa-SYNTH-ZOOM",
+  "key": "zoom",
+  "label": "Zoom",
+  "sensitivity": "low",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 3
+ },
+ {
+  "okta_id": "0oa-SYNTH-JIRA",
+  "key": "jira",
+  "label": "Jira",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 4
+ },
+ {
+  "okta_id": "0oa-SYNTH-CONFLUENCE",
+  "key": "confluence",
+  "label": "Confluence",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 5
+ },
+ {
+  "okta_id": "0oa-SYNTH-GITHUB",
+  "key": "github",
+  "label": "GitHub Enterprise",
+  "sensitivity": "high",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 6
+ },
+ {
+  "okta_id": "0oa-SYNTH-AWS-DEV",
+  "key": "aws-dev",
+  "label": "AWS Console (Dev)",
+  "sensitivity": "high",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 7
+ },
+ {
+  "okta_id": "0oa-SYNTH-AWS-PROD",
+  "key": "aws-prod",
+  "label": "AWS Console (Prod)",
+  "sensitivity": "critical",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 8
+ },
+ {
+  "okta_id": "0oa-SYNTH-DATADOG",
+  "key": "datadog",
+  "label": "Datadog",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 9
+ },
+ {
+  "okta_id": "0oa-SYNTH-PAGERDUTY",
+  "key": "pagerduty",
+  "label": "PagerDuty",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 10
+ },
+ {
+  "okta_id": "0oa-SYNTH-SNOWFLAKE",
+  "key": "snowflake",
+  "label": "Snowflake",
+  "sensitivity": "high",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 11
+ },
+ {
+  "okta_id": "0oa-SYNTH-TABLEAU",
+  "key": "tableau",
+  "label": "Tableau",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 12
+ },
+ {
+  "okta_id": "0oa-SYNTH-SALESFORCE",
+  "key": "salesforce",
+  "label": "Salesforce",
+  "sensitivity": "high",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 13
+ },
+ {
+  "okta_id": "0oa-SYNTH-HUBSPOT",
+  "key": "hubspot",
+  "label": "HubSpot",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 14
+ },
+ {
+  "okta_id": "0oa-SYNTH-FIGMA",
+  "key": "figma",
+  "label": "Figma",
+  "sensitivity": "low",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 15
+ },
+ {
+  "okta_id": "0oa-SYNTH-WORKDAY",
+  "key": "workday",
+  "label": "Workday",
+  "sensitivity": "high",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 16
+ },
+ {
+  "okta_id": "0oa-SYNTH-LATTICE",
+  "key": "lattice",
+  "label": "Lattice",
+  "sensitivity": "low",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 17
+ },
+ {
+  "okta_id": "0oa-SYNTH-NETSUITE",
+  "key": "netsuite",
+  "label": "NetSuite",
+  "sensitivity": "critical",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 18
+ },
+ {
+  "okta_id": "0oa-SYNTH-COUPA",
+  "key": "coupa",
+  "label": "Coupa",
+  "sensitivity": "high",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 19
+ },
+ {
+  "okta_id": "0oa-SYNTH-DOCUSIGN",
+  "key": "docusign",
+  "label": "DocuSign",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 20
+ },
+ {
+  "okta_id": "0oa-SYNTH-ZENDESK",
+  "key": "zendesk",
+  "label": "Zendesk",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 21
+ },
+ {
+  "okta_id": "0oa-SYNTH-OKTA-ADMIN",
+  "key": "okta-admin",
+  "label": "Okta Admin Console",
+  "sensitivity": "critical",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 22
+ },
+ {
+  "okta_id": "0oa-SYNTH-1PASSWORD",
+  "key": "1password",
+  "label": "1Password",
+  "sensitivity": "medium",
+  "sign_on_mode": "SAML_2_0",
+  "status": "ACTIVE",
+  "tenant_id": 1,
+  "_id": 23
+ }
+]

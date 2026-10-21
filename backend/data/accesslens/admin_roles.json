@@ -1,0 +1,32 @@
+[
+ {
+  "user_id": 75,
+  "role_type": "SUPER_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "user_id": 76,
+  "role_type": "APP_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "user_id": 77,
+  "role_type": "HELP_DESK_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "user_id": 69,
+  "role_type": "APP_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "user_id": 53,
+  "role_type": "SUPER_ADMIN",
+  "tenant_id": 1
+ },
+ {
+  "user_id": 71,
+  "role_type": "USER_ADMIN",
+  "tenant_id": 1
+ }
+]

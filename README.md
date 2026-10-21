@@ -341,6 +341,26 @@ cloned somewhere other than `~/.scanner-x`. If your Codex version doesn't load
 skills from that folder, add a line to the project's `AGENTS.md`:
 `For security scans, follow ~/.scanner-x/skills/scanner-x/SKILL.md.`
 
+## Access review (AccessLens, Okta)
+
+A second view in the web app (**Access review** tab, or `/#access`) for the Okta access right-sizing idea from the AccessLens PRD. It currently runs on synthetic data from `backend/data/accesslens/` (a MongoDB export of a fake `acme-demo.okta.com` tenant: 99 users, 23 apps, 638 assignments). It does not connect to Okta yet.
+
+- **Computed, not looked up**: Okta has no roles or findings, so AccessLens works them out from what Okta does provide (user profile and status, app assignments, admin roles, SSO sign-ins) plus our policy config. Users are grouped into cohorts by department and team; users with no department are placed in the cohort whose apps they most resemble. The eight rules (stale account, never used, unused, direct grant, outlier, missing, privileged role, separation-of-duties conflict) run in [`accesslens/engine.ts`](backend/src/accesslens/engine.ts), and the tests check them against the seed's answer key (`expected_findings.json`, all 71 matched with the same scores).
+- **User list**: everyone in the tenant, sorted by risk, with filters for flagged, inactive and no-title users.
+- **Per user**: title, department, team, inferred cohort (role), manager, groups and Okta admin roles. For every app: the app role, whether it was granted by group or directly, assignment and sync status, assigned date, last SSO, 90-day sign-in count, how many people in the cohort have it, and any rule flags (unused, never used, outlier, direct grant, stale account, SoD conflict, privileged role).
+- **Role check**: `POST /api/accesslens/users/:id/review` asks the selected model whether the user's role needs each app (**keep / review / revoke**, with a reason and confidence) and whether to **grant** apps most of the cohort has. The rules-only verdict is kept alongside, and the UI shows where the AI disagrees with it. With no model configured, or if the model call fails, the rules verdicts are used.
+- **Privacy**: the model gets role, app and usage data only. No names, emails or Okta IDs are sent.
+- **Recommendations only**: nothing is written back to Okta.
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /api/accesslens/summary` | Tenant, counts, rule totals, app catalogue |
+| `GET /api/accesslens/users` | User list with app counts, risk and latest review tally |
+| `GET /api/accesslens/users/:id` | Full access detail for one user |
+| `POST /api/accesslens/users/:id/review` | Body `{ "provider": "openai" \| "gemini" \| "claude" \| "rules", "force": true }` |
+
+Set `ACCESSLENS_DATA_DIR` to point at a different export. `backend/data/accesslens/import.sh` loads the same files into MongoDB.
+
 ## Non-goals (hackathon scope)
 
 - No active scanning (port scans, injection probes) — passive checks only.
