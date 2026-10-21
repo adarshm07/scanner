@@ -16,7 +16,7 @@ interface Derived {
   target: string;
   rows: Row[];
   rawHits: number;
-  logs: { at: number; source: string; message: string }[];
+  logs: { at: number; source: string; message: string; level?: "info" | "warn" | "error" }[];
   lastAt: number;
   done: boolean;
 }
@@ -81,7 +81,7 @@ function derive(events: ScanEvent[]): Derived {
         break;
       }
       case "log":
-        logs.push({ at: e.at, source: e.source, message: e.message });
+        logs.push({ at: e.at, source: e.source, message: e.message, level: e.level });
         break;
       case "done":
         done = true;
@@ -109,6 +109,25 @@ function fmt(ts: number): string {
   return d.toLocaleTimeString("en-GB", { hour12: false }) + "." + String(d.getMilliseconds()).padStart(3, "0");
 }
 
+/** Durations: "8.4s" under a minute, "4:07" after (one decimal stops mattering by then). */
+export function fmtDuration(ms: number): string {
+  const s = ms / 1000;
+  if (s < 60) return `${s.toFixed(1)}s`;
+  const total = Math.floor(s);
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+}
+
+/** Axis labels: whole seconds, or m:ss past a minute ("90s" reads worse than "1:30"). */
+function fmtTick(sec: number): string {
+  return sec < 60 ? `${sec}s` : `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+}
+
+const TICK_STEPS = [1, 2, 5, 10, 15, 30, 60, 120, 300, 600, 900, 1800];
+/** Smallest "nice" step that keeps the axis to at most ~7 labels, however long the scan runs. */
+export function tickStepFor(totalSecs: number): number {
+  return TICK_STEPS.find((s) => totalSecs / s <= 7) ?? TICK_STEPS[TICK_STEPS.length - 1];
+}
+
 export function ScanProgress({ events }: { events: ScanEvent[] }) {
   const d = useMemo(() => derive(events), [events]);
   const [now, setNow] = useState(Date.now());
@@ -124,16 +143,17 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [d.logs.length]);
 
+  const modelErrors = d.logs.filter((l) => l.source === "model" && l.level === "error").length;
   const started = d.startedAt ?? now;
   const clock = d.done ? d.lastAt : now;
   const elapsedMs = Math.max(0, clock - started);
   // Timeline window: at least 4s so bars are visible early.
   const windowMs = Math.max(4000, elapsedMs);
   const totalSecs = Math.ceil(windowMs / 1000);
-  const tickStep = totalSecs <= 12 ? 2 : totalSecs <= 40 ? 5 : 10;
-  const tickLabels = Array.from({ length: totalSecs + 1 }, (_, i) => i).filter(
-    (i) => i === 0 || i === totalSecs || i % tickStep === 0
-  );
+  const tickStep = tickStepFor(totalSecs);
+  // Only round multiples of the step: no trailing "current second" label that jumps every
+  // tick and collides with its neighbour.
+  const tickLabels = Array.from({ length: Math.floor(totalSecs / tickStep) + 1 }, (_, i) => i * tickStep);
 
   return (
     <div className="border border-line bg-ink">
@@ -150,8 +170,9 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
         <div className="flex gap-10 text-right">
           <div>
             <div className="text-[12px] text-muted">Elapsed</div>
-            <div className="font-mono text-[28px] font-medium tracking-[-0.02em]">
-              {(elapsedMs / 1000).toFixed(1)}s
+            {/* Fixed width + tabular digits: the header doesn't shift as the number grows. */}
+            <div className="min-w-[6.5ch] font-mono text-[28px] font-medium tabular-nums tracking-[-0.02em]">
+              {fmtDuration(elapsedMs)}
             </div>
           </div>
           <div>
@@ -168,15 +189,22 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
           <span>Step</span>
           <span>Check</span>
           <span className="relative">
-            {tickLabels.map((i) => (
-              <span
-                key={i}
-                className="absolute top-0 font-mono text-[11px]"
-                style={{ left: `${(i / totalSecs) * 100}%` }}
-              >
-                {i}s
-              </span>
-            ))}
+            {tickLabels.map((i) => {
+              const pos = (i * 1000) / windowMs;
+              return (
+                <span
+                  key={i}
+                  className="absolute top-0 whitespace-nowrap font-mono text-[11px] tabular-nums"
+                  // Centre each label on its tick; pin the edges so nothing overflows the column.
+                  style={{
+                    left: `${pos * 100}%`,
+                    transform: i === 0 ? undefined : pos > 0.95 ? "translateX(-100%)" : "translateX(-50%)",
+                  }}
+                >
+                  {fmtTick(i)}
+                </span>
+              );
+            })}
           </span>
           <span>Progress</span>
           <span className="text-right">Time</span>
@@ -226,8 +254,8 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
               >
                 {r.detail ?? (r.status === "running" ? "running…" : "")}
               </span>
-              <span className="text-right font-mono text-[12.5px] text-muted">
-                {ms > 0 ? `${(ms / 1000).toFixed(1)}s` : ""}
+              <span className="text-right font-mono text-[12.5px] tabular-nums text-muted">
+                {ms > 0 ? fmtDuration(ms) : ""}
               </span>
             </div>
           );
@@ -239,6 +267,11 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
         <div className="flex items-baseline gap-3 pb-2">
           <span className="text-[13px] font-medium">Output</span>
           <span className="text-[12px] text-muted">interleaved, newest last</span>
+          {modelErrors > 0 && (
+            <span className="ml-auto font-mono text-[12px] text-sev-critical">
+              {modelErrors} model {modelErrors === 1 ? "error" : "errors"}
+            </span>
+          )}
         </div>
         <pre
           ref={logRef}
@@ -246,9 +279,16 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
         >
           {d.logs.length === 0
             ? "  waiting for scanners…"
-            : d.logs
-                .map((l) => `${fmt(l.at)}   ${l.source.padEnd(12)}${l.message}`)
-                .join("\n")}
+            : d.logs.map((l, i) => (
+                <div
+                  key={i}
+                  className={
+                    l.level === "error" ? "text-sev-critical" : l.level === "warn" ? "text-sev-medium" : undefined
+                  }
+                >
+                  {`${fmt(l.at)}   ${l.source.padEnd(12)}${l.message}`}
+                </div>
+              ))}
         </pre>
       </div>
     </div>

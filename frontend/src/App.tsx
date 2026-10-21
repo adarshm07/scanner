@@ -41,6 +41,10 @@ function ScannerApp() {
   const [fullHistory, setFullHistory] = useState(false);
   const [baseRef, setBaseRef] = useState("");
   const [headRef, setHeadRef] = useState("");
+  // Private repo token: kept in memory only, sent with this scan, never stored or shown in commands.
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+  const [tokenUsername, setTokenUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<Report | null>(null);
@@ -101,7 +105,25 @@ function ScannerApp() {
     target.trim().length > 0 &&
     selected.size > 0 &&
     (mode === "repo" || attested) &&
+    (mode !== "repo" || !isPrivate || accessToken.trim().length > 0) &&
     !loading;
+
+  const repoHost = useMemo(() => {
+    try {
+      return new URL(targets.repo.trim()).hostname.toLowerCase();
+    } catch {
+      return "";
+    }
+  }, [targets.repo]);
+
+  const tokenHint =
+    repoHost === "bitbucket.org"
+      ? "Bitbucket: a repository access token (username x-token-auth) or an Atlassian API token with repository read scope."
+      : repoHost === "gitlab.com" || repoHost.includes("gitlab")
+        ? "GitLab: a personal or project access token with read_repository scope."
+        : repoHost === "dev.azure.com"
+          ? "Azure DevOps: a personal access token with Code (Read) scope."
+          : "GitHub: a fine-grained token with Contents: Read-only for this repo (or a classic token with repo scope).";
 
   async function runScan() {
     setLoading(true);
@@ -125,6 +147,12 @@ function ScannerApp() {
               fullHistory,
               baseRef: baseRef.trim() || undefined,
               headRef: (baseRef.trim() && headRef.trim()) || undefined,
+              ...(isPrivate && accessToken.trim()
+                ? {
+                    accessToken: accessToken.trim(),
+                    tokenUsername: (repoHost === "bitbucket.org" && tokenUsername.trim()) || undefined,
+                  }
+                : {}),
             }
           : { domain: target.trim(), attested, checks: chosen, provider: providerId ?? undefined, failOn, triage };
 
@@ -222,6 +250,67 @@ function ScannerApp() {
                   })}
                 </div>
                 <DomainInput mode={mode} value={target} onChange={setTarget} />
+                {mode === "repo" && (
+                  <div className="flex flex-col gap-3">
+                    <label className="flex cursor-pointer items-start gap-2.5 text-[13px] text-text3">
+                      <input
+                        type="checkbox"
+                        className="mt-0.5 h-4 w-4 accent-ink3"
+                        checked={isPrivate}
+                        onChange={(e) => {
+                          setIsPrivate(e.target.checked);
+                          if (!e.target.checked) {
+                            setAccessToken("");
+                            setTokenUsername("");
+                          }
+                        }}
+                      />
+                      <span className="flex flex-col gap-0.5">
+                        <span>Private repository</span>
+                        <span className="text-[12px] text-muted">
+                          Clone with an access token for GitHub, Bitbucket, GitLab or Azure DevOps.
+                        </span>
+                      </span>
+                    </label>
+                    {isPrivate && (
+                      <div className="ml-[26px] flex flex-col gap-1.5 text-[13px] text-text3">
+                        <label htmlFor="access-token" className="font-medium text-muted">
+                          Access token
+                        </label>
+                        <input
+                          id="access-token"
+                          type="password"
+                          value={accessToken}
+                          onChange={(e) => setAccessToken(e.target.value)}
+                          placeholder="paste a read-only token"
+                          autoComplete="off"
+                          spellCheck={false}
+                          className="h-[34px] w-full rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
+                        />
+                        {repoHost === "bitbucket.org" && (
+                          <label htmlFor="token-username" className="mt-1.5 font-medium text-muted">
+                            Username <span className="font-normal text-dim">(optional)</span>
+                          </label>
+                        )}
+                        {repoHost === "bitbucket.org" && (
+                          <input
+                            id="token-username"
+                            value={tokenUsername}
+                            onChange={(e) => setTokenUsername(e.target.value)}
+                            placeholder="x-bitbucket-api-token-auth"
+                            autoComplete="off"
+                            spellCheck={false}
+                            className="h-[34px] w-full rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
+                          />
+                        )}
+                        <span className="text-[12px] text-muted">{tokenHint}</span>
+                        <span className="text-[12px] text-muted">
+                          Used only to clone this repo for this scan. Never stored, logged or included in the report.
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
                 {mode === "repo" && (
                   <label className="flex cursor-pointer items-start gap-2.5 text-[13px] text-text3">
                     <input

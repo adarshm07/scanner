@@ -4,6 +4,7 @@ import { generateReport } from "../orchestrator/report";
 import { reportStore } from "../store/reportStore";
 import { normalizeDomain, validateRef, validateRepoUrl } from "../tools/util";
 import { assertPublicHost } from "../tools/netGuard";
+import { parseRepoToken } from "../tools/gitAuth";
 import { listProviders, resolveProvider } from "../llm";
 import { CHECKS, CHECK_IDS } from "../orchestrator/checks";
 import { Severity, SEVERITY_RANK } from "../schema/finding";
@@ -40,7 +41,8 @@ async function parseRepoTarget(
   const baseRef = validateRef(body.baseRef, "baseRef");
   const headRef = validateRef(body.headRef, "headRef");
   if (headRef && !baseRef) throw new Error("headRef requires baseRef.");
-  return { repoUrl, opts: { fullHistory: body.fullHistory === true, baseRef, headRef } };
+  const token = parseRepoToken(body.accessToken, body.tokenUsername);
+  return { repoUrl, opts: { fullHistory: body.fullHistory === true, baseRef, headRef, token } };
 }
 
 async function parseDomainTarget(domain: unknown): Promise<string> {

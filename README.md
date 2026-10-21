@@ -167,9 +167,17 @@ the whole checkout, so diff scans save report noise and LLM cost, not tool runti
 
 ### Private repositories
 
-Public repos clone anonymously. To scan private repos, give the backend a
-**read-only** token per git host in `backend/.env` (never in `.env.example` or the
-repo URL; URLs with credentials are rejected).
+Public repos clone anonymously. There are two ways to scan a private repo:
+
+1. **Per scan, from the web UI**: tick **Private repository** under the repo URL and
+   paste a read-only access token (GitHub, Bitbucket, GitLab or Azure DevOps; for
+   Bitbucket you can also set the username). The token is sent with that one scan
+   request as `accessToken` (and optional `tokenUsername`), used only for the repo's
+   host, kept in memory for the clone and scan, and never stored, logged or put in
+   the report. It takes precedence over a server token for the same host.
+2. **Server-wide, in `backend/.env`**: a **read-only** token per git host, as below.
+
+Never put a token in `.env.example` or the repo URL; URLs with credentials are rejected.
 
 | Host | Token and minimum permission | Variable |
 | --- | --- | --- |
