@@ -26,6 +26,11 @@ interface RawUser {
   manager_id: number | null;
   employee_type: string;
   country_code: string;
+  github_username?: string | null;
+  github_owner?: string | null;
+  github_repo?: string | null;
+  github_repo_url?: string | null;
+  github_pat?: string | null;
 }
 interface RawApp {
   _id: number;
@@ -137,6 +142,14 @@ export interface MissingApp {
   cohortShare: number;
 }
 
+export interface GitHubAccessConfig {
+  username: string | null;
+  owner: string | null;
+  repo: string | null;
+  repoUrl: string | null;
+  tokenConfigured: boolean;
+}
+
 export interface UserSummary {
   id: number;
   oktaId: string;
@@ -158,6 +171,7 @@ export interface UserSummary {
   findingCount: number;
   riskScore: number;
   topRules: string[];
+  github: GitHubAccessConfig | null;
 }
 
 export interface UserDetail extends UserSummary {
@@ -197,17 +211,25 @@ function read<T>(dir: string, name: string): T {
   return JSON.parse(fs.readFileSync(path.join(dir, `${name}.json`), "utf8")) as T;
 }
 
+function readOptional<T>(dir: string, name: string): T | null {
+  const file = path.join(dir, `${name}.json`);
+  if (!fs.existsSync(file)) return null;
+  return JSON.parse(fs.readFileSync(file, "utf8")) as T;
+}
+
 export function buildDataset(dir = dataDir()): Dataset {
-  const users = read<RawUser[]>(dir, "users");
+  const baseUsers = read<RawUser[]>(dir, "users");
+  const demoUsersFile = readOptional<{ users?: RawUser[]; assignments?: RawAssignment[]; usage?: RawUsage[]; admin_roles?: { user_id: number; role_type: string }[]; findings?: RawFinding[] }>(dir, "demo_users");
+  const users = [...baseUsers, ...(demoUsersFile?.users ?? [])];
   const apps = read<RawApp[]>(dir, "apps");
-  const assignments = read<RawAssignment[]>(dir, "assignments");
-  const usage = read<RawUsage[]>(dir, "app_usage");
+  const assignments = [...read<RawAssignment[]>(dir, "assignments"), ...(demoUsersFile?.assignments ?? [])];
+  const usage = [...read<RawUsage[]>(dir, "app_usage"), ...(demoUsersFile?.usage ?? [])];
   const groups = read<RawGroup[]>(dir, "groups");
   const groupMembers = read<{ group_id: number; user_id: number }[]>(dir, "group_members");
   const cohorts = read<RawCohort[]>(dir, "cohorts");
   const userCohorts = read<RawUserCohort[]>(dir, "user_cohorts");
-  const adminRoles = read<{ user_id: number; role_type: string }[]>(dir, "admin_roles");
-  const findings = read<RawFinding[]>(dir, "findings");
+  const adminRoles = [...read<{ user_id: number; role_type: string }[]>(dir, "admin_roles"), ...(demoUsersFile?.admin_roles ?? [])];
+  const findings = [...read<RawFinding[]>(dir, "findings"), ...(demoUsersFile?.findings ?? [])];
   const oktaAssignments = read<RawOktaAssignment[]>(dir, "okta_app_assignments");
   const config = read<RawConfig[]>(dir, "config")[0];
   const tenant = read<{ okta_domain: string; last_sync_at: MongoDate }[]>(dir, "tenants")[0];
@@ -342,6 +364,15 @@ export function buildDataset(dir = dataDir()): Dataset {
     missing.sort((a, b) => b.cohortShare - a.cohortShare);
 
     const mgr = u.manager_id != null ? userById.get(u.manager_id) : undefined;
+    const github = (u.github_pat || u.github_repo_url || u.github_owner || u.github_repo || u.github_username)
+      ? {
+          username: u.github_username ?? null,
+          owner: u.github_owner ?? null,
+          repo: u.github_repo ?? null,
+          repoUrl: u.github_repo_url ?? (u.github_owner && u.github_repo ? `https://github.com/${u.github_owner}/${u.github_repo}` : null),
+          tokenConfigured: !!(u.github_pat ?? "").trim(),
+        }
+      : null;
     const summary: UserSummary = {
       id: u._id,
       oktaId: u.okta_id,
@@ -366,6 +397,7 @@ export function buildDataset(dir = dataDir()): Dataset {
       findingCount: uFindings.length,
       riskScore: Math.round(uFindings.reduce((s, f) => s + f.risk_score, 0) * 10) / 10,
       topRules: [...new Set(uFindings.sort((a, b) => b.risk_score - a.risk_score).map((f) => f.rule))],
+      github,
     };
     summaries.push(summary);
     detail.set(u._id, {
@@ -388,6 +420,30 @@ export function buildDataset(dir = dataDir()): Dataset {
     apps,
     users: summaries,
     detail,
+  };
+}
+
+export function loadUserGitHubCredentials(userId: number): {
+  token: string;
+  owner: string;
+  repo: string;
+  repoUrl: string;
+  username: string;
+} | null {
+  const demoUsers = readOptional<{ users?: RawUser[] }>(dataDir(), "demo_users");
+  const user = demoUsers?.users?.find((u) => u._id === userId);
+  if (!user) return null;
+  const token = (user.github_pat ?? "").trim();
+  const owner = (user.github_owner ?? "").trim();
+  const repo = (user.github_repo ?? "").trim();
+  const repoUrl = (user.github_repo_url ?? "").trim() || (owner && repo ? `https://github.com/${owner}/${repo}` : "");
+  if (!token || !owner || !repo || !repoUrl) return null;
+  return {
+    token,
+    owner,
+    repo,
+    repoUrl,
+    username: (user.github_username ?? user.email ?? "").trim(),
   };
 }
 

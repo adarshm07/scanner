@@ -40,6 +40,14 @@ export interface MissingApp {
   cohortShare: number;
 }
 
+export interface GitHubAccessConfig {
+  username: string | null;
+  owner: string | null;
+  repo: string | null;
+  repoUrl: string | null;
+  tokenConfigured: boolean;
+}
+
 export interface AlUserSummary {
   id: number;
   oktaId: string;
@@ -61,6 +69,7 @@ export interface AlUserSummary {
   findingCount: number;
   riskScore: number;
   topRules: string[];
+  github: GitHubAccessConfig | null;
   review?: { engine: "llm" | "rules"; keep: number; review: number; revoke: number } | null;
 }
 

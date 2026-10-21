@@ -8,9 +8,9 @@ const ds = buildDataset();
 const byName = (name: string) => [...ds.detail.values()].find((u) => u.name === name)!;
 
 test("loads every user and assignment from the dummy data", () => {
-  assert.equal(ds.users.length, 99);
+  assert.equal(ds.users.length, 100);
   assert.equal(ds.apps.length, 23);
-  assert.equal(ds.users.reduce((s, u) => s + u.appCount, 0), 638);
+  assert.equal(ds.users.reduce((s, u) => s + u.appCount, 0), 642);
 });
 
 test("access rows carry access type, group and usage", () => {
@@ -76,4 +76,15 @@ test("a failing model degrades to rules with an error", async () => {
   const r = await reviewUser(byName("Liam Young"), ds, broken, true);
   assert.equal(r.engine, "rules");
   assert.match(r.error ?? "", /boom/);
+});
+
+test("demo users can include a GitHub PAT and repo config for targeted scans", () => {
+  const ajinkya = [...ds.detail.values()].find((u) => u.name === "Ajinkya Bhise");
+  assert.ok(ajinkya, "Ajinkya Bhise should be present in the AccessLens demo dataset");
+  assert.equal(ajinkya.title, "Full Stack Developer");
+  assert.ok(ajinkya.github);
+  assert.equal(ajinkya.github?.owner, "ajinkya-bhise");
+  assert.equal(ajinkya.github?.repo, "scanner");
+  assert.ok(ajinkya.github?.repoUrl.includes("https://github.com/"));
+  assert.ok(ajinkya.github?.tokenConfigured);
 });

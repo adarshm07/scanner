@@ -1,0 +1,77 @@
+{
+  "users": [
+    {
+      "_id": 100,
+      "okta_id": "00u-DEMO-AJINKYA",
+      "email": "ajinkya.bhise@acme-demo.com",
+      "first_name": "Ajinkya",
+      "last_name": "Bhise",
+      "status": "ACTIVE",
+      "created": { "$date": "2025-02-10T00:00:00.000Z" },
+      "last_login": { "$date": "2026-10-20T08:30:00.000Z" },
+      "title": "Full Stack Developer",
+      "department": "Engineering",
+      "team": "Platform",
+      "manager_id": 1,
+      "employee_type": "Employee",
+      "country_code": "IN",
+      "github_username": "",
+      "github_owner": "",
+      "github_repo": "",
+      "github_repo_url": "",
+      "github_pat": ""
+    }
+  ],
+  "assignments": [
+    {
+      "_id": 1000,
+      "user_id": 100,
+      "app_id": 6,
+      "source": "DIRECT",
+      "via_group_id": null,
+      "assigned_at": { "$date": "2026-09-02T00:00:00.000Z" },
+      "status": "ACTIVE",
+      "sync_state": "SYNCED"
+    },
+    {
+      "_id": 1001,
+      "user_id": 100,
+      "app_id": 4,
+      "source": "GROUP",
+      "via_group_id": 1,
+      "assigned_at": { "$date": "2026-08-20T00:00:00.000Z" },
+      "status": "ACTIVE",
+      "sync_state": "SYNCED"
+    },
+    {
+      "_id": 1002,
+      "user_id": 100,
+      "app_id": 1,
+      "source": "GROUP",
+      "via_group_id": 1,
+      "assigned_at": { "$date": "2026-08-27T00:00:00.000Z" },
+      "status": "ACTIVE",
+      "sync_state": "SYNCED"
+    },
+    {
+      "_id": 1003,
+      "user_id": 100,
+      "app_id": 2,
+      "source": "GROUP",
+      "via_group_id": 1,
+      "assigned_at": { "$date": "2026-09-10T00:00:00.000Z" },
+      "status": "ACTIVE",
+      "sync_state": "SYNCED"
+    }
+  ],
+  "usage": [
+    { "user_id": 100, "app_id": 6, "last_sso_at": { "$date": "2026-10-19T15:15:00.000Z" }, "sso_count_90d": 23 },
+    { "user_id": 100, "app_id": 4, "last_sso_at": { "$date": "2026-10-18T09:00:00.000Z" }, "sso_count_90d": 17 },
+    { "user_id": 100, "app_id": 1, "last_sso_at": { "$date": "2026-10-17T18:00:00.000Z" }, "sso_count_90d": 12 },
+    { "user_id": 100, "app_id": 2, "last_sso_at": { "$date": "2026-10-15T11:00:00.000Z" }, "sso_count_90d": 9 }
+  ],
+  "admin_roles": [
+    { "user_id": 100, "role_type": "App Administrator" }
+  ],
+  "findings": []
+}

@@ -1,6 +1,10 @@
 import { Router, Request, Response } from "express";
 import { resolveProvider } from "../llm";
-import { getDataset } from "./data";
+import { runRepoPipeline } from "../orchestrator/runPipeline";
+import { generateReport } from "../orchestrator/report";
+import { reportStore } from "../store/reportStore";
+import { resetGitCredentials } from "../tools/gitAuth";
+import { getDataset, loadUserGitHubCredentials } from "./data";
 import { cachedReview, reviewUser } from "./review";
 
 /**
@@ -89,4 +93,35 @@ accessLensRouter.post("/users/:id/review", async (req: Request, res: Response) =
   const llm = provider === "rules" ? null : resolveProvider(typeof provider === "string" ? provider : undefined);
   const review = await reviewUser(found.user, found.ds, llm, force === true);
   res.json({ review });
+});
+
+accessLensRouter.post("/users/:id/scan-github", async (req: Request, res: Response) => {
+  const found = userFrom(req, res);
+  if (!found) return;
+  const userGitHub = loadUserGitHubCredentials(found.user.id);
+  if (!userGitHub) {
+    return res.status(400).json({ error: "This user has no GitHub PAT configured in the AccessLens JSON dataset." });
+  }
+  const repoUrl = userGitHub.repoUrl;
+  const previousGitHubToken = process.env.GITHUB_TOKEN;
+  const previousGitHubOwners = process.env.GITHUB_OWNERS;
+  process.env.GITHUB_TOKEN = userGitHub.token;
+  process.env.GITHUB_OWNERS = userGitHub.owner;
+  resetGitCredentials();
+  try {
+    const pipeline = await runRepoPipeline(repoUrl, ["secrets", "sast", "deps"], { fullHistory: false });
+    try {
+      const report = await generateReport(pipeline, null, "high");
+      reportStore.save(report);
+      return res.json({ reportId: report.reportId, repoUrl, report });
+    } finally {
+      await pipeline.cleanup();
+    }
+  } catch (err) {
+    return res.status(500).json({ error: (err as Error).message });
+  } finally {
+    if (previousGitHubToken === undefined) delete process.env.GITHUB_TOKEN; else process.env.GITHUB_TOKEN = previousGitHubToken;
+    if (previousGitHubOwners === undefined) delete process.env.GITHUB_OWNERS; else process.env.GITHUB_OWNERS = previousGitHubOwners;
+    resetGitCredentials();
+  }
 });

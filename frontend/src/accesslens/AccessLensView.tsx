@@ -72,11 +72,26 @@ export function AccessLensView({ onBack }: { onBack: () => void }) {
   const [providers, setProviders] = useState<ProviderDescriptor[]>([]);
   const [providerId, setProviderId] = useState<ProviderId | null>(null);
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<Filter>("flagged");
+  const [filter, setFilter] = useState<Filter>("all");
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [detail, setDetail] = useState<AlUserDetail | null>(null);
   const [review, setReview] = useState<UserReview | null>(null);
   const [reviewing, setReviewing] = useState(false);
+  const [githubScanning, setGithubScanning] = useState(false);
+  const [githubScanResult, setGithubScanResult] = useState<{
+    reportId?: string;
+    repoUrl?: string;
+    message?: string;
+    report?: {
+      executiveSummary?: string;
+      stats?: { totalAfterFilter?: number; bySeverity?: Record<string, number> };
+      categories?: Array<{ category: string; findings: Array<{ title: string; severity: string; rule_id?: string }> }>;
+    };
+  } | null>(null);
+  const [reportViewer, setReportViewer] = useState<{ open: boolean; data: Record<string, unknown> | null }>({
+    open: false,
+    data: null,
+  });
   const [error, setError] = useState<string | null>(null);
 
   const refreshUsers = () =>
@@ -116,12 +131,13 @@ export function AccessLensView({ onBack }: { onBack: () => void }) {
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const hasSearch = q.length > 0;
     return users
       .filter((u) => {
-        if (filter === "flagged" && u.findingCount === 0) return false;
-        if (filter === "inactive" && u.status === "ACTIVE") return false;
-        if (filter === "no-title" && u.title) return false;
-        if (!q) return true;
+        if (!hasSearch && filter === "flagged" && u.findingCount === 0) return false;
+        if (!hasSearch && filter === "inactive" && u.status === "ACTIVE") return false;
+        if (!hasSearch && filter === "no-title" && u.title) return false;
+        if (!hasSearch) return true;
         return [u.name, u.email, u.title, u.department, u.team, u.cohort?.label]
           .filter(Boolean)
           .some((s) => s!.toLowerCase().includes(q));
@@ -150,8 +166,57 @@ export function AccessLensView({ onBack }: { onBack: () => void }) {
     }
   }
 
+  async function runGithubScan() {
+    if (!detail?.github?.repoUrl) return;
+    setGithubScanning(true);
+    setGithubScanResult(null);
+    setReportViewer({ open: false, data: null });
+    setError(null);
+    try {
+      const res = await fetch(`/api/accesslens/users/${detail.id}/scan-github`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ repoUrl: detail.github.repoUrl }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "GitHub scan failed");
+      setGithubScanResult({
+        reportId: data.reportId,
+        repoUrl: data.repoUrl,
+        message: `Repo scan complete for ${data.repoUrl}`,
+        report: data.report,
+      });
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setGithubScanning(false);
+    }
+  }
+
+  async function openFullReport(reportId: string | undefined) {
+    if (!reportId) return;
+    setError(null);
+    try {
+      const res = await fetch(`/api/report/${encodeURIComponent(reportId)}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to load report");
+      setReportViewer({ open: true, data });
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  }
+
   const decisionFor = (appKey: string) => review?.decisions.find((d) => d.appKey === appKey);
   const missingFor = (appKey: string) => review?.missing.find((m) => m.appKey === appKey);
+  const githubTopFindings =
+    githubScanResult?.report?.categories?.flatMap((category) =>
+      (category.findings ?? []).map((finding) => ({
+        category: category.category,
+        title: finding.title,
+        severity: finding.severity,
+      }))
+    )?.slice(0, 3) ?? [];
+  const githubSeverity = githubScanResult?.report?.stats?.bySeverity ?? { critical: 0, high: 0, medium: 0, low: 0 };
 
   return (
     <div className="min-h-screen bg-ink text-ink3">
@@ -314,6 +379,86 @@ export function AccessLensView({ onBack }: { onBack: () => void }) {
                       {Array.isArray(f.evidence.apps) ? ` (${(f.evidence.apps as string[]).join(" + ")})` : ""}
                     </div>
                   ))}
+
+                  {detail.github?.repoUrl && (
+                    <div className="mt-4 rounded border border-[#2d5a85] bg-[#2d5a85]/12 p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <div className="text-[11px] uppercase tracking-wide text-dim">GitHub access</div>
+                          <div className="mt-1 font-mono text-[12px] text-text3">{detail.github.owner}/{detail.github.repo}</div>
+                        </div>
+                        <button
+                          onClick={runGithubScan}
+                          disabled={githubScanning}
+                          className="h-8 rounded bg-ink3 px-3 text-[12px] font-medium text-ink hover:bg-white disabled:opacity-50"
+                        >
+                          {githubScanning ? "Scanning…" : "Scan private repo"}
+                        </button>
+                      </div>
+                      {detail.github.username && (
+                        <div className="mt-2 text-[12px] text-muted">User: {detail.github.username} · PAT configured in dataset</div>
+                      )}
+                      {githubScanResult && (
+                        <div className="mt-3 rounded border border-[#2f6b52] bg-[#2f6b52]/15 p-3 text-[12px] text-[#dbeedd]">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="font-medium text-[#7fd1a8]">{githubScanResult.message}</div>
+                            <span className="font-mono text-[11px] text-dim">{githubScanResult.reportId ?? "generated"}</span>
+                          </div>
+
+                          {githubScanResult.report?.executiveSummary && (
+                            <p className="mt-2 text-[13px] leading-relaxed text-text3">{githubScanResult.report.executiveSummary}</p>
+                          )}
+
+                          {githubScanResult.report?.stats && (
+                            <div className="mt-3 grid grid-cols-2 gap-2 text-[11px] text-muted md:grid-cols-4">
+                              <StatMini label="Total" value={githubScanResult.report.stats.totalAfterFilter ?? 0} />
+                              <StatMini label="Critical" value={githubSeverity.critical ?? 0} />
+                              <StatMini label="High" value={githubSeverity.high ?? 0} />
+                              <StatMini label="Medium" value={githubSeverity.medium ?? 0} />
+                            </div>
+                          )}
+
+                          {githubTopFindings.length > 0 && (
+                            <div className="mt-3">
+                              <div className="mb-1 text-[11px] uppercase tracking-wide text-dim">Top findings</div>
+                              <ul className="m-0 list-disc space-y-1 pl-4 text-[12px] text-text3">
+                                {githubTopFindings.map((finding, index) => (
+                                  <li key={`${finding.category}-${index}`}>
+                                    <span className="uppercase text-dim">{finding.severity}</span> · {finding.title}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {githubScanResult.reportId && (
+                            <div className="mt-3 flex flex-wrap items-center gap-2">
+                              <button
+                                onClick={() => {
+                                  if (reportViewer.open && reportViewer.data) {
+                                    setReportViewer({ open: false, data: null });
+                                    return;
+                                  }
+                                  openFullReport(githubScanResult.reportId);
+                                }}
+                                className="h-8 rounded border border-[#7fd1a8] bg-transparent px-3 text-[12px] font-medium text-[#7fd1a8] hover:bg-[#7fd1a8]/10"
+                              >
+                                {reportViewer.open ? "Hide report" : "Open full report"}
+                              </button>
+                            </div>
+                          )}
+
+                          {reportViewer.open && reportViewer.data && (
+                            <div className="mt-3 rounded border border-line bg-ink2 p-2">
+                              <pre className="m-0 max-h-[240px] overflow-auto whitespace-pre-wrap break-words text-[11px] leading-5 text-text3">
+                                {JSON.stringify(reportViewer.data, null, 2)}
+                              </pre>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {review && (
@@ -454,6 +599,15 @@ function Field({ label, value, warn }: { label: string; value: string; warn?: bo
     <div className="min-w-0">
       <dt className="text-[11px] uppercase tracking-wide text-dim">{label}</dt>
       <dd className={`m-0 mt-0.5 break-words ${warn ? "text-[#e8c45a]" : "text-text3"}`}>{value}</dd>
+    </div>
+  );
+}
+
+function StatMini({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded border border-line bg-ink2 px-2 py-1.5">
+      <div className="text-[10px] uppercase tracking-wide text-dim">{label}</div>
+      <div className="mt-1 font-mono text-[12px] text-text3">{value}</div>
     </div>
   );
 }
