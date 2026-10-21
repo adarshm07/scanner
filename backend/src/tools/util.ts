@@ -240,7 +240,7 @@ export async function validateRepoUrl(input: unknown): Promise<string> {
     url.username = "";
   }
   if (url.username || url.password) {
-    throw new Error("repoUrl must not contain credentials. Configure tokens in backend/.env instead.");
+    throw new Error("repoUrl must not contain credentials. Pass the token as accessToken (the Private repository option) instead.");
   }
   if (url.port) throw new Error("repoUrl must not specify a port.");
   const host = url.hostname.toLowerCase();

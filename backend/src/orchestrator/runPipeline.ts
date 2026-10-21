@@ -15,7 +15,7 @@ import { runExposedFiles } from "../tools/exposedFiles";
 import { DomainResult } from "../tools/domainResult";
 import { buildFixPlan, FixPlan } from "../tools/fixConfig";
 import { ToolRun } from "../tools/types";
-import { gitEnv, redactSecrets } from "../tools/gitAuth";
+import { gitEnv, redactSecrets, RepoToken } from "../tools/gitAuth";
 import { CHECKS } from "./checks";
 import { EmitFn } from "./events";
 
@@ -124,10 +124,13 @@ export interface RepoScanOptions {
   fullHistory?: boolean;
   baseRef?: string;
   headRef?: string;
+  /** Per-scan access token for a private repository (never stored or reported). */
+  token?: RepoToken;
 }
 
 // https only, no redirects (a clone can't be bounced to an internal host), and no credential
-// helpers: private repos authenticate only with tokens configured in gitAuth.ts, never with
+// helpers: private repos authenticate only with tokens from gitAuth.ts (server-configured or
+// the per-scan token the user entered), never with
 // whatever login the server's user has saved (e.g. the macOS Keychain).
 const GIT_SAFE = [
   "-c", "protocol.allow=never",
@@ -136,8 +139,12 @@ const GIT_SAFE = [
   "-c", "credential.helper=",
 ];
 
-function gitError(res: { spawnError?: string; stderr: string; code: number | null }, what: string): string {
-  return redactSecrets(res.spawnError || res.stderr.trim() || `${what} exited with code ${res.code}`);
+function gitError(
+  res: { spawnError?: string; stderr: string; code: number | null },
+  what: string,
+  token?: RepoToken
+): string {
+  return redactSecrets(res.spawnError || res.stderr.trim() || `${what} exited with code ${res.code}`, token);
 }
 
 /**
@@ -168,12 +175,22 @@ async function resolveRef(dir: string, ref: string, env: Record<string, string>)
 const REF_HINT =
   "use a branch name, a PR/MR ref (refs/pull/N/head on GitHub, refs/merge-requests/N/head on GitLab), or the full 40-character SHA";
 
+/** Add a hint when a clone fails for the usual private-repo reasons. */
+function cloneError(message: string, hadToken: boolean): string {
+  if (!/authentication failed|could not read username|terminal prompts disabled|returned error: 40[134]|repository not found|not found/i.test(message)) {
+    return message;
+  }
+  return hadToken
+    ? `${message} — the access token was rejected or cannot read this repository; check its scopes (read access to repository contents) and expiry`
+    : `${message} — if this is a private repository, tick "Private repository" and add an access token`;
+}
+
 async function cloneRepo(
   repoUrl: string,
-  opts: { fullHistory: boolean; baseRef?: string; headRef?: string }
+  opts: { fullHistory: boolean; baseRef?: string; headRef?: string; token?: RepoToken }
 ): Promise<{ dir: string; ref: string; baseSha?: string; changed?: Set<string>; error?: string; refError?: boolean }> {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
-  const env = gitEnv(repoUrl);
+  const env = gitEnv(repoUrl, opts.token);
   const historyArgs = opts.baseRef
     ? ["--filter=blob:none"]
     : opts.fullHistory
@@ -189,7 +206,7 @@ async function cloneRepo(
   );
   let ref = new Date().toISOString();
   if (clone.spawnError || clone.code !== 0) {
-    return { dir, ref, error: gitError(clone, "git clone") };
+    return { dir, ref, error: cloneError(gitError(clone, "git clone", opts.token), !!opts.token) };
   }
   // Fetch-then-checkout accepts branches, SHAs and refs/pull/N/head (fork PRs), unlike clone --branch.
   if (opts.headRef) {
@@ -203,7 +220,7 @@ async function cloneRepo(
       { cwd: dir, timeoutMs: 300000, env }
     );
     if (checkout.spawnError || checkout.code !== 0) {
-      return { dir, ref, refError: true, error: `could not check out ${opts.headRef}: ${gitError(checkout, "git checkout")}` };
+      return { dir, ref, refError: true, error: `could not check out ${opts.headRef}: ${gitError(checkout, "git checkout", opts.token)}` };
     }
   }
   const rev = await runCommand("git", ["rev-parse", "HEAD"], { cwd: dir });
@@ -407,10 +424,11 @@ export async function runRepoPipeline(
       fullHistory: scanHistory,
       baseRef: opts.baseRef,
       headRef: opts.headRef,
+      token: opts.token,
     });
   } catch (err) {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "scanner-x-"));
-    const warning = `Repository clone failed (${redactSecrets((err as Error).message)}). No repository code was scanned.`;
+    const warning = `Repository clone failed (${redactSecrets((err as Error).message, opts.token)}). No repository code was scanned.`;
     emit({ t: "log", at: Date.now(), source: "clone", message: warning });
     return incompleteOutput(repoUrl, new Date().toISOString(), dir, warning, true);
   }
@@ -431,7 +449,7 @@ export async function runRepoPipeline(
       baseRef: opts.baseRef,
       baseSha: cloned.baseSha,
       changed: cloned.changed,
-      env: gitEnv(repoUrl),
+      env: gitEnv(repoUrl, opts.token),
       removeDir: true,
     },
     emit

@@ -1,7 +1,8 @@
 /**
  * Git host credentials for cloning private repositories.
  *
- * Tokens come only from the server environment (backend/.env). They are sent to git as an
+ * Tokens come from the server environment (backend/.env), or from a per-scan access token the
+ * user enters for one private repository (see RepoToken). Either way they are sent to git as an
  * HTTP Authorization header scoped to one host via GIT_CONFIG_* environment variables, so
  * they never appear in argv (visible in `ps`), in the clone URL, or in error messages.
  *
@@ -137,15 +138,62 @@ export function credentialFor(repoUrl: string): GitCredential | undefined {
 }
 
 /**
+ * A token the user supplied for one scan of one private repository. It is used only for that
+ * repository's host, lives only in memory for the scan, and is never stored or reported.
+ */
+export interface RepoToken {
+  token: string;
+  /** Basic-auth username; defaults to what the host expects for its access tokens. */
+  username?: string;
+}
+
+/**
+ * Validate a per-scan token from an API request. Tokens are opaque, so this only rejects
+ * values that could break out of the Authorization header (whitespace, control characters).
+ */
+export function parseRepoToken(token: unknown, username: unknown): RepoToken | undefined {
+  if (token === undefined || token === null || token === "") return undefined;
+  if (typeof token !== "string") throw new Error("Invalid accessToken.");
+  const t = token.trim();
+  if (!t) return undefined;
+  if (t.length > 1024 || !/^[\x21-\x7e]+$/.test(t)) throw new Error("Invalid accessToken.");
+  if (username === undefined || username === null || username === "") return { token: t };
+  if (typeof username !== "string") throw new Error("Invalid tokenUsername.");
+  const u = username.trim();
+  if (!u) return { token: t };
+  if (!/^[A-Za-z0-9._@+-]{1,200}$/.test(u)) throw new Error("Invalid tokenUsername.");
+  return { token: t, username: u };
+}
+
+/** The credential a per-scan token becomes for this repository URL (its host only). */
+function userCredential(repoUrl: string, repoToken: RepoToken): GitCredential | undefined {
+  let url: URL;
+  try {
+    url = new URL(repoUrl);
+  } catch {
+    return undefined;
+  }
+  if (url.protocol !== "https:") return undefined;
+  const host = url.hostname.toLowerCase();
+  return {
+    host,
+    username: repoToken.username ?? DEFAULT_USERNAMES[host] ?? "oauth2",
+    token: repoToken.token,
+    owners: [ownerOf(url)],
+  };
+}
+
+/**
  * Environment for every git process (and tools that spawn git, like gitleaks) working on
  * this repository. Never prompts; adds an Authorization header only for a matching host.
+ * A per-scan token, when given, takes precedence over server-configured tokens.
  */
-export function gitEnv(repoUrl: string): Record<string, string> {
+export function gitEnv(repoUrl: string, repoToken?: RepoToken): Record<string, string> {
   const env: Record<string, string> = {
     GIT_TERMINAL_PROMPT: "0", // fail instead of waiting for a username prompt
     GCM_INTERACTIVE: "never", // Git Credential Manager: never open a login window
   };
-  const cred = credentialFor(repoUrl);
+  const cred = (repoToken && userCredential(repoUrl, repoToken)) || credentialFor(repoUrl);
   if (!cred) return env;
   const basic = Buffer.from(`${cred.username}:${cred.token}`).toString("base64");
   env.GIT_CONFIG_COUNT = "1";
@@ -154,10 +202,18 @@ export function gitEnv(repoUrl: string): Record<string, string> {
   return env;
 }
 
-/** Replace every configured token (raw and basic-auth encoded) with "***". */
-export function redactSecrets(text: string): string {
+/**
+ * Replace every configured token, and the per-scan token if given (raw and basic-auth
+ * encoded), with "***".
+ */
+export function redactSecrets(text: string, repoToken?: RepoToken): string {
   let out = text;
-  for (const c of credentials()) {
+  const extra: GitCredential[] = repoToken
+    ? [{ host: "", username: repoToken.username ?? "", token: repoToken.token, owners: [] },
+       ...Object.values(DEFAULT_USERNAMES).map((username) => ({ host: "", username, token: repoToken.token, owners: [] })),
+       { host: "", username: "oauth2", token: repoToken.token, owners: [] }]
+    : [];
+  for (const c of [...credentials(), ...extra]) {
     const basic = Buffer.from(`${c.username}:${c.token}`).toString("base64");
     for (const secret of [c.token, basic]) {
       if (secret.length >= 8) out = out.split(secret).join("***");
