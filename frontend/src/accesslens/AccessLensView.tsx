@@ -365,7 +365,7 @@ export function AccessLensView({ onBack }: { onBack: () => void }) {
                     <Field label="Department / team" value={[detail.department, detail.team].filter(Boolean).join(" / ") || "—"} />
                     <Field
                       label="Inferred role (cohort)"
-                      value={detail.cohort ? `${detail.cohort.label} · ${pct(detail.cohort.similarity)} match` : "—"}
+                      value={detail.cohort ? `${detail.cohort.label} · ${pct(detail.cohort.similarity)} match${detail.cohort.inferred ? " · inferred from apps (no department in Okta)" : ""}` : "—"}
                     />
                     <Field label="Manager" value={detail.manager?.name ?? "—"} />
                     <Field label="Type / country" value={`${detail.employeeType} · ${detail.country}`} />

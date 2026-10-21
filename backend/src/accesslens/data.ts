@@ -1,10 +1,16 @@
 import fs from "fs";
 import path from "path";
+import { EngineConfig, computeFindings, inferCohorts } from "./engine";
 
 /**
  * AccessLens dummy dataset (synthetic Okta workforce tenant). The JSON files under
  * backend/data/accesslens are the MongoDB export from the PRD's seed script; this module
  * loads them once and joins them into per-user access views. No database needed for the demo.
+ *
+ * Only data Okta can give us is read here (users, apps, assignments, groups, admin roles,
+ * SSO usage) plus our policy config. Cohorts and findings are computed by ./engine; the
+ * seed's cohorts.json, user_cohorts.json and findings.json are not read (expected_findings.json
+ * is the answer key the tests check the engine against).
  *
  * Override the folder with ACCESSLENS_DATA_DIR.
  */
@@ -63,18 +69,6 @@ interface RawGroup {
   name: string;
   description: string;
 }
-interface RawCohort {
-  _id: number;
-  key: string;
-  label: string;
-  confidence: number;
-}
-interface RawUserCohort {
-  user_id: number;
-  cohort_id: number;
-  similarity: number;
-  is_override: boolean;
-}
 interface RawFinding {
   _id: number;
   user_id: number;
@@ -90,16 +84,7 @@ interface RawOktaAssignment {
   id: string;
   profile?: { roles?: string[] };
 }
-interface RawConfig {
-  thresholds: {
-    unused_days: number;
-    never_used_days: number;
-    outlier_share: number;
-    missing_share: number;
-    min_cohort_size: number;
-  };
-  toxic_pairs: { app_a: string; app_b: string; reason: string }[];
-}
+type RawConfig = EngineConfig;
 
 export type Sensitivity = "low" | "medium" | "high" | "critical";
 
@@ -164,7 +149,7 @@ export interface UserSummary {
   manager: { id: number; name: string } | null;
   created: string | null;
   lastLogin: string | null;
-  cohort: { key: string; label: string; confidence: number; similarity: number; isOverride: boolean } | null;
+  cohort: { key: string; label: string; confidence: number; similarity: number; isOverride: boolean; inferred: boolean } | null;
   adminRoles: string[];
   groups: string[];
   appCount: number;
@@ -219,17 +204,14 @@ function readOptional<T>(dir: string, name: string): T | null {
 
 export function buildDataset(dir = dataDir()): Dataset {
   const baseUsers = read<RawUser[]>(dir, "users");
-  const demoUsersFile = readOptional<{ users?: RawUser[]; assignments?: RawAssignment[]; usage?: RawUsage[]; admin_roles?: { user_id: number; role_type: string }[]; findings?: RawFinding[] }>(dir, "demo_users");
+  const demoUsersFile = readOptional<{ users?: RawUser[]; assignments?: RawAssignment[]; usage?: RawUsage[]; admin_roles?: { user_id: number; role_type: string }[] }>(dir, "demo_users");
   const users = [...baseUsers, ...(demoUsersFile?.users ?? [])];
   const apps = read<RawApp[]>(dir, "apps");
   const assignments = [...read<RawAssignment[]>(dir, "assignments"), ...(demoUsersFile?.assignments ?? [])];
   const usage = [...read<RawUsage[]>(dir, "app_usage"), ...(demoUsersFile?.usage ?? [])];
   const groups = read<RawGroup[]>(dir, "groups");
   const groupMembers = read<{ group_id: number; user_id: number }[]>(dir, "group_members");
-  const cohorts = read<RawCohort[]>(dir, "cohorts");
-  const userCohorts = read<RawUserCohort[]>(dir, "user_cohorts");
   const adminRoles = [...read<{ user_id: number; role_type: string }[]>(dir, "admin_roles"), ...(demoUsersFile?.admin_roles ?? [])];
-  const findings = [...read<RawFinding[]>(dir, "findings"), ...(demoUsersFile?.findings ?? [])];
   const oktaAssignments = read<RawOktaAssignment[]>(dir, "okta_app_assignments");
   const config = read<RawConfig[]>(dir, "config")[0];
   const tenant = read<{ okta_domain: string; last_sync_at: MongoDate }[]>(dir, "tenants")[0];
@@ -237,6 +219,31 @@ export function buildDataset(dir = dataDir()): Dataset {
   // Day counts are relative to the last sync, so the demo reads the same on any date.
   const lastSync = toIso(tenant?.last_sync_at);
   const now = lastSync ? new Date(lastSync) : new Date();
+
+  // Infer each user's cohort (role) and run the rules over the raw Okta data.
+  const heldApps = new Map<number, Set<number>>();
+  for (const a of assignments) heldApps.set(a.user_id, (heldApps.get(a.user_id) ?? new Set()).add(a.app_id));
+  const engineUsers = users.map((u) => ({
+    id: u._id,
+    firstName: u.first_name,
+    name: `${u.first_name} ${u.last_name}`,
+    status: u.status,
+    department: u.department,
+    team: u.team,
+  }));
+  const { cohorts, membership } = inferCohorts(engineUsers, heldApps, config.min_inferred_similarity);
+  const userCohorts = [...membership.values()];
+  const findings: RawFinding[] = computeFindings({
+    now,
+    users: engineUsers,
+    apps: apps.map((a) => ({ id: a._id, key: a.key, sensitivity: a.sensitivity })),
+    assignments: assignments.map((a) => ({ userId: a.user_id, appId: a.app_id, source: a.source, assignedAt: toIso(a.assigned_at) })),
+    usage: usage.map((u) => ({ userId: u.user_id, appId: u.app_id, lastSsoAt: toIso(u.last_sso_at) })),
+    adminRoles: adminRoles.map((r) => ({ userId: r.user_id, role: r.role_type })),
+    config,
+    cohorts,
+    membership,
+  });
 
   const appById = new Map(apps.map((a) => [a._id, a]));
   const appByOkta = new Map(apps.map((a) => [a.okta_id, a]));
@@ -389,7 +396,7 @@ export function buildDataset(dir = dataDir()): Dataset {
       lastLogin: toIso(u.last_login),
       cohort:
         cohort && uc
-          ? { key: cohort.key, label: cohort.label, confidence: cohort.confidence, similarity: uc.similarity, isOverride: uc.is_override }
+          ? { key: cohort.key, label: cohort.label, confidence: cohort.confidence, similarity: uc.similarity, isOverride: false, inferred: uc.inferred }
           : null,
       adminRoles: adminOf.get(u._id) ?? [],
       groups: groupsOf.get(u._id) ?? [],

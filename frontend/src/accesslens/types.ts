@@ -62,7 +62,7 @@ export interface AlUserSummary {
   manager: { id: number; name: string } | null;
   created: string | null;
   lastLogin: string | null;
-  cohort: { key: string; label: string; confidence: number; similarity: number; isOverride: boolean } | null;
+  cohort: { key: string; label: string; confidence: number; similarity: number; isOverride: boolean; inferred: boolean } | null;
   adminRoles: string[];
   groups: string[];
   appCount: number;
