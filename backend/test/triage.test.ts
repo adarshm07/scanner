@@ -147,3 +147,12 @@ test("rule-test fixtures never reach the model", async () => {
   assert.equal(provider.calls.length, 1);
   assert.ok(!provider.calls[0].includes("swig.setDefaults"));
 });
+
+test("model errors are reported to the scan log", async () => {
+  const findings = ["a", "b"].map((id) => finding({ finding_id: id, location: { file: `src/${id}.ts`, line_start: 1 }, raw_snippet: `1: code ${id}` }));
+  const provider = new FakeProvider((u) => u.includes('"finding_id": "b"'));
+  const logs: [string, string][] = [];
+  await triageCategory(provider, "backend", "repo", findings, (level, message) => logs.push([level, message]));
+  assert.ok(logs.some(([l, m]) => l === "warn" && /splitting/.test(m)));
+  assert.ok(logs.some(([l, m]) => l === "error" && /src\/b\.ts:1/.test(m) && /blocked by guardrail/.test(m)));
+});

@@ -11,7 +11,7 @@ import { PipelineOutput } from "./runPipeline";
 import { describeReductions, filterFindings } from "./filterFindings";
 import { hydrateSnippets } from "./hydrate";
 import { maskFinding, secretsOf } from "../tools/secrets";
-import { triageCategory } from "./triage";
+import { triageCategory, TriageLog } from "./triage";
 import { dependencyNote } from "./reachability";
 import { EmitFn } from "./events";
 
@@ -37,7 +37,8 @@ async function executiveSummary(
   mode: string,
   categories: CategoryGroup[],
   stats: Report["stats"],
-  coverageWarning?: string
+  coverageWarning?: string,
+  log: TriageLog = () => {}
 ): Promise<string> {
   const deterministic = () => {
     const prefix = coverageWarning ? `Coverage incomplete — ${coverageWarning} ` : "";
@@ -75,8 +76,9 @@ async function executiveSummary(
       maxTokens: 600,
     });
     return summary.trim();
-  } catch {
+  } catch (err) {
     // LLM outage shouldn't fail the scan — fall back to the code-generated summary.
+    log("error", `summary: model call failed (${((err as Error).message ?? "").slice(0, 240)}); using a generated summary`);
     return deterministic();
   }
 }
@@ -115,6 +117,8 @@ export async function generateReport(
   const triageStart = Date.now();
   emit({ t: "stage", id: "triage", name: "Model explanations", status: "running", at: triageStart });
   let llmFallbackUsed = false;
+  const modelLog: TriageLog = (level, message) =>
+    emit({ t: "log", at: Date.now(), source: "model", level, message });
 
   const groupList = [...groups];
   for (const [, findings] of groupList) {
@@ -128,7 +132,7 @@ export async function generateReport(
 
   // Categories triage in parallel; withSlot in triage.ts caps concurrent LLM calls scan-wide.
   const triageOuts = await Promise.all(
-    groupList.map(([category, findings]) => triageCategory(provider, category, name, findings))
+    groupList.map(([category, findings]) => triageCategory(provider, category, name, findings, modelLog))
   );
 
   for (const [i, [category, findings]] of groupList.entries()) {
@@ -203,7 +207,8 @@ export async function generateReport(
     pipeline.mode,
     categories,
     { ...stats, totalAfterFilter: finalAfterFilter },
-    pipeline.incomplete ? pipeline.warning : undefined
+    pipeline.incomplete ? pipeline.warning : undefined,
+    modelLog
   );
 
   return {

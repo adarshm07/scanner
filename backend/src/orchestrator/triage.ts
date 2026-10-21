@@ -112,6 +112,17 @@ interface TriageLlmResponse {
   }[];
 }
 
+/** Where triage reports model trouble so the scan page can show it (the Output log). */
+export type TriageLog = (level: "info" | "warn" | "error", message: string) => void;
+const noLog: TriageLog = () => {};
+
+/** Gateway errors can be long JSON blobs; keep the useful head. */
+function errText(err: unknown): string {
+  const e = err as { status?: number; message?: string } | null;
+  const msg = (e?.message ?? String(err)).replace(/\s+/g, " ").trim();
+  return msg.length > 240 ? `${msg.slice(0, 237)}...` : msg;
+}
+
 export interface TriageCategoryOutput {
   results: Map<string, TriageResult>;
   llmFallbackUsed: boolean;
@@ -355,33 +366,39 @@ async function triageWithSplit(
   provider: LlmProvider,
   category: Category,
   repoName: string,
-  batch: Finding[]
+  batch: Finding[],
+  log: TriageLog = noLog
 ): Promise<{ results: TriageResult[]; fallback: boolean }> {
   try {
     return { results: await triageBatch(provider, category, repoName, batch), fallback: false };
   } catch (err) {
-    const message = (err as Error).message;
     if (isSplittable(err)) {
       if (batch.length > 1) {
+        log("warn", `${category}: batch of ${batch.length} rejected (${errText(err)}); splitting to isolate it`);
         // Both halves at once: the slot limiter still bounds total load on the gateway.
         const mid = Math.ceil(batch.length / 2);
         const [a, b] = await Promise.all([
-          triageWithSplit(provider, category, repoName, batch.slice(0, mid)),
-          triageWithSplit(provider, category, repoName, batch.slice(mid)),
+          triageWithSplit(provider, category, repoName, batch.slice(0, mid), log),
+          triageWithSplit(provider, category, repoName, batch.slice(mid), log),
         ]);
         return { results: [...a.results, ...b.results], fallback: a.fallback || b.fallback };
       }
+      const label = `${batch[0].rule_id} at ${locationLabel(batch[0])}`;
       // One finding still blocked: retry once without its code and advisory text, which is
       // usually what the filter objects to, so it still gets a model verdict.
       try {
-        return { results: await triageBatch(provider, category, repoName, batch, true), fallback: false };
+        const results = await triageBatch(provider, category, repoName, batch, true);
+        log("info", `${label}: blocked with code attached; triaged without it`);
+        return { results, fallback: false };
       } catch (retryErr) {
-        console.warn(`[triage] guardrail blocked ${category} finding ${batch[0].finding_id} (${batch[0].rule_id} at ${locationLabel(batch[0])}): ${(retryErr as Error).message}`);
+        console.warn(`[triage] guardrail blocked ${category} finding ${batch[0].finding_id} (${label}): ${(retryErr as Error).message}`);
+        log("error", `${label}: blocked by the model gateway (${errText(retryErr)}); left for manual review`);
         return { results: [blockedVerdict(batch[0])], fallback: true };
       }
     }
     // Any other LLM failure: degrade gracefully to pass-through rather than fail the scan.
-    console.warn(`[triage] LLM fallback for ${category} (${batch.length} findings): ${message}`);
+    console.warn(`[triage] LLM fallback for ${category} (${batch.length} findings): ${(err as Error).message}`);
+    log("error", `${category}: model call failed for ${batch.length} finding${batch.length === 1 ? "" : "s"} (${errText(err)}); showing scanner output instead`);
     return { results: batch.map(passthrough), fallback: true };
   }
 }
@@ -393,7 +410,8 @@ export async function triageCategory(
   provider: LlmProvider | null,
   category: Category,
   repoName: string,
-  findings: Finding[]
+  findings: Finding[],
+  log: TriageLog = noLog
 ): Promise<TriageCategoryOutput> {
   const out = new Map<string, TriageResult>();
   let llmFallbackUsed = false;
@@ -438,7 +456,7 @@ export async function triageCategory(
   }
 
   const outcomes = await Promise.all(
-    chunk(toModel, BATCH_SIZE).map((batch) => triageWithSplit(provider, category, repoName, batch))
+    chunk(toModel, BATCH_SIZE).map((batch) => triageWithSplit(provider, category, repoName, batch, log))
   );
   for (const { results, fallback } of outcomes) {
     llmFallbackUsed = llmFallbackUsed || fallback;

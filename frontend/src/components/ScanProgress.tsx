@@ -16,7 +16,7 @@ interface Derived {
   target: string;
   rows: Row[];
   rawHits: number;
-  logs: { at: number; source: string; message: string }[];
+  logs: { at: number; source: string; message: string; level?: "info" | "warn" | "error" }[];
   lastAt: number;
   done: boolean;
 }
@@ -81,7 +81,7 @@ function derive(events: ScanEvent[]): Derived {
         break;
       }
       case "log":
-        logs.push({ at: e.at, source: e.source, message: e.message });
+        logs.push({ at: e.at, source: e.source, message: e.message, level: e.level });
         break;
       case "done":
         done = true;
@@ -143,6 +143,7 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [d.logs.length]);
 
+  const modelErrors = d.logs.filter((l) => l.source === "model" && l.level === "error").length;
   const started = d.startedAt ?? now;
   const clock = d.done ? d.lastAt : now;
   const elapsedMs = Math.max(0, clock - started);
@@ -266,6 +267,11 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
         <div className="flex items-baseline gap-3 pb-2">
           <span className="text-[13px] font-medium">Output</span>
           <span className="text-[12px] text-muted">interleaved, newest last</span>
+          {modelErrors > 0 && (
+            <span className="ml-auto font-mono text-[12px] text-sev-critical">
+              {modelErrors} model {modelErrors === 1 ? "error" : "errors"}
+            </span>
+          )}
         </div>
         <pre
           ref={logRef}
@@ -273,9 +279,16 @@ export function ScanProgress({ events }: { events: ScanEvent[] }) {
         >
           {d.logs.length === 0
             ? "  waiting for scanners…"
-            : d.logs
-                .map((l) => `${fmt(l.at)}   ${l.source.padEnd(12)}${l.message}`)
-                .join("\n")}
+            : d.logs.map((l, i) => (
+                <div
+                  key={i}
+                  className={
+                    l.level === "error" ? "text-sev-critical" : l.level === "warn" ? "text-sev-medium" : undefined
+                  }
+                >
+                  {`${fmt(l.at)}   ${l.source.padEnd(12)}${l.message}`}
+                </div>
+              ))}
         </pre>
       </div>
     </div>
