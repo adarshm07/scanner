@@ -268,10 +268,16 @@ export default function App() {
                           className="h-[34px] w-full rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
                         />
                         {repoHost === "bitbucket.org" && (
+                          <label htmlFor="token-username" className="mt-1.5 font-medium text-muted">
+                            Username <span className="font-normal text-dim">(optional)</span>
+                          </label>
+                        )}
+                        {repoHost === "bitbucket.org" && (
                           <input
+                            id="token-username"
                             value={tokenUsername}
                             onChange={(e) => setTokenUsername(e.target.value)}
-                            placeholder="username (optional, default x-bitbucket-api-token-auth)"
+                            placeholder="x-bitbucket-api-token-auth"
                             autoComplete="off"
                             spellCheck={false}
                             className="h-[34px] w-full rounded border border-edge bg-ink2 px-2 font-mono text-[13px] text-ink3 outline-hidden placeholder:text-[#9ca3af] focus:border-muted"
