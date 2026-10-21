@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { Finding } from "../src/schema/finding";
 import { LlmMessage, LlmProvider, GuardrailBlockedError } from "../src/llm/provider";
-import { buildPayload, isRuleTestFixture, isGuardrailBlock, triageCategory } from "../src/orchestrator/triage";
+import { buildPayload, isRuleTestFixture, isGuardrailBlock, isSplittable, triageCategory } from "../src/orchestrator/triage";
 import { normalizeRuleId } from "../src/tools/semgrep";
 
 const FIXTURE_SNIPPET = [
@@ -94,13 +94,47 @@ class FakeProvider implements LlmProvider {
 
 test("a blocked finding is isolated instead of failing its whole batch", async () => {
   const findings = ["a", "b", "c", "d", "e"].map((id) => finding({ finding_id: id, location: { file: `src/${id}.ts`, line_start: 1 }, raw_snippet: `1: code ${id}` }));
-  findings[2].raw_snippet = "1: code BAD";
-  const provider = new FakeProvider((u) => u.includes("BAD"));
+  // Blocked by the finding itself, so even the minimal retry is refused.
+  const provider = new FakeProvider((u) => u.includes('"finding_id": "c"'));
   const { results, llmFallbackUsed } = await triageCategory(provider, "backend", "repo", findings);
   assert.ok(llmFallbackUsed);
   for (const id of ["a", "b", "d", "e"]) assert.equal(results.get(id)?.verdict, "true_positive", id);
   assert.equal(results.get("c")?.verdict, "needs_review");
   assert.match(results.get("c")!.explanation, /guardrail/);
+});
+
+test("a blocked finding is retried without its code and still gets a model verdict", async () => {
+  const findings = ["a", "b", "c"].map((id) => finding({ finding_id: id, location: { file: `src/${id}.ts`, line_start: 1 }, raw_snippet: `1: code ${id}` }));
+  findings[1].raw_snippet = "1: code PAYLOAD";
+  const provider = new FakeProvider((u) => u.includes("PAYLOAD"));
+  const { results, llmFallbackUsed } = await triageCategory(provider, "backend", "repo", findings);
+  assert.ok(!llmFallbackUsed);
+  for (const id of ["a", "b", "c"]) assert.equal(results.get(id)?.verdict, "true_positive", id);
+  const minimalCall = provider.calls.find((u) => u.includes("No code or advisory text"));
+  assert.ok(minimalCall && !minimalCall.includes("PAYLOAD"));
+});
+
+test("a gateway refusal returned as plain text (200, not JSON) is split, not a whole-batch fallback", async () => {
+  const findings = ["a", "b", "c", "d"].map((id) => finding({ finding_id: id, location: { file: `src/${id}.ts`, line_start: 1 }, raw_snippet: `1: code ${id}` }));
+  findings[3].raw_snippet = "1: code BAD";
+  const provider: LlmProvider = {
+    id: "openai",
+    async generate(msg) {
+      if (msg.user.includes('"finding_id": "d"')) return "Sorry, the model cannot answer this question.";
+      return FakeProvider.prototype.generate.call(new FakeProvider(() => false), msg);
+    },
+  };
+  const { results } = await triageCategory(provider, "backend", "repo", findings);
+  for (const id of ["a", "b", "c"]) assert.equal(results.get(id)?.verdict, "true_positive", id);
+  assert.equal(results.get("d")?.verdict, "needs_review");
+});
+
+test("unrecognised 400s split; auth, rate-limit and timeout errors do not", () => {
+  assert.ok(isSplittable(Object.assign(new Error("400 Request rejected"), { status: 400 })));
+  assert.ok(isSplittable(new Error("LLM did not return valid JSON")));
+  assert.ok(!isSplittable(Object.assign(new Error("401 Invalid API key"), { status: 401 })));
+  assert.ok(!isSplittable(Object.assign(new Error("429 Too many requests"), { status: 429 })));
+  assert.ok(!isSplittable(new Error("Request timed out.")));
 });
 
 test("rule-test fixtures never reach the model", async () => {

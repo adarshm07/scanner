@@ -19,7 +19,27 @@ import { scrubKeyMaterial } from "../tools/secrets";
  * available, fall back to a deterministic pass-through verdict.
  */
 
-const BATCH_SIZE = 20;
+/**
+ * Smaller batches answer faster (output tokens dominate latency) and a guardrail block
+ * costs fewer neighbours. Batches run in parallel, bounded by TRIAGE_CONCURRENCY across
+ * the whole scan so the gateway isn't flooded.
+ */
+const BATCH_SIZE = Number(process.env.TRIAGE_BATCH_SIZE) || 8;
+const CONCURRENCY = Number(process.env.TRIAGE_CONCURRENCY) || 4;
+
+let active = 0;
+const waiting: (() => void)[] = [];
+/** Run fn when one of the CONCURRENCY slots is free. Shared by every category in a scan. */
+export async function withSlot<T>(fn: () => Promise<T>): Promise<T> {
+  if (active >= CONCURRENCY) await new Promise<void>((r) => waiting.push(r));
+  active++;
+  try {
+    return await fn();
+  } finally {
+    active--;
+    waiting.shift()?.();
+  }
+}
 
 const SYSTEM_PROMPT = `You are a security triage assistant reviewing findings produced by deterministic scanning tools (secret detection, static analysis, dependency/CVE lookup, and configuration checks). Your job is judgment, not detection — the tools already found these; you decide how much each one actually matters in context, and explain why in plain language a developer can act on.
 
@@ -119,16 +139,18 @@ const SNIPPET_LINE = /^(\d+): ?(.*)$/;
  * stays out: it duplicates the title and reads like attack instructions to gateway filters.
  * Dependency findings keep tool_message, which carries the advisory text the model needs.
  */
-export function buildPayload(findings: Finding[], deps: boolean) {
+export function buildPayload(findings: Finding[], deps: boolean, minimal = false) {
   const files: Record<string, Map<number, string>> = {};
   const items = findings.map((f) => {
     let snippet: string | undefined;
-    const lines = (f.raw_snippet ?? "").split("\n").filter((l) => l !== "");
+    // Minimal mode (retry of a guardrail-blocked finding): no code and no advisory prose,
+    // the two things most likely to trip a content filter.
+    const lines = minimal ? [] : (f.raw_snippet ?? "").split("\n").filter((l) => l !== "");
     const parsed = lines.map((l) => SNIPPET_LINE.exec(l));
     if (f.location.file && lines.length && parsed.every(Boolean)) {
       const map = (files[f.location.file] ??= new Map());
       for (const m of parsed) map.set(Number(m![1]), m![2]);
-    } else if (f.raw_snippet) {
+    } else if (f.raw_snippet && !minimal) {
       snippet = f.raw_snippet;
     }
     return {
@@ -138,7 +160,7 @@ export function buildPayload(findings: Finding[], deps: boolean) {
       confidence: f.confidence,
       title: shortTitle(f.title),
       location: f.location,
-      ...(deps ? { tool_message: f.tool_message } : {}),
+      ...(deps && !minimal ? { tool_message: f.tool_message } : {}),
       ...(snippet ? { raw_snippet: snippet } : {}),
       metadata: f.metadata,
     };
@@ -192,6 +214,20 @@ export function isGuardrailBlock(err: unknown): boolean {
   const text = `${e.code ?? ""} ${e.message ?? ""}`;
   if (/guardrail|content[ _-]?(filter|policy|management)|moderation|safety|blocked|prohibited|violat/i.test(text)) return true;
   return false;
+}
+
+/**
+ * True when a smaller batch might succeed: a recognised guardrail block, a content-shaped
+ * 4xx whose wording we don't recognise, or a reply that isn't our JSON (a gateway guardrail
+ * often answers 200 with a canned refusal instead of an error). Auth, quota, timeouts and
+ * server errors are not split: every piece would fail the same way.
+ */
+export function isSplittable(err: unknown): boolean {
+  if (isGuardrailBlock(err)) return true;
+  const e = err as { status?: number; message?: string } | null;
+  if (!e) return false;
+  if (e.status === 400 || e.status === 403 || e.status === 422) return true;
+  return /did not return valid JSON|Unexpected token|JSON/i.test(e.message ?? "") && !e.status;
 }
 
 function passthrough(f: Finding): TriageResult {
@@ -250,7 +286,8 @@ async function triageBatch(
   provider: LlmProvider,
   category: Category,
   repoName: string,
-  batch: Finding[]
+  batch: Finding[],
+  minimal = false
 ): Promise<TriageResult[]> {
   const deps = category === "dependencies";
   const shape = deps
@@ -259,17 +296,20 @@ async function triageBatch(
   // Secrets were masked earlier (tools/secrets.ts); this catches key material no detector reported.
   const user = scrubKeyMaterial(
     `Here are ${batch.length} findings from category "${category}" in repo "${repoName}":\n${JSON.stringify(
-      buildPayload(batch, deps),
+      buildPayload(batch, deps, minimal),
       null,
       1
-    )}\n\nReturn JSON: ${shape}`
+    )}\n\n${minimal ? "No code or advisory text is included for these findings; judge from the rule id, title, location and metadata, and say so in the explanation.\n\n" : ""}Return JSON: ${shape}`
   );
 
-  const response = await callLlmJson<TriageLlmResponse>(provider, {
-    system: deps ? DEPENDENCY_SYSTEM_PROMPT : SYSTEM_PROMPT,
-    user,
-    maxTokens: 6000,
-  });
+  const response = await withSlot(() =>
+    callLlmJson<TriageLlmResponse>(provider, {
+      system: deps ? DEPENDENCY_SYSTEM_PROMPT : SYSTEM_PROMPT,
+      user,
+      // ~600 output tokens per finding is plenty for explanation + fix.
+      maxTokens: Math.min(6000, 600 * batch.length + 400),
+    })
+  );
 
   const byId = new Map(response.results.map((r) => [r.finding_id, r]));
   return batch.map((f) => {
@@ -321,17 +361,24 @@ async function triageWithSplit(
     return { results: await triageBatch(provider, category, repoName, batch), fallback: false };
   } catch (err) {
     const message = (err as Error).message;
-    if (isGuardrailBlock(err)) {
+    if (isSplittable(err)) {
       if (batch.length > 1) {
+        // Both halves at once: the slot limiter still bounds total load on the gateway.
         const mid = Math.ceil(batch.length / 2);
-        const [a, b] = [
-          await triageWithSplit(provider, category, repoName, batch.slice(0, mid)),
-          await triageWithSplit(provider, category, repoName, batch.slice(mid)),
-        ];
+        const [a, b] = await Promise.all([
+          triageWithSplit(provider, category, repoName, batch.slice(0, mid)),
+          triageWithSplit(provider, category, repoName, batch.slice(mid)),
+        ]);
         return { results: [...a.results, ...b.results], fallback: a.fallback || b.fallback };
       }
-      console.warn(`[triage] guardrail blocked ${category} finding ${batch[0].finding_id} (${batch[0].rule_id} at ${locationLabel(batch[0])}): ${message}`);
-      return { results: [blockedVerdict(batch[0])], fallback: true };
+      // One finding still blocked: retry once without its code and advisory text, which is
+      // usually what the filter objects to, so it still gets a model verdict.
+      try {
+        return { results: await triageBatch(provider, category, repoName, batch, true), fallback: false };
+      } catch (retryErr) {
+        console.warn(`[triage] guardrail blocked ${category} finding ${batch[0].finding_id} (${batch[0].rule_id} at ${locationLabel(batch[0])}): ${(retryErr as Error).message}`);
+        return { results: [blockedVerdict(batch[0])], fallback: true };
+      }
     }
     // Any other LLM failure: degrade gracefully to pass-through rather than fail the scan.
     console.warn(`[triage] LLM fallback for ${category} (${batch.length} findings): ${message}`);
@@ -390,8 +437,10 @@ export async function triageCategory(
     }
   }
 
-  for (const batch of chunk(toModel, BATCH_SIZE)) {
-    const { results, fallback } = await triageWithSplit(provider, category, repoName, batch);
+  const outcomes = await Promise.all(
+    chunk(toModel, BATCH_SIZE).map((batch) => triageWithSplit(provider, category, repoName, batch))
+  );
+  for (const { results, fallback } of outcomes) {
     llmFallbackUsed = llmFallbackUsed || fallback;
     for (const r of results) {
       triageStore.set(r);

@@ -116,15 +116,23 @@ export async function generateReport(
   emit({ t: "stage", id: "triage", name: "Model explanations", status: "running", at: triageStart });
   let llmFallbackUsed = false;
 
-  for (const [category, findings] of groups) {
+  const groupList = [...groups];
+  for (const [, findings] of groupList) {
     // Snippet hydration (repo mode only) — survivors only.
     if (pipeline.mode === "repo" && pipeline.repoDir) {
       await hydrateSnippets(findings, pipeline.repoDir);
     }
     // Never send, store or export a detected secret value: mask it in every finding.
     for (const f of findings) maskFinding(f, secrets);
+  }
 
-    const triageOut = await triageCategory(provider, category, name, findings);
+  // Categories triage in parallel; withSlot in triage.ts caps concurrent LLM calls scan-wide.
+  const triageOuts = await Promise.all(
+    groupList.map(([category, findings]) => triageCategory(provider, category, name, findings))
+  );
+
+  for (const [i, [category, findings]] of groupList.entries()) {
+    const triageOut = triageOuts[i];
     llmFallbackUsed = llmFallbackUsed || triageOut.llmFallbackUsed;
 
     const reportFindings: ReportFinding[] = findings
