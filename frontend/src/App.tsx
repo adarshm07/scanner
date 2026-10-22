@@ -16,6 +16,7 @@ import { AppsPage } from "./accesslens/dashboard/AppsPage";
 import { FindingsPage } from "./accesslens/dashboard/FindingsPage";
 import { ScansPage } from "./accesslens/dashboard/ScansPage";
 import { DEFAULT_FILTERS, type Filters, useDashboardData } from "./accesslens/dashboard/data";
+import { savedAgo, usePersistentState } from "./lib/storage";
 
 type Mode = "repo" | "domain";
 
@@ -29,8 +30,8 @@ function parseHash(hash: string): { page: PageId; param: string | null } {
 
 export default function App() {
   const [route, setRoute] = useState(() => parseHash(window.location.hash));
-  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
-  const { data, error, reload } = useDashboardData();
+  const [filters, setFilters] = usePersistentState<Filters>("prefs/filters", DEFAULT_FILTERS);
+  const { data, error, savedAt, reload } = useDashboardData();
   useEffect(() => {
     const onHash = () => {
       setRoute(parseHash(window.location.hash));
@@ -54,9 +55,10 @@ export default function App() {
         <AccessLensView userId={route.param ? Number(route.param) : null} />
       ) : (
         <div className="mx-auto w-full max-w-[1400px] px-6 py-8">
-          {needsData && error && (
+          {needsData && error && !data && (
             <div className="rounded border border-[#8a2f40] bg-[#8a2f40]/15 px-3 py-2 text-[13px] text-[#f58aa0]">{error}</div>
           )}
+          {needsData && error && data && savedAt && <StaleBanner savedAt={savedAt} onRetry={reload} />}
           {needsData && !data && !error && <div className="text-[13px] text-muted">Loading…</div>}
           {data && route.page === "dashboard" && <DashboardPage data={data} filters={filters} setFilters={setFilters} go={go} />}
           {data && route.page === "apps" && <AppsPage data={data} filters={filters} setFilters={setFilters} />}
@@ -67,6 +69,18 @@ export default function App() {
         </div>
       )}
     </AppShell>
+  );
+}
+
+/** Shown when the backend can't be reached and the page is drawn from the browser's copy. */
+function StaleBanner({ savedAt, onRetry }: { savedAt: string; onRetry: () => void }) {
+  return (
+    <div className="mb-5 flex flex-wrap items-center gap-3 rounded border border-[#7a6420] bg-[#7a6420]/12 px-3 py-2 text-[13px] text-[#e8c45a]">
+      Backend not reachable. Showing data saved in this browser {savedAgo(savedAt)}.
+      <button onClick={onRetry} className="rounded border border-[#7a6420] px-2 py-0.5 text-[12px] hover:bg-[#7a6420]/20">
+        Retry
+      </button>
+    </div>
   );
 }
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Severity } from "../../types";
 import type { AlUserSummary } from "../types";
+import { load, save } from "../../lib/storage";
 
 /** Shapes returned by GET /api/accesslens/dashboard. */
 export interface DashApp {
@@ -80,8 +81,17 @@ export function isInactive(a: DashAssignment, days: number) {
   return a.daysSinceUse == null || a.daysSinceUse >= days;
 }
 
+const DASH_CACHE = "cache/dashboard";
+
+/**
+ * Dashboard payload, shown from the browser cache first and then refreshed from the backend.
+ * `savedAt` is set while the cached copy is what's on screen; `error` is set if the refresh
+ * failed (the cached data, if any, stays visible).
+ */
 export function useDashboardData() {
-  const [data, setData] = useState<DashboardData | null>(null);
+  const [cached] = useState(() => load<DashboardData>(DASH_CACHE));
+  const [data, setData] = useState<DashboardData | null>(cached?.value ?? null);
+  const [savedAt, setSavedAt] = useState<string | null>(cached?.savedAt ?? null);
   const [error, setError] = useState<string | null>(null);
   const [version, setVersion] = useState(0);
   useEffect(() => {
@@ -90,12 +100,15 @@ export function useDashboardData() {
         const d = await r.json();
         if (!r.ok) throw new Error(d.error ?? "Dashboard data failed to load");
         setData(d);
+        setSavedAt(null);
+        setError(null);
+        save(DASH_CACHE, d);
       })
       .catch((e) => setError((e as Error).message || "Backend not reachable. Start it with `npm run dev` in backend/."));
   }, [version]);
   /** Re-fetch, e.g. after a scan refreshed the data and AI reviews. */
   const reload = useCallback(() => setVersion((v) => v + 1), []);
-  return { data, error, reload };
+  return { data, error, savedAt, reload };
 }
 
 /** Applies the filter row. App filter narrows assignments and findings, not users. */

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ProviderDescriptor } from "../../types";
 import { RULE_LABEL } from "./data";
+import { load, remove, save as persist, savedAgo } from "../../lib/storage";
 import { Chip, Empty, Panel, Table, userLink } from "./ui";
 
 /** Mirrors backend/src/accesslens/scans.ts. */
@@ -48,6 +49,13 @@ interface ScanRun {
   error?: string;
 }
 
+type SavedSchedule = { schedule: ScanSchedule; cron: string; nextRuns: string[] };
+const SCHEDULE_CACHE = "cache/scan-schedule";
+const RUNS_CACHE = "cache/scan-runs";
+const MODELS_CACHE = "cache/models";
+/** Unsaved schedule edits (a UI preference, not cached server data). */
+const DRAFT_KEY = "prefs/scan-schedule-draft";
+
 const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const CRON_PRESETS: [string, string][] = [
   ["0 9 * * 1-5", "Weekdays at 09:00"],
@@ -77,10 +85,14 @@ function modelName(id: string, providers: ProviderDescriptor[]) {
 }
 
 export function ScansPage({ onScanFinished }: { onScanFinished: () => void }) {
-  const [saved, setSaved] = useState<{ schedule: ScanSchedule; cron: string; nextRuns: string[] } | null>(null);
-  const [draft, setDraft] = useState<ScanSchedule | null>(null);
-  const [providers, setProviders] = useState<ProviderDescriptor[]>([]);
-  const [runs, setRuns] = useState<ScanRun[]>([]);
+  // Start from the browser's copy, then refresh from the backend.
+  const [saved, setSaved] = useState<SavedSchedule | null>(() => load<SavedSchedule>(SCHEDULE_CACHE)?.value ?? null);
+  const [draft, setDraftState] = useState<ScanSchedule | null>(
+    () => load<ScanSchedule>(DRAFT_KEY)?.value ?? load<SavedSchedule>(SCHEDULE_CACHE)?.value.schedule ?? null
+  );
+  const [providers, setProviders] = useState<ProviderDescriptor[]>(() => load<ProviderDescriptor[]>(MODELS_CACHE)?.value ?? []);
+  const [runs, setRuns] = useState<ScanRun[]>(() => load<ScanRun[]>(RUNS_CACHE)?.value ?? []);
+  const [offlineSince, setOfflineSince] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -94,6 +106,8 @@ export function ScansPage({ onScanFinished }: { onScanFinished: () => void }) {
         .then((d) => {
           const list: ScanRun[] = d.runs ?? [];
           setRuns(list);
+          persist(RUNS_CACHE, list);
+          setOfflineSince(null);
           const running = list.some((r) => r.status === "running");
           if (wasRunning.current && !running) onScanFinished();
           wasRunning.current = running;
@@ -108,13 +122,23 @@ export function ScansPage({ onScanFinished }: { onScanFinished: () => void }) {
         // A schedule never saved defaults to the viewer's own time zone.
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
         setSaved(d);
-        setDraft(d.schedule.updatedAt ? d.schedule : { ...d.schedule, timezone: tz });
+        persist(SCHEDULE_CACHE, d);
+        // Unsaved edits made in this browser win over the server copy.
+        const pending = load<ScanSchedule>(DRAFT_KEY)?.value;
+        setDraftState(pending ?? (d.schedule.updatedAt ? d.schedule : { ...d.schedule, timezone: tz }));
       })
-      .catch(() => setError("Backend not reachable. Start it with `npm run dev` in backend/."));
+      .catch(() => {
+        const cachedAt = load<SavedSchedule>(SCHEDULE_CACHE)?.savedAt;
+        if (cachedAt) setOfflineSince(cachedAt);
+        else setError("Backend not reachable. Start it with `npm run dev` in backend/.");
+      });
     fetch("/api/models")
       .then((r) => r.json())
-      .then((d) => setProviders(d.providers ?? []))
-      .catch(() => setProviders([]));
+      .then((d) => {
+        setProviders(d.providers ?? []);
+        persist(MODELS_CACHE, d.providers ?? []);
+      })
+      .catch(() => undefined);
     loadRuns().catch(() => undefined);
   }, [loadRuns]);
 
@@ -126,7 +150,12 @@ export function ScansPage({ onScanFinished }: { onScanFinished: () => void }) {
   }, [running, loadRuns]);
 
   const dirty = !!(saved && draft && JSON.stringify({ ...saved.schedule, updatedAt: null }) !== JSON.stringify({ ...draft, updatedAt: null }));
-  const set = <K extends keyof ScanSchedule>(k: K, v: ScanSchedule[K]) => setDraft((d) => (d ? { ...d, [k]: v } : d));
+  const setDraft = (d: ScanSchedule | null, keep: boolean) => {
+    setDraftState(d);
+    if (keep && d) persist(DRAFT_KEY, d);
+    else remove(DRAFT_KEY);
+  };
+  const set = <K extends keyof ScanSchedule>(k: K, v: ScanSchedule[K]) => draft && setDraft({ ...draft, [k]: v }, true);
 
   async function save(next = draft) {
     if (!next) return;
@@ -142,7 +171,8 @@ export function ScansPage({ onScanFinished }: { onScanFinished: () => void }) {
       const d = await res.json();
       if (!res.ok) throw new Error(d.error ?? "Could not save the schedule");
       setSaved(d);
-      setDraft(d.schedule);
+      persist(SCHEDULE_CACHE, d);
+      setDraft(d.schedule, false);
       setNotice(d.schedule.enabled ? "Schedule saved." : "Schedule saved. Scheduled scans are off.");
     } catch (e) {
       setError((e as Error).message);
@@ -196,6 +226,12 @@ export function ScansPage({ onScanFinished }: { onScanFinished: () => void }) {
       </div>
 
       {error && <ErrorBox>{error}</ErrorBox>}
+      {offlineSince && (
+        <div className="rounded border border-[#7a6420] bg-[#7a6420]/12 px-3 py-2 text-[13px] text-[#e8c45a]">
+          Backend not reachable. Showing the schedule and history saved in this browser {savedAgo(offlineSince)}. Changes and new scans need the backend.
+        </div>
+      )}
+      {dirty && !offlineSince && <div className="text-[12px] text-dim">Unsaved changes are kept in this browser until you save or discard them.</div>}
       {notice && <div className="rounded border border-[#2f6b52] bg-[#2f6b52]/15 px-3 py-2 text-[13px] text-[#7fd1a8]">{notice}</div>}
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -315,7 +351,7 @@ export function ScansPage({ onScanFinished }: { onScanFinished: () => void }) {
                 {saving ? "Saving…" : "Save schedule"}
               </button>
               {dirty && (
-                <button onClick={() => saved && setDraft(saved.schedule)} className="h-9 rounded px-3 text-[13px] text-muted hover:bg-hover hover:text-ink3">
+                <button onClick={() => saved && setDraft(saved.schedule, false)} className="h-9 rounded px-3 text-[13px] text-muted hover:bg-hover hover:text-ink3">
                   Discard changes
                 </button>
               )}
