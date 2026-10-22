@@ -3,6 +3,7 @@ import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import { router } from "./api/routes";
 import { accessLensRouter } from "./accesslens/routes";
+import { initScans } from "./accesslens/scans";
 import { config } from "./tools/util";
 import { allowPrivateTargets } from "./tools/netGuard";
 import { describeGitCredentials, ignoredGitCredentials, loadGitCredentials } from "./tools/gitAuth";
@@ -47,6 +48,18 @@ app.use(
       res.status(429).json({ error: "Too many review requests. Try again later." }),
   })
 );
+app.use(
+  "/api/accesslens/scans",
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skip: (req) => req.method === "GET",
+    handler: (_req, res) =>
+      res.status(429).json({ error: "Too many scan requests. Try again later." }),
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/health", (_req, res) =>
@@ -58,6 +71,7 @@ app.use("/api", router);
 
 app.listen(config.port, () => {
   console.log(`Scanner-X backend listening on :${config.port}`);
+  initScans();
   if (allowPrivateTargets()) {
     console.warn(
       "WARNING: ALLOW_PRIVATE_TARGETS is on. Scans may reach localhost and internal networks; never enable this on a public deployment."

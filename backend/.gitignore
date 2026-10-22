@@ -13,6 +13,7 @@ dist/
 *.sqlite
 *.sqlite3
 scanner-x-cache/
+.accesslens-state/
 !fixtures/exposed-files/.env
 
 # Logs

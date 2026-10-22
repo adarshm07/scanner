@@ -19,6 +19,7 @@
     "@anthropic-ai/sdk": "^0.27.3",
     "@google/generative-ai": "^0.24.1",
     "cors": "^2.8.5",
+    "croner": "^9.1.0",
     "dotenv": "^18.0.3",
     "express": "^4.19.2",
     "express-rate-limit": "^8.7.1",

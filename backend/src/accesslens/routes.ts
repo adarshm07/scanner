@@ -6,6 +6,9 @@ import { reportStore } from "../store/reportStore";
 import { resetGitCredentials } from "../tools/gitAuth";
 import { getDataset, loadUserGitHubCredentials } from "./data";
 import { cachedReview, reviewUser } from "./review";
+import { ScanSchedule, getRun, getSchedule, listRuns, saveSchedule, startScan } from "./scans";
+
+const PROVIDERS = ["rules", "claude", "gemini", "openai"];
 
 /**
  * AccessLens API (dummy Okta data). Mounted at /api/accesslens.
@@ -14,6 +17,11 @@ import { cachedReview, reviewUser } from "./review";
  *   GET  /users              user list with access counts and risk
  *   GET  /users/:id          one user's apps, access type, usage, findings, missing apps
  *   POST /users/:id/review   AI (or rules-only) verdict per app; body { provider?, force? }
+ *   GET  /schedule           scheduled scan settings, cron and next run times
+ *   PUT  /schedule           update them; body Partial<ScanSchedule>
+ *   GET  /scans              scan history, newest first
+ *   GET  /scans/:id          one scan with its new / resolved findings and summary
+ *   POST /scans              start a scan now; body { provider?, scope? }
  */
 export const accessLensRouter = Router();
 
@@ -194,5 +202,39 @@ accessLensRouter.post("/users/:id/scan-github", async (req: Request, res: Respon
     if (previousGitHubToken === undefined) delete process.env.GITHUB_TOKEN; else process.env.GITHUB_TOKEN = previousGitHubToken;
     if (previousGitHubOwners === undefined) delete process.env.GITHUB_OWNERS; else process.env.GITHUB_OWNERS = previousGitHubOwners;
     resetGitCredentials();
+  }
+});
+
+accessLensRouter.get("/schedule", (_req: Request, res: Response) => {
+  res.json(getSchedule());
+});
+
+accessLensRouter.put("/schedule", (req: Request, res: Response) => {
+  const result = saveSchedule(req.body ?? {});
+  if ("error" in result) return res.status(400).json(result);
+  res.json(result);
+});
+
+accessLensRouter.get("/scans", (_req: Request, res: Response) => {
+  res.json({ runs: listRuns() });
+});
+
+accessLensRouter.get("/scans/:id", (req: Request, res: Response) => {
+  const run = getRun(req.params.id);
+  if (!run) return res.status(404).json({ error: "Scan not found" });
+  res.json({ run });
+});
+
+accessLensRouter.post("/scans", async (req: Request, res: Response) => {
+  const { provider, scope } = req.body ?? {};
+  try {
+    const run = await startScan("manual", {
+      ...(PROVIDERS.includes(provider) ? { provider: provider as ScanSchedule["provider"] } : {}),
+      ...(scope === "all" || scope === "flagged" ? { scope } : {}),
+    });
+    const { findings, ...rest } = run;
+    res.status(202).json({ run: rest });
+  } catch (err) {
+    res.status(409).json({ error: (err as Error).message, runId: (err as { runId?: string }).runId });
   }
 });

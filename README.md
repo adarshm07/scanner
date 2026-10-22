@@ -343,7 +343,7 @@ skills from that folder, add a line to the project's `AGENTS.md`:
 
 ## Access review (AccessLens, Okta)
 
-A second view in the web app (**Access review** tab, or `/#access`) for the Okta access right-sizing idea from the AccessLens PRD. It currently runs on synthetic data from `backend/data/accesslens/` (a MongoDB export of a fake `acme-demo.okta.com` tenant: 99 users, 23 apps, 638 assignments). It does not connect to Okta yet.
+The **Access review** pages in the web app's sidebar (Dashboard, Users, Apps, Findings, Scheduled scans) cover the Okta access right-sizing idea from the AccessLens PRD. It currently runs on synthetic data from `backend/data/accesslens/` (a MongoDB export of a fake `acme-demo.okta.com` tenant: 99 users, 23 apps, 638 assignments). It does not connect to Okta yet.
 
 - **Computed, not looked up**: Okta has no roles or findings, so AccessLens works them out from what Okta does provide (user profile and status, app assignments, admin roles, SSO sign-ins) plus our policy config. Users are grouped into cohorts by department and team; users with no department are placed in the cohort whose apps they most resemble. The eight rules (stale account, never used, unused, direct grant, outlier, missing, privileged role, separation-of-duties conflict) run in [`accesslens/engine.ts`](backend/src/accesslens/engine.ts), and the tests check them against the seed's answer key (`expected_findings.json`, all 71 matched with the same scores).
 - **User list**: everyone in the tenant, sorted by risk, with filters for flagged, inactive and no-title users.
@@ -351,6 +351,8 @@ A second view in the web app (**Access review** tab, or `/#access`) for the Okta
 - **Role check**: `POST /api/accesslens/users/:id/review` asks the selected model whether the user's role needs each app (**keep / review / revoke**, with a reason and confidence) and whether to **grant** apps most of the cohort has. The rules-only verdict is kept alongside, and the UI shows where the AI disagrees with it. With no model configured, or if the model call fails, the rules verdicts are used.
 - **Privacy**: the model gets role, app and usage data only. No names, emails or Okta IDs are sent.
 - **Recommendations only**: nothing is written back to Okta.
+- **Dashboard** (`/#dashboard`): headline counts (flagged users, new joiners, unused access, privileged users), access issues by type, users not using each app for 30/60/90+ days, team and app-sensitivity breakdowns, and lists of the riskiest users, unused sensitive access, SoD conflicts and contractors with sensitive apps. Filters for team, department, status, type and app apply across Dashboard, Apps and Findings.
+- **Scheduled scans** (`/#scans`): re-checks every user daily, weekly, or on a custom cron schedule (at most hourly), or on demand. Each scan reloads the data, recomputes the findings, runs the role check for all users (or only flagged ones) with the chosen model, diffs the findings against the previous scan (new / resolved), and has the model write a short summary with next steps. The summary prompt is pseudonymous too. Schedule, history (last 60 scans) and the latest reviews are kept in `ACCESSLENS_STATE_DIR` (default `backend/.accesslens-state/`, git-ignored), so reviews survive a restart. The schedule runs inside the backend process, so it only fires while the backend is up.
 
 | Endpoint | Purpose |
 | --- | --- |
@@ -358,6 +360,10 @@ A second view in the web app (**Access review** tab, or `/#access`) for the Okta
 | `GET /api/accesslens/users` | User list with app counts, risk and latest review tally |
 | `GET /api/accesslens/users/:id` | Full access detail for one user |
 | `POST /api/accesslens/users/:id/review` | Body `{ "provider": "openai" \| "gemini" \| "claude" \| "rules", "force": true }` |
+| `GET /api/accesslens/dashboard` | Users, assignments and findings in one payload for the dashboard |
+| `GET` / `PUT /api/accesslens/schedule` | Scan schedule: `{ enabled, frequency: "daily" \| "weekly" \| "custom", time, weekday, cron, timezone, provider, scope: "all" \| "flagged" }` |
+| `POST /api/accesslens/scans` | Start a scan now (`{ provider?, scope? }`); 409 if one is running |
+| `GET /api/accesslens/scans`, `/scans/:id` | Scan history; one scan with new / resolved findings and summary |
 
 Set `ACCESSLENS_DATA_DIR` to point at a different export. `backend/data/accesslens/import.sh` loads the same files into MongoDB.
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Severity } from "../../types";
 import type { AlUserSummary } from "../types";
 
@@ -83,6 +83,7 @@ export function isInactive(a: DashAssignment, days: number) {
 export function useDashboardData() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [version, setVersion] = useState(0);
   useEffect(() => {
     fetch("/api/accesslens/dashboard")
       .then(async (r) => {
@@ -91,8 +92,10 @@ export function useDashboardData() {
         setData(d);
       })
       .catch((e) => setError((e as Error).message || "Backend not reachable. Start it with `npm run dev` in backend/."));
-  }, []);
-  return { data, error };
+  }, [version]);
+  /** Re-fetch, e.g. after a scan refreshed the data and AI reviews. */
+  const reload = useCallback(() => setVersion((v) => v + 1), []);
+  return { data, error, reload };
 }
 
 /** Applies the filter row. App filter narrows assignments and findings, not users. */

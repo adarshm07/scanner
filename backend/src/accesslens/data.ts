@@ -459,3 +459,9 @@ export function getDataset(): Dataset {
   if (!cached) cached = buildDataset();
   return cached;
 }
+
+/** Re-read the export and recompute findings (a scheduled scan's "sync"). */
+export function reloadDataset(): Dataset {
+  cached = buildDataset();
+  return cached;
+}

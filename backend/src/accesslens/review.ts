@@ -204,6 +204,19 @@ export function mergeReply(u: UserDetail, ds: Dataset, reply: LlmReply, provider
 
 const cache = new Map<string, UserReview>();
 
+/** Every user's latest review (one per user). */
+export function allCachedReviews(): UserReview[] {
+  return [...cache.values()];
+}
+
+/** Restore saved reviews (e.g. from the last scheduled scan) after a restart. */
+export function seedReviewCache(reviews: UserReview[]) {
+  for (const r of reviews) {
+    if (cachedReview(r.userId)) continue;
+    cache.set(`${r.userId}:${r.provider ?? "rules"}`, r);
+  }
+}
+
 export function cachedReview(userId: number): UserReview | undefined {
   for (const [k, v] of cache) if (k.startsWith(`${userId}:`)) return v;
   return undefined;
