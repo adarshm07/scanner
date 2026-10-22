@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type PageId = "dashboard" | "users" | "apps" | "findings" | "scan";
+export type PageId = "dashboard" | "users" | "apps" | "findings" | "scans" | "scan";
 
 const NAV: { section: string; items: { id: PageId; label: string; icon: ReactNode }[] }[] = [
   {
@@ -10,6 +10,7 @@ const NAV: { section: string; items: { id: PageId; label: string; icon: ReactNod
       { id: "users", label: "Users", icon: <IconUsers /> },
       { id: "apps", label: "Apps", icon: <IconApps /> },
       { id: "findings", label: "Findings", icon: <IconFlag /> },
+      { id: "scans", label: "Scheduled scans", icon: <IconClock /> },
     ],
   },
   {
@@ -104,6 +105,14 @@ function IconFlag() {
   return (
     <svg {...svg}>
       <path d="M3 14V2.5M3 3h8.5l-1.8 3 1.8 3H3" />
+    </svg>
+  );
+}
+function IconClock() {
+  return (
+    <svg {...svg}>
+      <circle cx="8" cy="8" r="6" />
+      <path d="M8 4.5V8l2.5 1.5" />
     </svg>
   );
 }

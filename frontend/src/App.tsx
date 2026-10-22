@@ -14,22 +14,23 @@ import { AppShell, type PageId } from "./layout/AppShell";
 import { DashboardPage } from "./accesslens/dashboard/DashboardPage";
 import { AppsPage } from "./accesslens/dashboard/AppsPage";
 import { FindingsPage } from "./accesslens/dashboard/FindingsPage";
+import { ScansPage } from "./accesslens/dashboard/ScansPage";
 import { DEFAULT_FILTERS, type Filters, useDashboardData } from "./accesslens/dashboard/data";
 
 type Mode = "repo" | "domain";
 
-/** Hash routes: #dashboard, #users[/id], #apps, #findings[/RULE], #scan. "#access" is the old Users link. */
+/** Hash routes: #dashboard, #users[/id], #apps, #findings[/RULE], #scans, #scan. "#access" is the old Users link. */
 function parseHash(hash: string): { page: PageId; param: string | null } {
   const [head, param = null] = hash.replace(/^#\/?/, "").split("/");
   if (head === "access") return { page: "users", param };
-  const pages: PageId[] = ["dashboard", "users", "apps", "findings", "scan"];
+  const pages: PageId[] = ["dashboard", "users", "apps", "findings", "scans", "scan"];
   return { page: pages.includes(head as PageId) ? (head as PageId) : "dashboard", param };
 }
 
 export default function App() {
   const [route, setRoute] = useState(() => parseHash(window.location.hash));
   const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
-  const { data, error } = useDashboardData();
+  const { data, error, reload } = useDashboardData();
   useEffect(() => {
     const onHash = () => {
       setRoute(parseHash(window.location.hash));
@@ -59,6 +60,7 @@ export default function App() {
           {needsData && !data && !error && <div className="text-[13px] text-muted">Loading…</div>}
           {data && route.page === "dashboard" && <DashboardPage data={data} filters={filters} setFilters={setFilters} go={go} />}
           {data && route.page === "apps" && <AppsPage data={data} filters={filters} setFilters={setFilters} />}
+          {route.page === "scans" && <ScansPage onScanFinished={reload} />}
           {data && route.page === "findings" && (
             <FindingsPage data={data} filters={filters} setFilters={setFilters} rule={route.param} go={go} />
           )}
