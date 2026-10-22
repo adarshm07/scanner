@@ -399,8 +399,8 @@ async function summarise(run: ScanRun, ds: Dataset, reviews: UserReview[], llm: 
     return {
       engine: "llm",
       headline: String(reply.headline),
-      highlights: (reply.highlights ?? []).map(String).slice(0, 4),
-      actions: (reply.actions ?? []).map(String).slice(0, 4),
+      highlights: (Array.isArray(reply.highlights) ? reply.highlights : []).map(String).slice(0, 4),
+      actions: (Array.isArray(reply.actions) ? reply.actions : []).map(String).slice(0, 4),
     };
   } catch {
     return fallback;

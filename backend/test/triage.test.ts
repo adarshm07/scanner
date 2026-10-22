@@ -156,3 +156,33 @@ test("model errors are reported to the scan log", async () => {
   assert.ok(logs.some(([l, m]) => l === "warn" && /splitting/.test(m)));
   assert.ok(logs.some(([l, m]) => l === "error" && /src\/b\.ts:1/.test(m) && /blocked by guardrail/.test(m)));
 });
+
+test("loosely shaped model replies are normalised instead of failing the batch", async () => {
+  // Real gateway replies: suggested_fix as a list of steps, a title-cased verdict, a numeric
+  // id, an unknown severity, and one finding with no usable verdict.
+  const findings = ["a", "b", "c"].map((id) => finding({ finding_id: id, location: { file: `src/${id}.ts`, line_start: 1 }, raw_snippet: `1: code ${id}` }));
+  const provider: LlmProvider = {
+    id: "openai",
+    async generate() {
+      return JSON.stringify({
+        results: [
+          { finding_id: "a", verdict: "True Positive", adjusted_severity: "HIGH", explanation: "Input reaches the query unescaped.", suggested_fix: ["Use a parameterised query.", "Re-run the scan to verify."] },
+          { finding_id: "b", verdict: "false_positive", adjusted_severity: "severe", explanation: ["Test-only", "code path."], suggested_fix: { steps: ["1. Move it under test/."] } },
+          { finding_id: "c", verdict: "maybe", explanation: "?" },
+        ],
+      });
+    },
+  };
+  const { results, llmFallbackUsed } = await triageCategory(provider, "backend", "repo", findings);
+  assert.ok(!llmFallbackUsed);
+  const a = results.get("a")!;
+  assert.equal(a.verdict, "true_positive");
+  assert.equal(a.adjusted_severity, "high");
+  assert.equal(a.suggested_fix, "1. Use a parameterised query.\n2. Re-run the scan to verify.");
+  const b = results.get("b")!;
+  assert.equal(b.verdict, "false_positive");
+  assert.equal(b.adjusted_severity, "medium"); // unknown severity keeps the scanner's
+  assert.equal(b.explanation, "Test-only\ncode path.");
+  assert.equal(b.suggested_fix, "1. Move it under test/.");
+  assert.equal(results.get("c")!.verdict, "needs_review"); // no usable verdict → scanner output
+});

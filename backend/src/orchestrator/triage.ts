@@ -101,14 +101,19 @@ For EACH finding return:
 
 Rules: judge only from the evidence given; do not invent import sites or features. Do not lower a CISA KEV entry for being unlikely; only reachability can lower it. Respond ONLY with valid JSON matching the schema in the user message. Do not invent new findings.`;
 
+/**
+ * What the model is asked for. Models don't always follow the shape (a list of steps for
+ * suggested_fix, a numeric id, a made-up verdict), so every field is read through the
+ * normalisers below rather than trusted.
+ */
 interface TriageLlmResponse {
   results: {
-    finding_id: string;
-    verdict: Verdict;
-    adjusted_severity: Severity;
-    explanation: string;
-    suggested_fix: string;
-    reachability?: Reachability;
+    finding_id: unknown;
+    verdict: unknown;
+    adjusted_severity: unknown;
+    explanation: unknown;
+    suggested_fix: unknown;
+    reachability?: unknown;
   }[];
 }
 
@@ -322,12 +327,17 @@ async function triageBatch(
     })
   );
 
-  const byId = new Map(response.results.map((r) => [r.finding_id, r]));
+  if (!Array.isArray(response?.results)) throw new Error("model reply had no results array");
+  const results = response.results;
+  const byId = new Map(results.filter((r) => r && typeof r === "object").map((r) => [String(r.finding_id), r]));
   return batch.map((f) => {
     const r = byId.get(f.finding_id);
     if (!r) return passthrough(f);
-    const rawExplanation = (r.explanation ?? "").trim();
-    const rawFix = (r.suggested_fix ?? "").trim();
+    const verdict = asVerdict(r.verdict);
+    // A reply without a usable verdict is no better than the scanner's own output.
+    if (!verdict) return passthrough(f);
+    const rawExplanation = asText(r.explanation);
+    const rawFix = asText(r.suggested_fix, true);
     const explanation =
       rawExplanation && !nearDuplicate(rawExplanation, f.tool_message)
         ? rawExplanation
@@ -338,15 +348,52 @@ async function triageBatch(
         : fallbackFix(f);
     const result: TriageResult = {
       finding_id: f.finding_id,
-      verdict: r.verdict,
-      adjusted_severity: r.adjusted_severity ?? f.severity,
+      verdict,
+      adjusted_severity: asSeverity(r.adjusted_severity) ?? f.severity,
       explanation,
       suggested_fix: suggestedFix,
-      ...(deps && REACHABILITY.includes(r.reachability as Reachability) ? { reachability: r.reachability } : {}),
+      ...(deps && REACHABILITY.includes(r.reachability as Reachability) ? { reachability: r.reachability as Reachability } : {}),
     };
     // The model judges reachability; these rules bound what that judgement can do to severity.
     return deps ? enforceReachability(f, result) : result;
   });
+}
+
+const VERDICTS: Verdict[] = ["true_positive", "false_positive", "needs_review"];
+const SEVERITIES: Severity[] = ["critical", "high", "medium", "low"];
+
+/** "True Positive", "TRUE-POSITIVE" and friends → "true_positive"; anything else → null. */
+export function asVerdict(v: unknown): Verdict | null {
+  const s = typeof v === "string" ? v.trim().toLowerCase().replace(/[\s-]+/g, "_") : "";
+  return VERDICTS.includes(s as Verdict) ? (s as Verdict) : null;
+}
+
+export function asSeverity(v: unknown): Severity | null {
+  const s = typeof v === "string" ? v.trim().toLowerCase() : "";
+  return SEVERITIES.includes(s as Severity) ? (s as Severity) : null;
+}
+
+/**
+ * Model text → trimmed string. Lists (e.g. suggested_fix as an array of steps) are joined
+ * one per line, numbered when `numbered` and the items aren't already; objects use their
+ * text-like fields; anything else becomes "".
+ */
+export function asText(v: unknown, numbered = false): string {
+  if (v == null) return "";
+  if (typeof v === "string") return v.trim();
+  if (typeof v === "number" || typeof v === "boolean") return String(v);
+  if (Array.isArray(v)) {
+    const items = v.map((x) => asText(x)).filter(Boolean);
+    const already = items.every((x) => /^\d+[.)]\s/.test(x));
+    return items.map((x, i) => (numbered && !already ? `${i + 1}. ${x}` : x)).join("\n");
+  }
+  if (typeof v === "object") {
+    const o = v as Record<string, unknown>;
+    for (const k of ["text", "steps", "step", "description", "content", "value"]) {
+      if (o[k] != null) return asText(o[k], numbered);
+    }
+  }
+  return "";
 }
 
 function blockedVerdict(f: Finding): TriageResult {
