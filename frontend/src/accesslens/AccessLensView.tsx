@@ -3,6 +3,23 @@ import type { ProviderDescriptor, ProviderId } from "../types";
 import { ModelSelector } from "../components/ModelSelector";
 import { SeverityGlyph } from "../components/Severity";
 import type { AccessVerdict, AlSummary, AlUserDetail, AlUserSummary, UserReview } from "./types";
+import { load, save, savedAgo, usePersistentState } from "../lib/storage";
+
+const SUMMARY_CACHE = "cache/al-summary";
+const USERS_CACHE = "cache/al-users";
+const DETAIL_CACHE = "cache/al-user-details";
+/** Most recently opened users kept in the browser, with their latest AI verdict. */
+const DETAIL_LIMIT = 40;
+type DetailEntry = { user: AlUserDetail; review: UserReview | null };
+
+function cachedDetail(id: number): DetailEntry | null {
+  return load<DetailEntry[]>(DETAIL_CACHE)?.value.find((e) => e.user.id === id) ?? null;
+}
+function cacheDetail(entry: DetailEntry) {
+  // Newest first; the oldest fall off past DETAIL_LIMIT.
+  const rest = (load<DetailEntry[]>(DETAIL_CACHE)?.value ?? []).filter((e) => e.user.id !== entry.user.id);
+  save(DETAIL_CACHE, [entry, ...rest].slice(0, DETAIL_LIMIT));
+}
 
 /**
  * AccessLens: Okta users, the apps each one holds, how the access was granted and used,
@@ -67,12 +84,13 @@ function roleText(u: AlUserSummary): string {
 type Filter = "all" | "flagged" | "inactive" | "no-title";
 
 export function AccessLensView({ userId = null }: { userId?: number | null }) {
-  const [summary, setSummary] = useState<AlSummary | null>(null);
-  const [users, setUsers] = useState<AlUserSummary[]>([]);
+  const [summary, setSummary] = useState<AlSummary | null>(() => load<AlSummary>(SUMMARY_CACHE)?.value ?? null);
+  const [users, setUsers] = useState<AlUserSummary[]>(() => load<AlUserSummary[]>(USERS_CACHE)?.value ?? []);
+  const [offlineSince, setOfflineSince] = useState<string | null>(null);
   const [providers, setProviders] = useState<ProviderDescriptor[]>([]);
   const [providerId, setProviderId] = useState<ProviderId | null>(null);
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<Filter>("all");
+  const [query, setQuery] = usePersistentState("prefs/users-query", "");
+  const [filter, setFilter] = usePersistentState<Filter>("prefs/users-filter", "all");
   const [selectedId, setSelectedIdState] = useState<number | null>(userId);
   // Keep the open user in the URL (#users/<id>) so dashboard links land on them.
   useEffect(() => setSelectedIdState(userId), [userId]);
@@ -103,13 +121,24 @@ export function AccessLensView({ userId = null }: { userId?: number | null }) {
   const refreshUsers = () =>
     fetch("/api/accesslens/users")
       .then((r) => r.json())
-      .then((d) => setUsers(d.users ?? []));
+      .then((d) => {
+        setUsers(d.users ?? []);
+        save(USERS_CACHE, d.users ?? []);
+      });
 
   useEffect(() => {
     fetch("/api/accesslens/summary")
       .then((r) => r.json())
-      .then(setSummary)
-      .catch(() => setError("Backend not reachable. Start it with `npm run dev` in backend/."));
+      .then((d) => {
+        setSummary(d);
+        save(SUMMARY_CACHE, d);
+        setOfflineSince(null);
+      })
+      .catch(() => {
+        const at = load<AlSummary>(SUMMARY_CACHE)?.savedAt;
+        if (at) setOfflineSince(at);
+        else setError("Backend not reachable. Start it with `npm run dev` in backend/.");
+      });
     refreshUsers().catch(() => undefined);
     fetch("/api/models")
       .then((r) => r.json())
@@ -123,16 +152,24 @@ export function AccessLensView({ userId = null }: { userId?: number | null }) {
 
   useEffect(() => {
     if (selectedId == null) return;
-    setDetail(null);
-    setReview(null);
+    // Show the saved copy straight away, then replace it with the backend's.
+    const saved = cachedDetail(selectedId);
+    setDetail(saved?.user ?? null);
+    setReview(saved?.review ?? null);
     setError(null);
     fetch(`/api/accesslens/users/${selectedId}`)
-      .then((r) => r.json())
-      .then((d) => {
+      .then(async (r) => {
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error ?? "User failed to load");
+        // Keep a verdict saved in the browser if the backend has none (e.g. after a restart).
+        const review = d.review ?? (saved?.review && saved.review.userId === d.user.id ? saved.review : null);
         setDetail(d.user);
-        setReview(d.review);
+        setReview(review);
+        cacheDetail({ user: d.user, review });
       })
-      .catch((e) => setError((e as Error).message));
+      .catch((e) => {
+        if (!saved) setError((e as Error).message);
+      });
   }, [selectedId]);
 
   const visible = useMemo(() => {
@@ -164,6 +201,7 @@ export function AccessLensView({ userId = null }: { userId?: number | null }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Review failed");
       setReview(data.review);
+      cacheDetail({ user: detail, review: data.review });
       refreshUsers().catch(() => undefined);
     } catch (e) {
       setError((e as Error).message);
@@ -246,6 +284,11 @@ export function AccessLensView({ userId = null }: { userId?: number | null }) {
           )}
         </div>
 
+        {offlineSince && (
+          <div className="mb-4 rounded border border-[#7a6420] bg-[#7a6420]/12 px-3 py-2 text-[13px] text-[#e8c45a]">
+            Backend not reachable. Showing users saved in this browser {savedAgo(offlineSince)}. Running a check needs the backend.
+          </div>
+        )}
         {error && <div className="mb-4 rounded border border-[#8a2f40] bg-[#8a2f40]/15 px-3 py-2 text-[13px] text-[#f58aa0]">{error}</div>}
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
