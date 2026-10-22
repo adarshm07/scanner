@@ -171,7 +171,7 @@ const CONFIDENCES = new Set<Confidence>(["high", "medium", "low"]);
 /** Merge the model's reply with the rules baseline; anything it skipped falls back to rules. */
 export function mergeReply(u: UserDetail, ds: Dataset, reply: LlmReply, provider: string): UserReview {
   const base = rulesReview(u, ds);
-  const byApp = new Map((reply.decisions ?? []).filter((d) => d.app).map((d) => [String(d.app), d]));
+  const byApp = new Map((Array.isArray(reply.decisions) ? reply.decisions : []).filter((d) => d?.app).map((d) => [String(d.app), d]));
   const decisions = base.decisions.map((b) => {
     const d = byApp.get(b.appKey);
     const verdict = d && VERDICTS.has(d.verdict as Verdict) ? (d.verdict as Verdict) : null;
@@ -184,7 +184,7 @@ export function mergeReply(u: UserDetail, ds: Dataset, reply: LlmReply, provider
       ruleVerdict: b.ruleVerdict,
     };
   });
-  const missByApp = new Map((reply.missing ?? []).filter((m) => m.app).map((m) => [String(m.app), m]));
+  const missByApp = new Map((Array.isArray(reply.missing) ? reply.missing : []).filter((m) => m?.app).map((m) => [String(m.app), m]));
   const missing = u.missing.map((m) => {
     const r = missByApp.get(m.appKey);
     const verdict = r?.verdict === "grant" || r?.verdict === "skip" ? r.verdict : u.status === "ACTIVE" ? "grant" : "skip";
