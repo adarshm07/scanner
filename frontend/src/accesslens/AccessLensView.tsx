@@ -66,14 +66,20 @@ function roleText(u: AlUserSummary): string {
 
 type Filter = "all" | "flagged" | "inactive" | "no-title";
 
-export function AccessLensView({ onBack }: { onBack: () => void }) {
+export function AccessLensView({ userId = null }: { userId?: number | null }) {
   const [summary, setSummary] = useState<AlSummary | null>(null);
   const [users, setUsers] = useState<AlUserSummary[]>([]);
   const [providers, setProviders] = useState<ProviderDescriptor[]>([]);
   const [providerId, setProviderId] = useState<ProviderId | null>(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedIdState] = useState<number | null>(userId);
+  // Keep the open user in the URL (#users/<id>) so dashboard links land on them.
+  useEffect(() => setSelectedIdState(userId), [userId]);
+  const setSelectedId = (id: number) => {
+    setSelectedIdState(id);
+    window.history.replaceState(null, "", `#users/${id}`);
+  };
   const [detail, setDetail] = useState<AlUserDetail | null>(null);
   const [review, setReview] = useState<UserReview | null>(null);
   const [reviewing, setReviewing] = useState(false);
@@ -219,30 +225,14 @@ export function AccessLensView({ onBack }: { onBack: () => void }) {
   const githubSeverity = githubScanResult?.report?.stats?.bySeverity ?? { critical: 0, high: 0, medium: 0, low: 0 };
 
   return (
-    <div className="min-h-screen bg-ink text-ink3">
-      <header className="flex h-[52px] items-center gap-3 border-b border-line px-6">
-        <span className="whitespace-nowrap text-[15px] font-semibold tracking-[-0.01em]">Scanner-X</span>
-        <nav className="ml-2 flex shrink-0 gap-1 whitespace-nowrap">
-          <button onClick={onBack} className="rounded-[3px] px-2.5 py-1 text-[13px] text-text3 hover:bg-hover">
-            Code &amp; domain scan
-          </button>
-          <span className="rounded-[3px] bg-ink3 px-2.5 py-1 text-[13px] font-medium text-ink">Access review</span>
-        </nav>
-        <div className="grow" />
-        {summary && (
-          <span className="hidden font-mono text-[12px] text-dim sm:block">
-            {summary.tenant.domain} · synced {summary.tenant.lastSyncAt?.slice(0, 10) ?? "—"}
-          </span>
-        )}
-      </header>
-
+    <div>
       <main className="mx-auto w-full max-w-[1400px] px-6 py-8">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="m-0 text-[26px] font-semibold tracking-[-0.02em]">Okta access review</h1>
+            <h1 className="m-0 text-[24px] font-semibold tracking-[-0.02em]">Users</h1>
             <p className="mt-1 text-[13px] text-muted">
               Who has which apps, how they got them, whether they use them, and whether their role needs them.
-              Demo data from a synthetic tenant.
+              Demo data from a synthetic tenant{summary ? ` (${summary.tenant.domain})` : ""}.
             </p>
           </div>
           {summary && (

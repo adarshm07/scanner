@@ -10,6 +10,7 @@ import { cachedReview, reviewUser } from "./review";
 /**
  * AccessLens API (dummy Okta data). Mounted at /api/accesslens.
  *   GET  /summary            tenant, counts, apps
+ *   GET  /dashboard          flat users, assignments and findings for the dashboard
  *   GET  /users              user list with access counts and risk
  *   GET  /users/:id          one user's apps, access type, usage, findings, missing apps
  *   POST /users/:id/review   AI (or rules-only) verdict per app; body { provider?, force? }
@@ -65,6 +66,76 @@ accessLensRouter.get("/users", (_req: Request, res: Response) => {
           : null,
       };
     }),
+  });
+});
+
+/**
+ * Everything the dashboard needs in one flat, compact payload. The frontend filters
+ * (team, status, type, app, inactivity days) and aggregates client-side, so changing a
+ * filter never needs another round trip. Day counts are relative to the last sync.
+ */
+accessLensRouter.get("/dashboard", (_req: Request, res: Response) => {
+  const ds = loadOr500(res);
+  if (!ds) return;
+  const assignments: {
+    userId: number;
+    appKey: string;
+    daysSinceUse: number | null;
+    assignedDays: number | null;
+    ssoCount90d: number;
+    source: "GROUP" | "DIRECT";
+    rules: string[];
+  }[] = [];
+  const findings: { userId: number; appKey: string | null; rule: string; riskScore: number; explanation: string }[] = [];
+  for (const d of ds.detail.values()) {
+    for (const a of d.access) {
+      assignments.push({
+        userId: d.id,
+        appKey: a.appKey,
+        daysSinceUse: a.daysSinceUse,
+        assignedDays: a.assignedDays,
+        ssoCount90d: a.ssoCount90d,
+        source: a.source,
+        rules: a.findings.map((f) => f.rule),
+      });
+      for (const f of a.findings) {
+        findings.push({ userId: d.id, appKey: a.appKey, rule: f.rule, riskScore: f.riskScore, explanation: f.explanation });
+      }
+    }
+    for (const f of d.userFindings) {
+      findings.push({ userId: d.id, appKey: f.appKey, rule: f.rule, riskScore: f.riskScore, explanation: f.explanation });
+    }
+    for (const m of d.missing) {
+      findings.push({
+        userId: d.id,
+        appKey: m.appKey,
+        rule: "MISSING_ACCESS",
+        riskScore: 0,
+        explanation: `${Math.round(m.cohortShare * 100)}% of the ${d.cohort?.label ?? "cohort"} cohort has ${m.appLabel}`,
+      });
+    }
+  }
+  res.json({
+    tenant: ds.tenant,
+    asOf: ds.now.toISOString(),
+    thresholds: ds.thresholds,
+    apps: ds.apps.map((a) => ({ key: a.key, label: a.label, sensitivity: a.sensitivity })),
+    users: ds.users.map((u) => {
+      const r = cachedReview(u.id);
+      return {
+        ...u,
+        review: r
+          ? {
+              engine: r.engine,
+              keep: r.decisions.filter((x) => x.verdict === "keep").length,
+              review: r.decisions.filter((x) => x.verdict === "review").length,
+              revoke: r.decisions.filter((x) => x.verdict === "revoke").length,
+            }
+          : null,
+      };
+    }),
+    assignments,
+    findings,
   });
 });
 
