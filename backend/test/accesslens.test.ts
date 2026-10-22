@@ -12,7 +12,7 @@ const byName = (name: string) => [...ds.detail.values()].find((u) => u.name === 
 test("loads every user and assignment from the dummy data", () => {
   assert.equal(ds.users.length, 100);
   assert.equal(ds.apps.length, 23);
-  assert.equal(ds.users.reduce((s, u) => s + u.appCount, 0), 642);
+  assert.equal(ds.users.reduce((s, u) => s + u.appCount, 0), 624);
 });
 
 test("access rows carry access type, group and usage", () => {
@@ -25,18 +25,23 @@ test("access rows carry access type, group and usage", () => {
   assert.equal(slack.daysSinceUse, 3);
 });
 
-test("rules mark deprovisioned users for full revocation", () => {
+test("deprovisioned users have been cleaned up; suspended users are marked for full revocation", () => {
+  // The data reflects a later sync: both deprovisioned users' app access was removed.
   const noah = byName("Noah Verma");
   assert.equal(noah.status, "DEPROVISIONED");
-  const r = rulesReview(noah, ds);
+  assert.equal(noah.access.length, 0);
+  assert.equal(noah.missing.length, 0, "no grant suggestions for a deprovisioned account");
+  const vikram = byName("Vikram Kapoor");
+  assert.equal(vikram.status, "SUSPENDED");
+  const r = rulesReview(vikram, ds);
   assert.ok(r.decisions.length > 0);
   assert.ok(r.decisions.every((d) => d.verdict === "revoke"));
   assert.equal(r.missing.length, 0);
 });
 
-test("never-used critical access is revoked by rules", () => {
-  const ella = byName("Ella Wright");
-  const d = rulesReview(ella, ds).decisions.find((x) => x.appKey === "aws-prod")!;
+test("never-used access is revoked by rules", () => {
+  const arjun = byName("Arjun Smith");
+  const d = rulesReview(arjun, ds).decisions.find((x) => x.appKey === "docusign")!;
   assert.equal(d.verdict, "revoke");
 });
 
@@ -59,7 +64,7 @@ test("rules computed from raw Okta data reproduce the answer key exactly", () =>
     rule: string;
     risk_score: number;
   }[];
-  assert.equal(expected.length, 71);
+  assert.equal(expected.length, 41);
   for (const e of expected) {
     const key = `${e.user}|${e.app}|${e.rule}`;
     assert.ok(got.has(key), `missing ${key}`);
@@ -76,15 +81,16 @@ test("users with no department get a cohort inferred from their apps", () => {
       (c) => [c.user_id, c.cohort_id]
     )
   );
-  const noDept = [...ds.detail.values()].filter((u) => !u.department && seedCohort.has(u.id));
-  assert.equal(noDept.length, 23);
+  // Users with no apps left (Noah Verma, deprovisioned and cleaned up) have nothing to infer from.
+  const noDept = [...ds.detail.values()].filter((u) => !u.department && seedCohort.has(u.id) && u.appCount > 0);
+  assert.equal(noDept.length, 22);
   assert.ok(noDept.every((u) => u.cohort?.inferred));
-  // Same grouping as the seed for 22 of 23. User 94 holds GitHub, which every Web engineer has
+  // Same grouping as the seed for 21 of 22. User 94 holds GitHub, which every Web engineer has
   // and no Product person has, so the apps point to Web rather than the seed's Product label.
   const seedLabelOf = new Map<number, string>();
   for (const u of ds.detail.values()) if (u.department && u.cohort) seedLabelOf.set(seedCohort.get(u.id)!, u.cohort.label);
   const agree = noDept.filter((u) => seedLabelOf.get(seedCohort.get(u.id)!) === u.cohort?.label);
-  assert.equal(agree.length, 22);
+  assert.equal(agree.length, 21);
   assert.equal(byName("Mia Garcia").cohort?.label, "Marketing");
   assert.ok(byName("Mia Garcia").userFindings.some((f) => f.rule === "PRIVILEGED_ROLE"));
 });

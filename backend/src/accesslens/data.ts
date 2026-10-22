@@ -352,9 +352,10 @@ export function buildDataset(dir = dataDir()): Dataset {
       .filter((x): x is AppAccess => x !== null)
       .sort((a, b) => sensRank[a.sensitivity] - sensRank[b.sensitivity] || a.appLabel.localeCompare(b.appLabel));
 
-    // Apps most of the cohort has that this user lacks.
+    // Apps most of the cohort has that this user lacks (active users only, like the engine:
+    // a deprovisioned or suspended account should get nothing new).
     const missing: MissingApp[] = [];
-    if (shares && (cohortMembers.get(uc!.cohort_id)?.length ?? 0) >= config.thresholds.min_cohort_size) {
+    if (u.status === "ACTIVE" && shares && (cohortMembers.get(uc!.cohort_id)?.length ?? 0) >= config.thresholds.min_cohort_size) {
       for (const [aid, share] of shares) {
         if (held.has(aid) || share < config.thresholds.missing_share) continue;
         const app = appById.get(aid);

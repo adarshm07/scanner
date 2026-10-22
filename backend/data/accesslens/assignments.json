@@ -1218,132 +1218,6 @@
   "tenant_id": 1
  },
  {
-  "user_id": 11,
-  "app_id": 6,
-  "source": "GROUP",
-  "via_group_id": 2,
-  "assigned_at": {
-   "$date": "2024-07-24T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10011",
-  "_id": 88,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 1,
-  "source": "GROUP",
-  "via_group_id": 1,
-  "assigned_at": {
-   "$date": "2023-01-29T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 89,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 2,
-  "source": "GROUP",
-  "via_group_id": 1,
-  "assigned_at": {
-   "$date": "2023-01-29T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 90,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 3,
-  "source": "GROUP",
-  "via_group_id": 1,
-  "assigned_at": {
-   "$date": "2023-01-31T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 91,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 4,
-  "source": "GROUP",
-  "via_group_id": 3,
-  "assigned_at": {
-   "$date": "2023-01-30T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 92,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 5,
-  "source": "GROUP",
-  "via_group_id": 3,
-  "assigned_at": {
-   "$date": "2023-01-30T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 93,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 7,
-  "source": "GROUP",
-  "via_group_id": 3,
-  "assigned_at": {
-   "$date": "2023-01-28T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 94,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 9,
-  "source": "GROUP",
-  "via_group_id": 3,
-  "assigned_at": {
-   "$date": "2023-01-29T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 95,
-  "tenant_id": 1
- },
- {
-  "user_id": 12,
-  "app_id": 6,
-  "source": "GROUP",
-  "via_group_id": 2,
-  "assigned_at": {
-   "$date": "2023-01-30T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10012",
-  "_id": 96,
-  "tenant_id": 1
- },
- {
   "user_id": 13,
   "app_id": 1,
   "source": "GROUP",
@@ -5320,20 +5194,6 @@
   "tenant_id": 1
  },
  {
-  "user_id": 55,
-  "app_id": 8,
-  "source": "DIRECT",
-  "via_group_id": null,
-  "assigned_at": {
-   "$date": "2025-04-02T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10055",
-  "_id": 381,
-  "tenant_id": 1
- },
- {
   "user_id": 56,
   "app_id": 1,
   "source": "GROUP",
@@ -5583,90 +5443,6 @@
   "sync_state": "SYNCHRONIZED",
   "external_id": "5e60a412-a012-11ef-952c-6c792da10058",
   "_id": 399,
-  "tenant_id": 1
- },
- {
-  "user_id": 59,
-  "app_id": 1,
-  "source": "GROUP",
-  "via_group_id": 1,
-  "assigned_at": {
-   "$date": "2025-03-29T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10059",
-  "_id": 400,
-  "tenant_id": 1
- },
- {
-  "user_id": 59,
-  "app_id": 2,
-  "source": "GROUP",
-  "via_group_id": 1,
-  "assigned_at": {
-   "$date": "2025-03-28T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10059",
-  "_id": 401,
-  "tenant_id": 1
- },
- {
-  "user_id": 59,
-  "app_id": 3,
-  "source": "GROUP",
-  "via_group_id": 1,
-  "assigned_at": {
-   "$date": "2025-03-29T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10059",
-  "_id": 402,
-  "tenant_id": 1
- },
- {
-  "user_id": 59,
-  "app_id": 14,
-  "source": "GROUP",
-  "via_group_id": 8,
-  "assigned_at": {
-   "$date": "2025-03-30T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10059",
-  "_id": 403,
-  "tenant_id": 1
- },
- {
-  "user_id": 59,
-  "app_id": 15,
-  "source": "GROUP",
-  "via_group_id": 8,
-  "assigned_at": {
-   "$date": "2025-03-29T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10059",
-  "_id": 404,
-  "tenant_id": 1
- },
- {
-  "user_id": 59,
-  "app_id": 12,
-  "source": "GROUP",
-  "via_group_id": 8,
-  "assigned_at": {
-   "$date": "2025-03-29T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10059",
-  "_id": 405,
   "tenant_id": 1
  },
  {
@@ -6381,20 +6157,6 @@
   "sync_state": "SYNCHRONIZED",
   "external_id": "5e60a412-a012-11ef-952c-6c792da10069",
   "_id": 456,
-  "tenant_id": 1
- },
- {
-  "user_id": 69,
-  "app_id": 18,
-  "source": "GROUP",
-  "via_group_id": 10,
-  "assigned_at": {
-   "$date": "2024-03-13T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10069",
-  "_id": 457,
   "tenant_id": 1
  },
  {
@@ -8747,20 +8509,6 @@
   "sync_state": "SYNCHRONIZED",
   "external_id": "5e60a412-a012-11ef-952c-6c792da10097",
   "_id": 625,
-  "tenant_id": 1
- },
- {
-  "user_id": 97,
-  "app_id": 6,
-  "source": "GROUP",
-  "via_group_id": 2,
-  "assigned_at": {
-   "$date": "2022-12-30T06:00:00.000Z"
-  },
-  "status": "PROVISIONED",
-  "sync_state": "SYNCHRONIZED",
-  "external_id": "5e60a412-a012-11ef-952c-6c792da10097",
-  "_id": 626,
   "tenant_id": 1
  },
  {

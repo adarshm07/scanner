@@ -1,77 +1,5 @@
 [
  {
-  "user": "Ella Wright",
-  "app": "aws-prod",
-  "rule": "NEVER_USED",
-  "risk_score": 22.4,
-  "detail": "Assigned 565 days ago to aws-prod; no Okta sign-in ever seen.",
-  "tenant_id": 1
- },
- {
-  "user": "Liam Young",
-  "app": "netsuite",
-  "rule": "NEVER_USED",
-  "risk_score": 22.4,
-  "detail": "Assigned 950 days ago to netsuite; no Okta sign-in ever seen.",
-  "tenant_id": 1
- },
- {
-  "user": "Jack Iyer",
-  "app": "github",
-  "rule": "UNUSED_ACCESS",
-  "risk_score": 21.0,
-  "detail": "No sign-in to github for 206 days.",
-  "tenant_id": 1
- },
- {
-  "user": "Ava Verma",
-  "app": "workday",
-  "rule": "UNUSED_ACCESS",
-  "risk_score": 18.0,
-  "detail": "No sign-in to workday for 150 days.",
-  "tenant_id": 1
- },
- {
-  "user": "Kavya Das",
-  "app": "snowflake",
-  "rule": "NEVER_USED",
-  "risk_score": 16.8,
-  "detail": "Assigned 531 days ago to snowflake; no Okta sign-in ever seen.",
-  "tenant_id": 1
- },
- {
-  "user": "Henry Wright",
-  "app": "salesforce",
-  "rule": "UNUSED_ACCESS",
-  "risk_score": 15.5,
-  "detail": "No sign-in to salesforce for 125 days.",
-  "tenant_id": 1
- },
- {
-  "user": "Chloe Khan",
-  "app": "github",
-  "rule": "UNUSED_ACCESS",
-  "risk_score": 14.2,
-  "detail": "No sign-in to github for 112 days.",
-  "tenant_id": 1
- },
- {
-  "user": "Mason Lewis",
-  "app": "datadog",
-  "rule": "UNUSED_ACCESS",
-  "risk_score": 13.7,
-  "detail": "No sign-in to datadog for 175 days.",
-  "tenant_id": 1
- },
- {
-  "user": "Kavya Das",
-  "app": "jira",
-  "rule": "UNUSED_ACCESS",
-  "risk_score": 13.3,
-  "detail": "No sign-in to jira for 169 days.",
-  "tenant_id": 1
- },
- {
   "user": "Ethan Garcia",
   "app": "datadog",
   "rule": "UNUSED_ACCESS",
@@ -139,7 +67,7 @@
   "user": "Liam Young",
   "app": "okta-admin",
   "rule": "PRIVILEGED_ROLE",
-  "risk_score": 8.0,
+  "risk_score": 8,
   "detail": "Liam Young holds Okta APP_ADMIN outside IT/Security.",
   "tenant_id": 1
  },
@@ -147,7 +75,7 @@
   "user": "Mia Garcia",
   "app": "okta-admin",
   "rule": "PRIVILEGED_ROLE",
-  "risk_score": 8.0,
+  "risk_score": 8,
   "detail": "Mia Garcia holds Okta SUPER_ADMIN outside IT/Security.",
   "tenant_id": 1
  },
@@ -155,7 +83,7 @@
   "user": "Sneha Singh",
   "app": "okta-admin",
   "rule": "PRIVILEGED_ROLE",
-  "risk_score": 8.0,
+  "risk_score": 8,
   "detail": "Sneha Singh holds Okta USER_ADMIN outside IT/Security.",
   "tenant_id": 1
  },
@@ -171,7 +99,7 @@
   "user": "Nisha Nair",
   "app": "zoom",
   "rule": "UNUSED_ACCESS",
-  "risk_score": 7.0,
+  "risk_score": 7,
   "detail": "No sign-in to zoom for 259 days.",
   "tenant_id": 1
  },
@@ -184,26 +112,10 @@
   "tenant_id": 1
  },
  {
-  "user": "Noah Verma",
-  "app": "aws-dev",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 6.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to aws-dev.",
-  "tenant_id": 1
- },
- {
-  "user": "Noah Verma",
-  "app": "github",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 6.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to github.",
-  "tenant_id": 1
- },
- {
   "user": "Vikram Kapoor",
   "app": "salesforce",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 6.0,
+  "risk_score": 6,
   "detail": "Vikram Kapoor is suspended in Okta but still assigned to salesforce.",
   "tenant_id": 1
  },
@@ -211,16 +123,8 @@
   "user": "Ava Verma",
   "app": "zoom",
   "rule": "UNUSED_ACCESS",
-  "risk_score": 6.0,
+  "risk_score": 6,
   "detail": "No sign-in to zoom for 149 days.",
-  "tenant_id": 1
- },
- {
-  "user": "Arjun Smith",
-  "app": "zoom",
-  "rule": "NEVER_USED",
-  "risk_score": 5.6,
-  "detail": "Assigned 1161 days ago to zoom; no Okta sign-in ever seen.",
   "tenant_id": 1
  },
  {
@@ -232,22 +136,6 @@
   "tenant_id": 1
  },
  {
-  "user": "Sneha Singh",
-  "app": "zoom",
-  "rule": "NEVER_USED",
-  "risk_score": 5.6,
-  "detail": "Assigned 674 days ago to zoom; no Okta sign-in ever seen.",
-  "tenant_id": 1
- },
- {
-  "user": "Ethan Joshi",
-  "app": "zoom",
-  "rule": "NEVER_USED",
-  "risk_score": 5.6,
-  "detail": "Assigned 231 days ago to zoom; no Okta sign-in ever seen.",
-  "tenant_id": 1
- },
- {
   "user": "Kabir Taylor",
   "app": "zoom",
   "rule": "NEVER_USED",
@@ -256,42 +144,10 @@
   "tenant_id": 1
  },
  {
-  "user": "Ella Wright",
-  "app": "aws-prod",
-  "rule": "OUTLIER_ACCESS",
-  "risk_score": 4.8,
-  "detail": "Only 9% of Marketing hold aws-prod.",
-  "tenant_id": 1
- },
- {
-  "user": "Noah Verma",
-  "app": "jira",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to jira.",
-  "tenant_id": 1
- },
- {
-  "user": "Noah Verma",
-  "app": "confluence",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to confluence.",
-  "tenant_id": 1
- },
- {
-  "user": "Noah Verma",
-  "app": "datadog",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to datadog.",
-  "tenant_id": 1
- },
- {
   "user": "Vikram Kapoor",
   "app": "docusign",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
+  "risk_score": 4,
   "detail": "Vikram Kapoor is suspended in Okta but still assigned to docusign.",
   "tenant_id": 1
  },
@@ -299,31 +155,15 @@
   "user": "Vikram Kapoor",
   "app": "hubspot",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
+  "risk_score": 4,
   "detail": "Vikram Kapoor is suspended in Okta but still assigned to hubspot.",
-  "tenant_id": 1
- },
- {
-  "user": "Isha Joshi",
-  "app": "hubspot",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
-  "detail": "Isha Joshi is deprovisioned in Okta but still assigned to hubspot.",
-  "tenant_id": 1
- },
- {
-  "user": "Isha Joshi",
-  "app": "tableau",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
-  "detail": "Isha Joshi is deprovisioned in Okta but still assigned to tableau.",
   "tenant_id": 1
  },
  {
   "user": "Zoe King",
   "app": "zendesk",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
+  "risk_score": 4,
   "detail": "Zoe King is suspended in Okta but still assigned to zendesk.",
   "tenant_id": 1
  },
@@ -331,7 +171,7 @@
   "user": "Zoe King",
   "app": "jira",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 4.0,
+  "risk_score": 4,
   "detail": "Zoe King is suspended in Okta but still assigned to jira.",
   "tenant_id": 1
  },
@@ -352,34 +192,10 @@
   "tenant_id": 1
  },
  {
-  "user": "Noah Verma",
-  "app": "slack",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to slack.",
-  "tenant_id": 1
- },
- {
-  "user": "Noah Verma",
-  "app": "gworkspace",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to gworkspace.",
-  "tenant_id": 1
- },
- {
-  "user": "Noah Verma",
-  "app": "zoom",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
-  "detail": "Noah Verma is deprovisioned in Okta but still assigned to zoom.",
-  "tenant_id": 1
- },
- {
   "user": "Vikram Kapoor",
   "app": "slack",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
+  "risk_score": 2,
   "detail": "Vikram Kapoor is suspended in Okta but still assigned to slack.",
   "tenant_id": 1
  },
@@ -387,7 +203,7 @@
   "user": "Vikram Kapoor",
   "app": "gworkspace",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
+  "risk_score": 2,
   "detail": "Vikram Kapoor is suspended in Okta but still assigned to gworkspace.",
   "tenant_id": 1
  },
@@ -395,47 +211,15 @@
   "user": "Vikram Kapoor",
   "app": "zoom",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
+  "risk_score": 2,
   "detail": "Vikram Kapoor is suspended in Okta but still assigned to zoom.",
-  "tenant_id": 1
- },
- {
-  "user": "Isha Joshi",
-  "app": "slack",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
-  "detail": "Isha Joshi is deprovisioned in Okta but still assigned to slack.",
-  "tenant_id": 1
- },
- {
-  "user": "Isha Joshi",
-  "app": "gworkspace",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
-  "detail": "Isha Joshi is deprovisioned in Okta but still assigned to gworkspace.",
-  "tenant_id": 1
- },
- {
-  "user": "Isha Joshi",
-  "app": "zoom",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
-  "detail": "Isha Joshi is deprovisioned in Okta but still assigned to zoom.",
-  "tenant_id": 1
- },
- {
-  "user": "Isha Joshi",
-  "app": "figma",
-  "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
-  "detail": "Isha Joshi is deprovisioned in Okta but still assigned to figma.",
   "tenant_id": 1
  },
  {
   "user": "Zoe King",
   "app": "slack",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
+  "risk_score": 2,
   "detail": "Zoe King is suspended in Okta but still assigned to slack.",
   "tenant_id": 1
  },
@@ -443,7 +227,7 @@
   "user": "Zoe King",
   "app": "gworkspace",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
+  "risk_score": 2,
   "detail": "Zoe King is suspended in Okta but still assigned to gworkspace.",
   "tenant_id": 1
  },
@@ -451,16 +235,8 @@
   "user": "Zoe King",
   "app": "zoom",
   "rule": "STALE_ACCOUNT",
-  "risk_score": 2.0,
+  "risk_score": 2,
   "detail": "Zoe King is suspended in Okta but still assigned to zoom.",
-  "tenant_id": 1
- },
- {
-  "user": "Rahul Garcia",
-  "app": "github",
-  "rule": "MISSING_ACCESS",
-  "risk_score": 1.8,
-  "detail": "85% of the cohort has github; Rahul does not.",
   "tenant_id": 1
  },
  {
@@ -469,22 +245,6 @@
   "rule": "MISSING_ACCESS",
   "risk_score": 1.8,
   "detail": "92% of the cohort has aws-dev; Emma does not.",
-  "tenant_id": 1
- },
- {
-  "user": "Emma Iyer",
-  "app": "github",
-  "rule": "MISSING_ACCESS",
-  "risk_score": 1.8,
-  "detail": "85% of the cohort has github; Emma does not.",
-  "tenant_id": 1
- },
- {
-  "user": "Ella Wright",
-  "app": "aws-prod",
-  "rule": "DIRECT_ASSIGNMENT",
-  "risk_score": 1.2,
-  "detail": "aws-prod assigned directly, bypassing group policy.",
   "tenant_id": 1
  },
  {

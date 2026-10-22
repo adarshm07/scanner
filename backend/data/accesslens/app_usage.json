@@ -201,9 +201,9 @@
   "user_id": 3,
   "app_id": 9,
   "last_sso_at": {
-   "$date": "2026-04-27T06:00:00.000Z"
+   "$date": "2026-10-17T06:00:00.000Z"
   },
-  "sso_count_90d": 0,
+  "sso_count_90d": 6,
   "tenant_id": 1
  },
  {
@@ -2045,8 +2045,10 @@
  {
   "user_id": 31,
   "app_id": 11,
-  "last_sso_at": null,
-  "sso_count_90d": 0,
+  "last_sso_at": {
+   "$date": "2026-10-17T06:00:00.000Z"
+  },
+  "sso_count_90d": 2,
   "tenant_id": 1
  },
  {
@@ -2062,9 +2064,9 @@
   "user_id": 31,
   "app_id": 4,
   "last_sso_at": {
-   "$date": "2026-05-03T06:00:00.000Z"
+   "$date": "2026-10-17T06:00:00.000Z"
   },
-  "sso_count_90d": 0,
+  "sso_count_90d": 9,
   "tenant_id": 1
  },
  {
@@ -2521,9 +2523,9 @@
   "user_id": 39,
   "app_id": 13,
   "last_sso_at": {
-   "$date": "2026-06-16T06:00:00.000Z"
+   "$date": "2026-10-17T06:00:00.000Z"
   },
-  "sso_count_90d": 0,
+  "sso_count_90d": 7,
   "tenant_id": 1
  },
  {
@@ -3058,8 +3060,10 @@
  {
   "user_id": 49,
   "app_id": 3,
-  "last_sso_at": null,
-  "sso_count_90d": 0,
+  "last_sso_at": {
+   "$date": "2026-10-17T06:00:00.000Z"
+  },
+  "sso_count_90d": 4,
   "tenant_id": 1
  },
  {
@@ -4180,8 +4184,10 @@
  {
   "user_id": 71,
   "app_id": 3,
-  "last_sso_at": null,
-  "sso_count_90d": 0,
+  "last_sso_at": {
+   "$date": "2026-10-17T06:00:00.000Z"
+  },
+  "sso_count_90d": 3,
   "tenant_id": 1
  },
  {
@@ -4296,9 +4302,9 @@
   "user_id": 73,
   "app_id": 16,
   "last_sso_at": {
-   "$date": "2026-05-22T06:00:00.000Z"
+   "$date": "2026-10-17T06:00:00.000Z"
   },
-  "sso_count_90d": 0,
+  "sso_count_90d": 4,
   "tenant_id": 1
  },
  {
@@ -4466,8 +4472,10 @@
  {
   "user_id": 76,
   "app_id": 3,
-  "last_sso_at": null,
-  "sso_count_90d": 0,
+  "last_sso_at": {
+   "$date": "2026-10-17T06:00:00.000Z"
+  },
+  "sso_count_90d": 5,
   "tenant_id": 1
  },
  {

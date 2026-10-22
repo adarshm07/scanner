@@ -156,8 +156,8 @@
  {
   "userId": "00u-SYNTH-003",
   "appId": "0oa-SYNTH-DATADOG",
-  "lastSsoAt": "2026-04-27T06:00:00.000Z",
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 6,
   "tenant_id": 1
  },
  {
@@ -1591,8 +1591,8 @@
  {
   "userId": "00u-SYNTH-031",
   "appId": "0oa-SYNTH-SNOWFLAKE",
-  "lastSsoAt": null,
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 2,
   "tenant_id": 1
  },
  {
@@ -1605,8 +1605,8 @@
  {
   "userId": "00u-SYNTH-031",
   "appId": "0oa-SYNTH-JIRA",
-  "lastSsoAt": "2026-05-03T06:00:00.000Z",
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 9,
   "tenant_id": 1
  },
  {
@@ -1962,8 +1962,8 @@
  {
   "userId": "00u-SYNTH-039",
   "appId": "0oa-SYNTH-SALESFORCE",
-  "lastSsoAt": "2026-06-16T06:00:00.000Z",
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 7,
   "tenant_id": 1
  },
  {
@@ -2382,8 +2382,8 @@
  {
   "userId": "00u-SYNTH-049",
   "appId": "0oa-SYNTH-ZOOM",
-  "lastSsoAt": null,
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 4,
   "tenant_id": 1
  },
  {
@@ -3264,8 +3264,8 @@
  {
   "userId": "00u-SYNTH-071",
   "appId": "0oa-SYNTH-ZOOM",
-  "lastSsoAt": null,
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 3,
   "tenant_id": 1
  },
  {
@@ -3355,8 +3355,8 @@
  {
   "userId": "00u-SYNTH-073",
   "appId": "0oa-SYNTH-WORKDAY",
-  "lastSsoAt": "2026-05-22T06:00:00.000Z",
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 4,
   "tenant_id": 1
  },
  {
@@ -3488,8 +3488,8 @@
  {
   "userId": "00u-SYNTH-076",
   "appId": "0oa-SYNTH-ZOOM",
-  "lastSsoAt": null,
-  "ssoCount90d": 0,
+  "lastSsoAt": "2026-10-17T06:00:00.000Z",
+  "ssoCount90d": 5,
   "tenant_id": 1
  },
  {
