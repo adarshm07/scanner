@@ -1,0 +1,127 @@
+import { useEffect, useMemo, useState } from "react";
+import type { Severity } from "../../types";
+import type { AlUserSummary } from "../types";
+
+/** Shapes returned by GET /api/accesslens/dashboard. */
+export interface DashApp {
+  key: string;
+  label: string;
+  sensitivity: Severity;
+}
+export interface DashAssignment {
+  userId: number;
+  appKey: string;
+  daysSinceUse: number | null;
+  assignedDays: number | null;
+  ssoCount90d: number;
+  source: "GROUP" | "DIRECT";
+  rules: string[];
+}
+export interface DashFinding {
+  userId: number;
+  appKey: string | null;
+  rule: string;
+  riskScore: number;
+  explanation: string;
+}
+export interface DashboardData {
+  tenant: { domain: string; lastSyncAt: string | null };
+  asOf: string;
+  thresholds: { unused_days: number; never_used_days: number };
+  apps: DashApp[];
+  users: AlUserSummary[];
+  assignments: DashAssignment[];
+  findings: DashFinding[];
+}
+
+export const RULE_LABEL: Record<string, string> = {
+  STALE_ACCOUNT: "Stale account",
+  UNUSED_ACCESS: "Unused access",
+  NEVER_USED: "Never used",
+  OUTLIER_ACCESS: "Outlier access",
+  MISSING_ACCESS: "Missing access",
+  DIRECT_ASSIGNMENT: "Direct grant",
+  PRIVILEGED_ROLE: "Privileged role",
+  TOXIC_COMBINATION: "SoD conflict",
+};
+
+export const NO_TEAM = "Unassigned";
+export const teamOf = (u: AlUserSummary) => u.team ?? NO_TEAM;
+
+export interface Filters {
+  team: string;
+  department: string;
+  status: "all" | "active" | "inactive";
+  employeeType: string;
+  app: string;
+  /** "Not used in N days" threshold. */
+  inactiveDays: number;
+}
+
+export const DEFAULT_FILTERS: Filters = {
+  team: "all",
+  department: "all",
+  status: "all",
+  employeeType: "all",
+  app: "all",
+  inactiveDays: 30,
+};
+
+const DAY = 86_400_000;
+
+/** Days between a date and the sync date (day counts follow the last Okta sync). */
+export function daysBefore(asOf: string, iso: string | null): number | null {
+  if (!iso) return null;
+  return Math.max(0, Math.floor((new Date(asOf).getTime() - new Date(iso).getTime()) / DAY));
+}
+
+/** True when an assignment hasn't been used within the threshold (never used counts). */
+export function isInactive(a: DashAssignment, days: number) {
+  return a.daysSinceUse == null || a.daysSinceUse >= days;
+}
+
+export function useDashboardData() {
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    fetch("/api/accesslens/dashboard")
+      .then(async (r) => {
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error ?? "Dashboard data failed to load");
+        setData(d);
+      })
+      .catch((e) => setError((e as Error).message || "Backend not reachable. Start it with `npm run dev` in backend/."));
+  }, []);
+  return { data, error };
+}
+
+/** Applies the filter row. App filter narrows assignments and findings, not users. */
+export function useFiltered(data: DashboardData | null, f: Filters) {
+  return useMemo(() => {
+    if (!data) return null;
+    const users = data.users.filter(
+      (u) =>
+        (f.team === "all" || teamOf(u) === f.team) &&
+        (f.department === "all" || (u.department ?? NO_TEAM) === f.department) &&
+        (f.status === "all" || (f.status === "active") === (u.status === "ACTIVE")) &&
+        (f.employeeType === "all" || u.employeeType === f.employeeType)
+    );
+    const ids = new Set(users.map((u) => u.id));
+    const assignments = data.assignments.filter((a) => ids.has(a.userId) && (f.app === "all" || a.appKey === f.app));
+    const findings = data.findings.filter(
+      (x) => ids.has(x.userId) && (f.app === "all" || x.appKey === f.app)
+    );
+    const userById = new Map(data.users.map((u) => [u.id, u]));
+    const appByKey = new Map(data.apps.map((a) => [a.key, a]));
+    return { users, assignments, findings, userById, appByKey };
+  }, [data, f]);
+}
+
+export function options(data: DashboardData) {
+  const uniq = (xs: string[]) => [...new Set(xs)].sort((a, b) => (a === NO_TEAM ? 1 : b === NO_TEAM ? -1 : a.localeCompare(b)));
+  return {
+    teams: uniq(data.users.map(teamOf)),
+    departments: uniq(data.users.map((u) => u.department ?? NO_TEAM)),
+    employeeTypes: uniq(data.users.map((u) => u.employeeType)),
+  };
+}

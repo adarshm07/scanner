@@ -10,19 +10,62 @@ import { WorkflowPanel } from "./components/WorkflowPanel";
 import { streamScan } from "./lib/scanStream";
 import { AccessLensView } from "./accesslens/AccessLensView";
 
+import { AppShell, type PageId } from "./layout/AppShell";
+import { DashboardPage } from "./accesslens/dashboard/DashboardPage";
+import { AppsPage } from "./accesslens/dashboard/AppsPage";
+import { FindingsPage } from "./accesslens/dashboard/FindingsPage";
+import { DEFAULT_FILTERS, type Filters, useDashboardData } from "./accesslens/dashboard/data";
+
 type Mode = "repo" | "domain";
 
+/** Hash routes: #dashboard, #users[/id], #apps, #findings[/RULE], #scan. "#access" is the old Users link. */
+function parseHash(hash: string): { page: PageId; param: string | null } {
+  const [head, param = null] = hash.replace(/^#\/?/, "").split("/");
+  if (head === "access") return { page: "users", param };
+  const pages: PageId[] = ["dashboard", "users", "apps", "findings", "scan"];
+  return { page: pages.includes(head as PageId) ? (head as PageId) : "dashboard", param };
+}
+
 export default function App() {
-  const [view, setView] = useState<"scan" | "access">(() =>
-    window.location.hash === "#access" ? "access" : "scan"
-  );
+  const [route, setRoute] = useState(() => parseHash(window.location.hash));
+  const [filters, setFilters] = useState<Filters>(DEFAULT_FILTERS);
+  const { data, error } = useDashboardData();
   useEffect(() => {
-    const onHash = () => setView(window.location.hash === "#access" ? "access" : "scan");
+    const onHash = () => {
+      setRoute(parseHash(window.location.hash));
+      window.scrollTo(0, 0);
+    };
     window.addEventListener("hashchange", onHash);
     return () => window.removeEventListener("hashchange", onHash);
   }, []);
-  if (view === "access") return <AccessLensView onBack={() => (window.location.hash = "")} />;
-  return <ScannerApp />;
+  const go = (hash: string) => (window.location.hash = hash);
+
+  const needsData = route.page === "dashboard" || route.page === "apps" || route.page === "findings";
+  return (
+    <AppShell
+      page={route.page}
+      badges={data ? { findings: data.findings.filter((f) => f.rule !== "MISSING_ACCESS").length } : {}}
+      footer={data && <>{data.tenant.domain}<br />synced {data.tenant.lastSyncAt?.slice(0, 10) ?? "—"}</>}
+    >
+      {route.page === "scan" ? (
+        <ScannerApp />
+      ) : route.page === "users" ? (
+        <AccessLensView userId={route.param ? Number(route.param) : null} />
+      ) : (
+        <div className="mx-auto w-full max-w-[1400px] px-6 py-8">
+          {needsData && error && (
+            <div className="rounded border border-[#8a2f40] bg-[#8a2f40]/15 px-3 py-2 text-[13px] text-[#f58aa0]">{error}</div>
+          )}
+          {needsData && !data && !error && <div className="text-[13px] text-muted">Loading…</div>}
+          {data && route.page === "dashboard" && <DashboardPage data={data} filters={filters} setFilters={setFilters} go={go} />}
+          {data && route.page === "apps" && <AppsPage data={data} filters={filters} setFilters={setFilters} />}
+          {data && route.page === "findings" && (
+            <FindingsPage data={data} filters={filters} setFilters={setFilters} rule={route.param} go={go} />
+          )}
+        </div>
+      )}
+    </AppShell>
+  );
 }
 
 function ScannerApp() {
@@ -179,7 +222,7 @@ function ScannerApp() {
   // After a scan, the report becomes a full-width page of its own (design).
   if (report) {
     return (
-      <div className="min-h-screen bg-ink text-ink3">
+      <div>
         <div className="mx-auto w-full max-w-[1400px] px-6 py-8">
           <ReportView report={report} onNewScan={() => setReport(null)} />
         </div>
@@ -190,7 +233,7 @@ function ScannerApp() {
   // While a scan runs, show the live streaming progress screen (design).
   if (loading && scanEvents.length > 0) {
     return (
-      <div className="min-h-screen bg-ink text-ink3">
+      <div>
         <div className="mx-auto w-full max-w-[1400px] px-6 py-8">
           <ScanProgress events={scanEvents} />
         </div>
@@ -199,15 +242,9 @@ function ScannerApp() {
   }
 
   return (
-    <div className="min-h-screen bg-ink text-ink3">
+    <div>
       <header className="flex h-[52px] items-center gap-3 border-b border-line px-6">
-        <span className="whitespace-nowrap text-[15px] font-semibold tracking-[-0.01em]">Scanner-X</span>
-        <nav className="ml-2 flex shrink-0 gap-1 whitespace-nowrap">
-          <span className="rounded-[3px] bg-ink3 px-2.5 py-1 text-[13px] font-medium text-ink">Code &amp; domain scan</span>
-          <a href="#access" className="rounded-[3px] px-2.5 py-1 text-[13px] text-text3 no-underline hover:bg-hover">
-            Access review
-          </a>
-        </nav>
+        <span className="whitespace-nowrap text-[14px] font-medium">Code &amp; domain scan</span>
         <span className="hidden text-[13px] text-muted lg:inline">
           Deterministic security tools + thin LLM triage
         </span>
