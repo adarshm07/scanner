@@ -1,7 +1,7 @@
 import { CheckResult, Finding, makeFindingId } from "../schema/finding";
 import { DomainResult } from "./domainResult";
 import { findTakeovers, takeoverAdapter } from "./takeover";
-import { fetchWithTimeout } from "./util";
+import { fetchWithTimeout, netError } from "./util";
 
 /**
  * Subdomain enumeration via certificate transparency logs (crt.sh), then a takeover check:
@@ -87,7 +87,7 @@ export async function runSubdomainCheck(host: string): Promise<DomainResult> {
   try {
     const res = await fetchWithTimeout(
       `https://crt.sh/?q=${encodeURIComponent(`%.${host}`)}&output=json`,
-      { timeoutMs: 15000 }
+      { timeoutMs: 30000, publicFeed: true }
     );
     if (!res.ok) return unavailable(`crt.sh returned HTTP ${res.status}`);
     const entries = (await res.json()) as CrtShEntry[];
@@ -100,7 +100,7 @@ export async function runSubdomainCheck(host: string): Promise<DomainResult> {
     }
     names = [...set].sort();
   } catch (err) {
-    return unavailable((err as Error).message);
+    return unavailable(netError(err));
   }
 
   const listing = subdomainAdapter(host, names);

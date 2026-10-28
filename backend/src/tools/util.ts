@@ -3,7 +3,7 @@ import os from "os";
 import path from "path";
 import { existsSync } from "fs";
 import dotenv from "dotenv";
-import { Agent, fetch, Response } from "undici";
+import { Agent, EnvHttpProxyAgent, fetch, Response } from "undici";
 import { allowPrivateTargets, assertIpLiteralAllowed, assertPublicHost, guardedLookup } from "./netGuard";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true });
@@ -167,12 +167,36 @@ export async function checkTool(
 
 const guardedAgent = new Agent({ connect: { lookup: guardedLookup } });
 
+let proxyAgent: EnvHttpProxyAgent | undefined;
+/**
+ * Proxy agent for FIXED public hosts only (crt.sh, CISA, FIRST, OSV), never for scan targets:
+ * the private-address guard can't see what a proxy connects to.
+ */
+export function publicFeedProxyAgent(): EnvHttpProxyAgent | undefined {
+  if (!process.env.HTTPS_PROXY && !process.env.https_proxy) return undefined;
+  return (proxyAgent ??= new EnvHttpProxyAgent());
+}
+
+/**
+ * undici reports every network failure as "fetch failed" and puts the real reason
+ * (ENOTFOUND, ECONNREFUSED, UND_ERR_CONNECT_TIMEOUT, EPRIVATETARGET...) in err.cause.
+ */
+export function netError(e: unknown): string {
+  const err = e as (Error & { cause?: { code?: string; message?: string } }) | undefined;
+  if (!err) return "error";
+  if (err.name === "AbortError" || err.name === "TimeoutError") return "timed out";
+  const c = err.cause;
+  const why = c?.code ?? c?.message;
+  return why && why !== err.message ? `${err.message}: ${why}` : err.message ?? "error";
+}
+
 /**
  * fetch with an abort timeout. Connections to private/internal addresses are refused.
+ * `publicFeed: true` is for fixed, hard-coded public hosts: it honors HTTPS_PROXY.
  */
 export async function fetchWithTimeout(
   url: string,
-  opts: { timeoutMs?: number; method?: string; headers?: Record<string, string> } = {}
+  opts: { timeoutMs?: number; method?: string; headers?: Record<string, string>; publicFeed?: boolean } = {}
 ): Promise<Response> {
   assertIpLiteralAllowed(new URL(url).hostname);
   const controller = new AbortController();
@@ -183,7 +207,7 @@ export async function fetchWithTimeout(
       headers: opts.headers,
       redirect: "manual",
       signal: controller.signal,
-      dispatcher: guardedAgent,
+      dispatcher: (opts.publicFeed && publicFeedProxyAgent()) || guardedAgent,
     });
   } finally {
     clearTimeout(timer);
